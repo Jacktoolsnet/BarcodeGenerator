@@ -13,5 +13,5 @@
 
     <Label fx:id="welcomeText"/>
     <ImageView fx:id="imageViewBarcode" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
-    <Button onAction="#onHelloButtonClick" text="Hello!"/>
+    <Button onAction="#onHelloButtonClick" text="%button.generate.barcode"/>
 </VBox>

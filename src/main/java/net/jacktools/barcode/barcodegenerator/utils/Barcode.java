@@ -9,9 +9,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.nio.file.Path;
 
 public class Barcode {
+
+    public static BufferedImage LAST_BARCODE_IMAGE;
 
     /**
      * Converts a BufferedImage to an javaFX image.
@@ -46,6 +51,17 @@ public class Barcode {
     public static BufferedImage generateEAN13BarcodeImage(String barcodeText, int width, int height) throws Exception {
         EAN13Writer barcodeWriter = new EAN13Writer();
         BitMatrix bitMatrix = barcodeWriter.encode(barcodeText, BarcodeFormat.EAN_13, width, height);
-        return MatrixToImageWriter.toBufferedImage(bitMatrix);
+        LAST_BARCODE_IMAGE = MatrixToImageWriter.toBufferedImage(bitMatrix);
+        return LAST_BARCODE_IMAGE;
+    }
+
+    /**
+     * Writes the last generated barcode image to a file.
+     *
+     * @param filePath the file path
+     * @throws IOException if an error occours
+     */
+    public static void barcodeToFile(Path filePath) throws IOException {
+        ImageIO.write(LAST_BARCODE_IMAGE, "png", filePath.toFile());
     }
 }
