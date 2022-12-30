@@ -9,8 +9,6 @@ import java.io.IOException;
 
 public class Application extends javafx.application.Application {
 
-    private static Assets ASSETS = new Assets();
-
     public static void main(String[] args) {
         launch();
     }
@@ -21,7 +19,10 @@ public class Application extends javafx.application.Application {
         fxmlLoader.setResources(Assets.RESOURCEBUNDLE);
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
         stage.setTitle("Barcode generator");
+        stage.getIcons().add(Assets.APPLICATION_ICON);
         stage.setScene(scene);
+        MainViewController controller = fxmlLoader.getController();
+        controller.setStage(stage);
         stage.show();
     }
 }
