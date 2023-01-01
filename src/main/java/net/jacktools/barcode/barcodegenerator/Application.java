@@ -3,10 +3,13 @@ package net.jacktools.barcode.barcodegenerator;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import net.jacktools.barcode.barcodegenerator.utils.AppLog;
 import net.jacktools.barcode.barcodegenerator.utils.Assets;
-import net.jacktools.barcode.barcodegenerator.web.Server;
+import net.jacktools.barcode.barcodegenerator.utils.Settings;
+import net.jacktools.barcode.barcodegenerator.web.AppServer;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 public class Application extends javafx.application.Application {
 
@@ -16,7 +19,10 @@ public class Application extends javafx.application.Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Server webServer = new Server(8080, 0);
+        AppLog.log(Level.INFO, Assets.getString("application.log.start"));
+        if (Settings.WEB_SERVER_AUTOSTART) {
+            AppServer.start();
+        }
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("mainView.fxml"));
         fxmlLoader.setResources(Assets.RESOURCEBUNDLE);
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);

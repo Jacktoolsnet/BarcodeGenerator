@@ -5,6 +5,7 @@ module net.jacktools.barcode.barcodegenerator {
     requires javafx.controls;
     requires javafx.fxml;
     requires jdk.httpserver;
+    requires java.logging;
 
     opens net.jacktools.barcode.barcodegenerator to javafx.fxml;
     exports net.jacktools.barcode.barcodegenerator;

@@ -10,10 +10,13 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import net.jacktools.barcode.barcodegenerator.utils.AppLog;
 import net.jacktools.barcode.barcodegenerator.utils.Assets;
 import net.jacktools.barcode.barcodegenerator.utils.Barcode;
+import net.jacktools.barcode.barcodegenerator.utils.Settings;
 
 import java.util.Optional;
+import java.util.logging.Level;
 
 public class MainViewController {
     @FXML
@@ -38,7 +41,10 @@ public class MainViewController {
                 if (result.get() == ButtonType.NO) {
                     e.consume();
                 } else {
+                    // Save settings.
+                    Settings.saveProperties();
                     // Close the application.
+                    AppLog.log(Level.INFO, Assets.getString("application.log.stop"));
                     Platform.exit();
                     System.exit(0);
                 }

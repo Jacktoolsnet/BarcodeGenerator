@@ -21,6 +21,7 @@ import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -56,34 +57,22 @@ public class Barcode {
      * @param format the barcode format
      * @param width  thw image width
      * @param height the image height
-     * @return the barcode image
+     * @return the barcode image as buffered image
      */
     public static BufferedImage create(String value, BarcodeFormat format, int width, int height) throws WriterException {
         Writer writer;
         switch (format) {
-            case EAN_8:
-                writer = new EAN8Writer();
-                break;
-            case EAN_13:
-                writer = new EAN13Writer();
-                break;
-            case UPC_A:
-                writer = new UPCAWriter();
-                break;
-            case QR_CODE:
-                writer = new QRCodeWriter();
+            case AZTEC:
+                writer = new AztecWriter();
                 break;
             case CODE_39:
                 writer = new Code39Writer();
                 break;
+            case CODE_93:
+                writer = new Code93Writer();
+                break;
             case CODE_128:
                 writer = new Code128Writer();
-                break;
-            case ITF:
-                writer = new ITFWriter();
-                break;
-            case PDF_417:
-                writer = new PDF417Writer();
                 break;
             case CODABAR:
                 writer = new CodaBarWriter();
@@ -91,8 +80,26 @@ public class Barcode {
             case DATA_MATRIX:
                 writer = new DataMatrixWriter();
                 break;
-            case AZTEC:
-                writer = new AztecWriter();
+            case EAN_8:
+                writer = new EAN8Writer();
+                break;
+            case EAN_13:
+                writer = new EAN13Writer();
+                break;
+            case ITF:
+                writer = new ITFWriter();
+                break;
+            case PDF_417:
+                writer = new PDF417Writer();
+                break;
+            case QR_CODE:
+                writer = new QRCodeWriter();
+                break;
+            case UPC_A:
+                writer = new UPCAWriter();
+                break;
+            case UPC_E:
+                writer = new UPCEWriter();
                 break;
             default:
                 throw new IllegalArgumentException(Assets.getString("barcode.no.formatter", format.toString()));
@@ -100,6 +107,22 @@ public class Barcode {
         BitMatrix bitMatrix = writer.encode(value, format, width, height);
         LAST_BARCODE_IMAGE = MatrixToImageWriter.toBufferedImage(bitMatrix);
         return LAST_BARCODE_IMAGE;
+    }
+
+    /**
+     * Creates an EAN138 barcode image
+     *
+     * @param value  The barcode text
+     * @param format the barcode format
+     * @param width  thw image width
+     * @param height the image height
+     * @return the barcode image as byte array
+     */
+    public static byte[] createByteArray(String value, BarcodeFormat format, int width, int height) throws Exception {
+        create(value, format, width, height);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ImageIO.write(LAST_BARCODE_IMAGE, "png", byteArrayOutputStream);
+        return byteArrayOutputStream.toByteArray();
     }
 
     /**
