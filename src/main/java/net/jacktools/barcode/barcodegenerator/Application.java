@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import net.jacktools.barcode.barcodegenerator.utils.Assets;
+import net.jacktools.barcode.barcodegenerator.web.Server;
 
 import java.io.IOException;
 
@@ -15,10 +16,11 @@ public class Application extends javafx.application.Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        Server webServer = new Server(8080, 0);
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("mainView.fxml"));
         fxmlLoader.setResources(Assets.RESOURCEBUNDLE);
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Barcode generator");
+        stage.setTitle(Assets.getString("application.title"));
         stage.getIcons().add(Assets.APPLICATION_ICON);
         stage.setScene(scene);
         MainViewController controller = fxmlLoader.getController();
