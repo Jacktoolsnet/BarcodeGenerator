@@ -29,6 +29,8 @@ public class Application extends javafx.application.Application {
         stage.setTitle(Assets.getString("application.title"));
         stage.getIcons().add(Assets.APPLICATION_ICON);
         stage.setScene(scene);
+        stage.setWidth(1000);
+        stage.setHeight(650);
         MainViewController controller = fxmlLoader.getController();
         controller.setStage(stage);
         stage.show();

@@ -9,6 +9,7 @@ import java.util.logging.Level;
 
 public class Settings {
 
+    public static String APP_ICON_COLOUR;
     public static int WEB_SERVER_PORT;
     public static boolean WEB_SERVER_AUTOSTART;
     public static int BARCODE_DEFAULT_WIDTH;
@@ -51,6 +52,7 @@ public class Settings {
     }
 
     private static void readProperties() throws NumberFormatException {
+        APP_ICON_COLOUR = properties.getProperty("app.icon.colour");
         WEB_SERVER_PORT = Integer.valueOf(properties.getProperty("webserver.port"));
         WEB_SERVER_AUTOSTART = Boolean.valueOf(properties.getProperty("webserver.autostart"));
         BARCODE_DEFAULT_WIDTH = Integer.valueOf(properties.getProperty("barcode.default.width"));
@@ -62,6 +64,7 @@ public class Settings {
     public static void saveProperties() {
         AppLog.log(Level.INFO, Assets.getString("application.settings.save"));
         try (OutputStream output = new FileOutputStream(configPropertiesPath.toString())) {
+            properties.setProperty("app.icon.colour", APP_ICON_COLOUR);
             properties.setProperty("webserver.port", String.valueOf(WEB_SERVER_PORT));
             properties.setProperty("webserver.autostart", String.valueOf(WEB_SERVER_AUTOSTART));
             properties.setProperty("barcode.default.width", String.valueOf(BARCODE_DEFAULT_WIDTH));

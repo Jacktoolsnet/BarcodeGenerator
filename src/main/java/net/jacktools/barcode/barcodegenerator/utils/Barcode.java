@@ -1,6 +1,5 @@
 package net.jacktools.barcode.barcodegenerator.utils;
 
-import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Writer;
 import com.google.zxing.WriterException;
 import com.google.zxing.aztec.AztecWriter;
@@ -59,7 +58,7 @@ public class Barcode {
      * @param height the image height
      * @return the barcode image as buffered image
      */
-    public static BufferedImage create(String value, BarcodeFormat format, int width, int height) throws WriterException {
+    public static BufferedImage create(String value, SupportedBarcodeFormat format, int width, int height) throws WriterException {
         Writer writer;
         switch (format) {
             case AZTEC:
@@ -104,7 +103,7 @@ public class Barcode {
             default:
                 throw new IllegalArgumentException(Assets.getString("barcode.no.formatter", format.toString()));
         }
-        BitMatrix bitMatrix = writer.encode(value, format, width, height);
+        BitMatrix bitMatrix = writer.encode(value, format.getBarcodeFormat(), width, height);
         LAST_BARCODE_IMAGE = MatrixToImageWriter.toBufferedImage(bitMatrix);
         return LAST_BARCODE_IMAGE;
     }
@@ -118,7 +117,7 @@ public class Barcode {
      * @param height the image height
      * @return the barcode image as byte array
      */
-    public static byte[] createByteArray(String value, BarcodeFormat format, int width, int height) throws Exception {
+    public static byte[] createByteArray(String value, SupportedBarcodeFormat format, int width, int height) throws Exception {
         create(value, format, width, height);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         ImageIO.write(LAST_BARCODE_IMAGE, "png", byteArrayOutputStream);

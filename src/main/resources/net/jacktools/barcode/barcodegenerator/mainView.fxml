@@ -1,17 +1,335 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.VBox?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/19"
-      fx:controller="net.jacktools.barcode.barcodegenerator.MainViewController">
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.Color?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="500.0" minWidth="1000.0"
+            prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19"
+            fx:controller="net.jacktools.barcode.barcodegenerator.MainViewController">
+    <top>
+        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <buttons>
+                <Button fx:id="buttonSave" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" maxHeight="48.0"
+                        maxWidth="48.0" minHeight="48.0" minWidth="48.0" mnemonicParsing="false"
+                        onAction="#buttonSave_onAction" prefHeight="48.0" prefWidth="48.0" textAlignment="CENTER">
+                    <graphic>
+                        <ImageView fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../../img/floppy-disk.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </padding>
+                </Button>
+                <Button fx:id="buttonCopy" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" maxHeight="48.0"
+                        maxWidth="48.0" minHeight="48.0" minWidth="48.0" mnemonicParsing="false"
+                        onAction="#buttonCopy_onAction" prefHeight="48.0" prefWidth="48.0" textAlignment="CENTER">
+                    <graphic>
+                        <ImageView fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../../img/copy.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </padding>
+                </Button>
+                <Button fx:id="buttonInfo" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" maxHeight="48.0"
+                        maxWidth="48.0" minHeight="48.0" minWidth="48.0" mnemonicParsing="false"
+                        onAction="#buttonHelp_onAction" prefHeight="48.0" prefWidth="48.0" textAlignment="CENTER">
+                    <graphic>
+                        <ImageView fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../../img/circle-question.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </padding>
+                </Button>
+                <Button fx:id="buttonInfo" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" layoutX="830.0"
+                        layoutY="10.0" maxHeight="48.0" maxWidth="48.0" minHeight="48.0" minWidth="48.0"
+                        mnemonicParsing="false" onAction="#buttonInfo_onAction" prefHeight="48.0" prefWidth="48.0"
+                        textAlignment="CENTER">
+                    <graphic>
+                        <ImageView fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../../img/circle-info.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </padding>
+                </Button>
+                <Button fx:id="buttonCloseApplication" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" layoutX="915.0"
+                        layoutY="10.0" maxHeight="48.0" maxWidth="48.0" minHeight="48.0" minWidth="48.0"
+                        mnemonicParsing="false" onAction="#buttonCloseApplication_onAction" prefHeight="48.0"
+                        prefWidth="48.0" textAlignment="CENTER">
+                    <graphic>
+                        <ImageView fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../../img/door-open.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                    </padding>
+                </Button>
+            </buttons>
+            <BorderPane.margin>
+                <Insets/>
+            </BorderPane.margin>
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </padding>
+        </ButtonBar>
+    </top>
+    <center>
+        <TabPane fx:id="tabPaneMain" prefHeight="200.0" prefWidth="200.0" side="LEFT" tabClosingPolicy="UNAVAILABLE"
+                 tabMaxHeight="40.0" tabMaxWidth="40.0" tabMinHeight="40.0" tabMinWidth="40.0"
+                 BorderPane.alignment="CENTER">
+            <tabs>
+                <Tab fx:id="tabBarcode" closable="false">
+                    <graphic>
+                        <ImageView fitHeight="36.0" fitWidth="36.0" rotate="90.0">
+                            <image>
+                                <Image url="@../../../../img/barcode.png"/>
+                            </image>
+                            <rotationAxis>
+                                <Point3D/>
+                            </rotationAxis>
+                        </ImageView>
+                    </graphic>
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <children>
+                                <BorderPane layoutX="98.0" layoutY="36.0" prefHeight="200.0" prefWidth="200.0"
+                                            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                            AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <top>
+                                        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                            <buttons>
+                                                <Label alignment="CENTER_RIGHT" layoutX="218.0" layoutY="17.0"
+                                                       maxWidth="15.0" minWidth="15.0" prefWidth="15.0"
+                                                       text="%fxml.main.label.type"/>
+                                                <ChoiceBox fx:id="choiceBoxBarcodeType" maxWidth="150.0"
+                                                           minWidth="150.0" prefWidth="150.0"/>
+                                                <Label alignment="CENTER_RIGHT" maxWidth="15.0" minWidth="15.0"
+                                                       prefWidth="15.0" text="%fxml.main.label.value"/>
+                                                <TextField fx:id="textFieldBarcodeValue"/>
+                                                <Label alignment="CENTER_RIGHT" layoutX="420.0" layoutY="22.0"
+                                                       maxWidth="15.0" minWidth="15.0" prefWidth="15.0"
+                                                       text="%fxml.main.label.width"/>
+                                                <Spinner fx:id="spinnerBarcodeWidth" maxWidth="75.0" minWidth="75.0"
+                                                         prefWidth="75.0"/>
+                                                <Label alignment="CENTER_RIGHT" layoutX="469.0" layoutY="26.0"
+                                                       maxWidth="15.0" minWidth="15.0" prefWidth="15.0"
+                                                       text="%fxml.main.label.height"/>
+                                                <Spinner fx:id="spinnerBarcodeHeight" layoutX="554.0" layoutY="22.0"
+                                                         maxWidth="75.0" minWidth="75.0" prefWidth="75.0"/>
+                                                <ColorPicker fx:id="colorPickerBarcode">
+                                                    <value>
+                                                        <Color/>
+                                                    </value>
+                                                </ColorPicker>
+                                            </buttons>
+                                            <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                            </padding>
+                                        </ButtonBar>
+                                    </top>
+                                    <center>
+                                        <ImageView fx:id="imageViewBarcode" fitHeight="150.0" fitWidth="200.0"
+                                                   pickOnBounds="true" preserveRatio="true"
+                                                   BorderPane.alignment="CENTER">
+                                            <image>
+                                                <Image url="@../../../../img/barcode.png"/>
+                                            </image>
+                                        </ImageView>
+                                    </center>
+                                </BorderPane>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab fx:id="tabQrCode" closable="false">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <children>
+                                <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0"
+                                            AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                            AnchorPane.topAnchor="0.0">
+                                    <top>
+                                        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                            <buttons>
+                                                <Label alignment="CENTER_RIGHT" layoutX="420.0" layoutY="22.0"
+                                                       maxWidth="15.0" minWidth="15.0" prefWidth="15.0"
+                                                       text="%fxml.main.label.width"/>
+                                                <Spinner fx:id="spinnerQrCodeWidth" maxWidth="75.0" minWidth="75.0"
+                                                         prefWidth="75.0"/>
+                                                <Label alignment="CENTER_RIGHT" layoutX="469.0" layoutY="26.0"
+                                                       maxWidth="15.0" minWidth="15.0" prefWidth="15.0"
+                                                       text="%fxml.main.label.height"/>
+                                                <Spinner fx:id="spinnerQrCodeHeigth" layoutX="554.0" layoutY="22.0"
+                                                         maxWidth="75.0" minWidth="75.0" prefWidth="75.0"/>
+                                                <ColorPicker fx:id="colorPickerQrCode">
+                                                    <value>
+                                                        <Color/>
+                                                    </value>
+                                                </ColorPicker>
+                                            </buttons>
+                                            <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                            </padding>
+                                        </ButtonBar>
+                                    </top>
+                                    <center>
+                                        <ImageView fx:id="imageViewQrCode" fitHeight="150.0" fitWidth="200.0"
+                                                   pickOnBounds="true" preserveRatio="true"
+                                                   BorderPane.alignment="CENTER">
+                                            <image>
+                                                <Image url="@../../../../img/qrcode.png"/>
+                                            </image>
+                                        </ImageView>
+                                    </center>
+                                    <left>
+                                        <Accordion prefHeight="386.0" prefWidth="392.0" BorderPane.alignment="CENTER">
+                                            <panes>
+                                                <TitledPane fx:id="titledPaneTransver" animated="false"
+                                                            text="%fxml.main.titledpane.transfer">
+                                                    <content>
+                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0"
+                                                                    prefWidth="200.0"/>
+                                                    </content>
+                                                </TitledPane>
+                                                <TitledPane fx:id="titledContact" animated="false"
+                                                            text="%fxml.main.titledpane.contact">
+                                                    <content>
+                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0"
+                                                                    prefWidth="200.0"/>
+                                                    </content>
+                                                </TitledPane>
+                                                <TitledPane fx:id="titledPaneMeeting" animated="false"
+                                                            text="%fxml.main.titledpane.meeting">
+                                                    <content>
+                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0"
+                                                                    prefWidth="200.0"/>
+                                                    </content>
+                                                </TitledPane>
+                                            </panes>
+                                        </Accordion>
+                                    </left>
+                                </BorderPane>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                    <graphic>
+                        <ImageView fitHeight="36.0" fitWidth="36.0" rotate="90.0">
+                            <image>
+                                <Image url="@../../../../img/qrcode.png"/>
+                            </image>
+                            <rotationAxis>
+                                <Point3D/>
+                            </rotationAxis>
+                        </ImageView>
+                    </graphic>
+                </Tab>
+                <Tab fx:id="tabWebServer" closable="false">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <children>
+                                <BorderPane layoutX="150.0" layoutY="60.0" prefHeight="200.0" prefWidth="200.0"
+                                            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                            AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <top>
+                                        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                            <buttons>
+                                                <CheckBox fx:id="checkBoxWebServerAutoStart" mnemonicParsing="false"
+                                                          text="beim Programmstart starten"/>
+                                                <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxWidth="30.0"
+                                                       minWidth="30.0" prefWidth="30.0" text="Port:"
+                                                       textAlignment="RIGHT"/>
+                                                <Spinner fx:id="spinnerWebServerPort" maxWidth="100.0" minWidth="100.0"
+                                                         prefWidth="100.0"/>
+                                                <Button fx:id="buttonWebServerStart" alignment="CENTER"
+                                                        contentDisplay="GRAPHIC_ONLY" maxHeight="48.0" maxWidth="48.0"
+                                                        minHeight="48.0" minWidth="48.0" mnemonicParsing="false"
+                                                        onAction="#buttonWebServerStart_onAction" prefHeight="48.0"
+                                                        prefWidth="48.0" textAlignment="CENTER">
+                                                    <graphic>
+                                                        <ImageView fitHeight="36.0" fitWidth="36.0" pickOnBounds="true"
+                                                                   preserveRatio="true">
+                                                            <image>
+                                                                <Image url="@../../../../img/circle-play.png"/>
+                                                            </image>
+                                                        </ImageView>
+                                                    </graphic>
+                                                    <padding>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </padding>
+                                                </Button>
+                                                <Button fx:id="buttonWebServerStop" alignment="CENTER"
+                                                        contentDisplay="GRAPHIC_ONLY" layoutX="496.0" layoutY="10.0"
+                                                        maxHeight="48.0" maxWidth="48.0" minHeight="48.0"
+                                                        minWidth="48.0" mnemonicParsing="false"
+                                                        onAction="#buttonWebServerStop_onAction" prefHeight="48.0"
+                                                        prefWidth="48.0" textAlignment="CENTER">
+                                                    <graphic>
+                                                        <ImageView fitHeight="36.0" fitWidth="36.0" pickOnBounds="true"
+                                                                   preserveRatio="true">
+                                                            <image>
+                                                                <Image url="@../../../../img/circle-stop.png"/>
+                                                            </image>
+                                                        </ImageView>
+                                                    </graphic>
+                                                    <padding>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </padding>
+                                                </Button>
+                                            </buttons>
+                                            <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                            </padding>
+                                        </ButtonBar>
+                                    </top>
+                                    <center>
+                                        <TextArea fx:id="textAreaWebServerLog" editable="false" prefHeight="200.0"
+                                                  prefWidth="200.0" BorderPane.alignment="CENTER"/>
+                                    </center>
+                                </BorderPane>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                    <graphic>
+                        <ImageView fitHeight="36.0" fitWidth="36.0" rotate="90.0">
+                            <image>
+                                <Image url="@../../../../img/rss.png"/>
+                            </image>
+                            <rotationAxis>
+                                <Point3D/>
+                            </rotationAxis>
+                        </ImageView>
+                    </graphic>
+                </Tab>
+            </tabs>
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </padding>
+        </TabPane>
+    </center>
+    <bottom>
+        <Hyperlink fx:id="hyperlinkPreview" onAction="#hyperlinkPreview_onAction" text="Hyperlink"
+                   BorderPane.alignment="CENTER"/>
+    </bottom>
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
     </padding>
-
-    <Label fx:id="welcomeText"/>
-    <ImageView fx:id="imageViewBarcode" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
-    <Button onAction="#onHelloButtonClick" text="%button.generate.barcode"/>
-</VBox>
+</BorderPane>

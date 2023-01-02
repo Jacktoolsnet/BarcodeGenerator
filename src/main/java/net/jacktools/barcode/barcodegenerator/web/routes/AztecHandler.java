@@ -1,10 +1,10 @@
 package net.jacktools.barcode.barcodegenerator.web.routes;
 
-import com.google.zxing.BarcodeFormat;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import net.jacktools.barcode.barcodegenerator.utils.Barcode;
 import net.jacktools.barcode.barcodegenerator.utils.Settings;
+import net.jacktools.barcode.barcodegenerator.utils.SupportedBarcodeFormat;
 import net.jacktools.barcode.barcodegenerator.web.AppServer;
 
 import java.io.IOException;
@@ -18,7 +18,7 @@ public class AztecHandler implements HttpHandler {
         try {
             Map<String, String> queryParameter = AppServer.queryToMap(httpExchange.getRequestURI().getQuery());
             if (null != queryParameter.get("value")) {
-                byte[] bytes = Barcode.createByteArray(queryParameter.get("value"), BarcodeFormat.AZTEC, null != queryParameter.get("width") ? Integer.valueOf(queryParameter.get("width")) : Settings.QRCODE_DEFAULT_WIDTH, null != queryParameter.get("height") ? Integer.valueOf(queryParameter.get("height")) : Settings.QRCODE_DEFAULT_HEIGHT);
+                byte[] bytes = Barcode.createByteArray(queryParameter.get("value"), SupportedBarcodeFormat.AZTEC, null != queryParameter.get("width") ? Integer.valueOf(queryParameter.get("width")) : Settings.QRCODE_DEFAULT_WIDTH, null != queryParameter.get("height") ? Integer.valueOf(queryParameter.get("height")) : Settings.QRCODE_DEFAULT_HEIGHT);
                 httpExchange.sendResponseHeaders(200, bytes.length);
                 OutputStream outputStream = httpExchange.getResponseBody();
                 outputStream.write(bytes);
