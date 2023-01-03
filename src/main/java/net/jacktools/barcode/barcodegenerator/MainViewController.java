@@ -4,17 +4,20 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import net.jacktools.barcode.barcodegenerator.utils.AppLog;
-import net.jacktools.barcode.barcodegenerator.utils.Assets;
-import net.jacktools.barcode.barcodegenerator.utils.Settings;
-import net.jacktools.barcode.barcodegenerator.utils.SupportedBarcodeFormat;
+import javafx.util.converter.IntegerStringConverter;
+import net.jacktools.barcode.barcodegenerator.utils.*;
 
+import java.text.NumberFormat;
+import java.text.ParsePosition;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.function.UnaryOperator;
 import java.util.logging.Level;
 
 public class MainViewController {
@@ -57,20 +60,26 @@ public class MainViewController {
     @FXML
     private ImageView imageViewQrCode;
 
+    NumberFormat format = NumberFormat.getIntegerInstance();
+    UnaryOperator<TextFormatter.Change> filter = c -> {
+        if (c.isContentChange()) {
+            ParsePosition parsePosition = new ParsePosition(0);
+            // NumberFormat evaluates the beginning of the text
+            format.parse(c.getControlNewText(), parsePosition);
+            if (parsePosition.getIndex() == 0 ||
+                    parsePosition.getIndex() < c.getControlNewText().length()) {
+                // reject parsing the complete text failed
+                return null;
+            }
+        }
+        return c;
+    };
     @FXML
-    private Spinner<?> spinnerBarcodeHeight;
-
+    private Spinner<Integer> spinnerBarcodeHeight;
     @FXML
-    private Spinner<?> spinnerBarcodeWidth;
-
+    private Spinner<Integer> spinnerBarcodeWidth;
     @FXML
-    private Spinner<?> spinnerQrCodeHeigth;
-
-    @FXML
-    private Spinner<?> spinnerQrCodeWidth;
-
-    @FXML
-    private Spinner<?> spinnerWebServerPort;
+    private Spinner<Integer> spinnerQrCodeHeigth;
 
     @FXML
     private Tab tabBarcode;
@@ -100,6 +109,10 @@ public class MainViewController {
     private TitledPane titledPaneTransver;
 
     private Stage stage;
+    @FXML
+    private Spinner<Integer> spinnerQrCodeWidth;
+    @FXML
+    private Spinner<Integer> spinnerWebServerPort;
 
     @FXML
     void initialize() {
@@ -131,15 +144,95 @@ public class MainViewController {
         });
     }
 
-//    @FXML
-//    protected void onHelloButtonClick() {
-//        try {
-//            this.welcomeText.setText("978020137962");
-//            this.imageViewBarcode.setImage(Barcode.convertToFxImage(Barcode.create(this.welcomeText.getText(), BarcodeFormat.EAN_13, 300, 150)));
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+    public void setDefaultValues() {
+        // stage
+        this.stage.widthProperty().addListener((observable, oldValue, newValue) -> {
+            createBarcode();
+        });
+        this.stage.heightProperty().addListener((observable, oldValue, newValue) -> {
+            createBarcode();
+        });
+        // Barcode type
+        this.choiceBoxBarcodeType.getSelectionModel().select(SupportedBarcodeFormat.QR_CODE);
+        this.choiceBoxBarcodeType.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            createBarcode();
+        });
+        // Barcode value
+        this.textFieldBarcodeValue.textProperty().addListener((observable, oldValue, newValue) -> {
+            createBarcode();
+        });
+        // Barcode color
+        this.colorPickerBarcode.valueProperty().addListener((observable, oldValue, newValue) -> {
+            createBarcode();
+        });
+        // Spinner
+        this.spinnerBarcodeWidth.setEditable(true);
+        this.spinnerBarcodeWidth.getEditor().setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, filter));
+        this.spinnerBarcodeWidth.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10000, Settings.BARCODE_DEFAULT_WIDTH));
+        this.spinnerBarcodeWidth.valueProperty().addListener((observable, oldValue, newValue) -> {
+            Node increment = spinnerBarcodeWidth.lookup(".increment-arrow-button");
+            if (increment != null) {
+                increment.getOnMouseReleased().handle(null);
+            }
+
+            Node decrement = spinnerBarcodeWidth.lookup(".decrement-arrow-button");
+            if (decrement != null) {
+                decrement.getOnMouseReleased().handle(null);
+            }
+            createBarcode();
+        });
+        this.spinnerBarcodeHeight.setEditable(true);
+        this.spinnerBarcodeHeight.getEditor().setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, filter));
+        this.spinnerBarcodeHeight.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10000, Settings.BARCODE_DEFAULT_HEIGHT));
+        this.spinnerBarcodeHeight.valueProperty().addListener((observable, oldValue, newValue) -> {
+            Node increment = spinnerBarcodeWidth.lookup(".increment-arrow-button");
+            if (increment != null) {
+                increment.getOnMouseReleased().handle(null);
+            }
+
+            Node decrement = spinnerBarcodeWidth.lookup(".decrement-arrow-button");
+            if (decrement != null) {
+                decrement.getOnMouseReleased().handle(null);
+            }
+            createBarcode();
+        });
+        this.spinnerQrCodeWidth.setEditable(true);
+        this.spinnerQrCodeWidth.getEditor().setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, filter));
+        this.spinnerQrCodeWidth.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(16, 2048, Settings.BARCODE_DEFAULT_WIDTH));
+        this.spinnerQrCodeHeigth.setEditable(true);
+        this.spinnerQrCodeHeigth.getEditor().setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, filter));
+        this.spinnerQrCodeHeigth.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(16, 2048, Settings.BARCODE_DEFAULT_HEIGHT));
+        this.spinnerWebServerPort.setEditable(true);
+        this.spinnerWebServerPort.getEditor().setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, filter));
+        this.spinnerWebServerPort.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1024, 65535, Settings.WEB_SERVER_PORT));
+    }
+
+    private void createBarcode() {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (!textFieldBarcodeValue.getText().isBlank() && null != choiceBoxBarcodeType.getSelectionModel().getSelectedItem()) {
+                        imageViewBarcode.setImage(Barcode.convertToFxImage(Barcode.create(textFieldBarcodeValue.getText(), choiceBoxBarcodeType.getSelectionModel().getSelectedItem(), spinnerBarcodeWidth.getValue(), spinnerBarcodeHeight.getValue()), Color.WHITE, colorPickerBarcode.getValue()));
+                        protectImageSize();
+                    }
+                } catch (Exception exception) {
+                    Alert alert = Assets.getAlert(Alert.AlertType.INFORMATION, true);
+                    alert.setHeaderText(Assets.getString("application.error.header"));
+                    alert.setContentText(exception.getLocalizedMessage());
+                    alert.getButtonTypes().clear();
+                    alert.getButtonTypes().addAll(ButtonType.OK);
+                    alert.show();
+                }
+            }
+        });
+
+    }
+
+    private void protectImageSize() {
+        this.imageViewBarcode.setFitWidth(this.spinnerBarcodeWidth.getValue() > this.stage.getWidth() - 100 ? this.stage.getWidth() - 100 : 0);
+        this.imageViewBarcode.setFitHeight(this.spinnerBarcodeHeight.getValue() > this.stage.getHeight() - 200 ? this.stage.getHeight() - 200 : 0);
+    }
 
     @FXML
     void buttonCloseApplication_onAction(ActionEvent event) {

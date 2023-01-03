@@ -5,11 +5,10 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.Color?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="500.0" minWidth="1000.0"
-            prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19"
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/19"
             fx:controller="net.jacktools.barcode.barcodegenerator.MainViewController">
     <top>
-        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <ButtonBar BorderPane.alignment="CENTER">
             <buttons>
                 <Button fx:id="buttonSave" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" maxHeight="48.0"
                         maxWidth="48.0" minHeight="48.0" minWidth="48.0" mnemonicParsing="false"
@@ -93,9 +92,8 @@
         </ButtonBar>
     </top>
     <center>
-        <TabPane fx:id="tabPaneMain" prefHeight="200.0" prefWidth="200.0" side="LEFT" tabClosingPolicy="UNAVAILABLE"
-                 tabMaxHeight="40.0" tabMaxWidth="40.0" tabMinHeight="40.0" tabMinWidth="40.0"
-                 BorderPane.alignment="CENTER">
+        <TabPane fx:id="tabPaneMain" side="LEFT" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="40.0" tabMaxWidth="40.0"
+                 tabMinHeight="40.0" tabMinWidth="40.0" BorderPane.alignment="CENTER">
             <tabs>
                 <Tab fx:id="tabBarcode" closable="false">
                     <graphic>
@@ -109,11 +107,11 @@
                         </ImageView>
                     </graphic>
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane>
                             <children>
-                                <BorderPane layoutX="98.0" layoutY="36.0" prefHeight="200.0" prefWidth="200.0"
-                                            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                                            AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <BorderPane layoutX="98.0" layoutY="36.0" AnchorPane.bottomAnchor="0.0"
+                                            AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                            AnchorPane.topAnchor="0.0">
                                     <top>
                                         <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                             <buttons>
@@ -147,12 +145,14 @@
                                         </ButtonBar>
                                     </top>
                                     <center>
-                                        <ImageView fx:id="imageViewBarcode" fitHeight="150.0" fitWidth="200.0"
-                                                   pickOnBounds="true" preserveRatio="true"
-                                                   BorderPane.alignment="CENTER">
+                                        <ImageView fx:id="imageViewBarcode" pickOnBounds="true" preserveRatio="true"
+                                                   smooth="false" BorderPane.alignment="CENTER">
                                             <image>
                                                 <Image url="@../../../../img/barcode.png"/>
                                             </image>
+                                            <viewport>
+                                                <Rectangle2D/>
+                                            </viewport>
                                         </ImageView>
                                     </center>
                                 </BorderPane>
@@ -162,11 +162,10 @@
                 </Tab>
                 <Tab fx:id="tabQrCode" closable="false">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane>
                             <children>
-                                <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0"
-                                            AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                                            AnchorPane.topAnchor="0.0">
+                                <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                            AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <top>
                                         <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                             <buttons>
@@ -192,8 +191,7 @@
                                         </ButtonBar>
                                     </top>
                                     <center>
-                                        <ImageView fx:id="imageViewQrCode" fitHeight="150.0" fitWidth="200.0"
-                                                   pickOnBounds="true" preserveRatio="true"
+                                        <ImageView fx:id="imageViewQrCode" pickOnBounds="true" preserveRatio="true"
                                                    BorderPane.alignment="CENTER">
                                             <image>
                                                 <Image url="@../../../../img/qrcode.png"/>
@@ -244,11 +242,11 @@
                 </Tab>
                 <Tab fx:id="tabWebServer" closable="false">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane>
                             <children>
-                                <BorderPane layoutX="150.0" layoutY="60.0" prefHeight="200.0" prefWidth="200.0"
-                                            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                                            AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <BorderPane layoutX="150.0" layoutY="60.0" AnchorPane.bottomAnchor="0.0"
+                                            AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                            AnchorPane.topAnchor="0.0">
                                     <top>
                                         <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                             <buttons>

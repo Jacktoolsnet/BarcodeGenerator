@@ -15,6 +15,7 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -31,16 +32,24 @@ public class Barcode {
     /**
      * Converts a BufferedImage to an javaFX image.
      *
-     * @param bufferedImage the bufferedImage
+     * @param bufferedImage   the bufferedImage
+     * @param backgroundColor the background color
+     * @param barcodeColor    the barcode color
      * @return the javaFX image
      */
-    public static Image convertToFxImage(BufferedImage bufferedImage) {
+    public static Image convertToFxImage(BufferedImage bufferedImage, Color backgroundColor, Color barcodeColor) {
         if (bufferedImage != null) {
             WritableImage writableImage = new WritableImage(bufferedImage.getWidth(), bufferedImage.getHeight());
             PixelWriter pixelWriter = writableImage.getPixelWriter();
             for (int x = 0; x < bufferedImage.getWidth(); x++) {
                 for (int y = 0; y < bufferedImage.getHeight(); y++) {
-                    pixelWriter.setArgb(x, y, bufferedImage.getRGB(x, y));
+                    if (bufferedImage.getRGB(x, y) == 0xFF000000) {
+                        bufferedImage.setRGB(x, y, barcodeColor.hashCode());
+                        pixelWriter.setColor(x, y, barcodeColor);
+                    } else {
+                        bufferedImage.setRGB(x, y, backgroundColor.hashCode());
+                        pixelWriter.setColor(x, y, backgroundColor);
+                    }
                 }
             }
             return new ImageView(writableImage).getImage();
@@ -153,4 +162,5 @@ public class Barcode {
         content.putImage(image);
         clipboard.setContent(content);
     }
+
 }
