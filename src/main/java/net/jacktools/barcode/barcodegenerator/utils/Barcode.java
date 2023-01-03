@@ -9,10 +9,7 @@ import com.google.zxing.datamatrix.DataMatrixWriter;
 import com.google.zxing.oned.*;
 import com.google.zxing.pdf417.PDF417Writer;
 import com.google.zxing.qrcode.QRCodeWriter;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
+import javafx.scene.image.*;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.paint.Color;
@@ -26,37 +23,6 @@ import java.io.File;
 import java.io.IOException;
 
 public class Barcode {
-
-    public static BufferedImage LAST_BARCODE_IMAGE;
-
-    /**
-     * Converts a BufferedImage to an javaFX image.
-     *
-     * @param bufferedImage   the bufferedImage
-     * @param backgroundColor the background color
-     * @param barcodeColor    the barcode color
-     * @return the javaFX image
-     */
-    public static Image convertToFxImage(BufferedImage bufferedImage, Color backgroundColor, Color barcodeColor) {
-        if (bufferedImage != null) {
-            WritableImage writableImage = new WritableImage(bufferedImage.getWidth(), bufferedImage.getHeight());
-            PixelWriter pixelWriter = writableImage.getPixelWriter();
-            for (int x = 0; x < bufferedImage.getWidth(); x++) {
-                for (int y = 0; y < bufferedImage.getHeight(); y++) {
-                    if (bufferedImage.getRGB(x, y) == 0xFF000000) {
-                        bufferedImage.setRGB(x, y, barcodeColor.hashCode());
-                        pixelWriter.setColor(x, y, barcodeColor);
-                    } else {
-                        bufferedImage.setRGB(x, y, backgroundColor.hashCode());
-                        pixelWriter.setColor(x, y, backgroundColor);
-                    }
-                }
-            }
-            return new ImageView(writableImage).getImage();
-        } else {
-            return null;
-        }
-    }
 
     /**
      * Creates an EAN138 barcode image
@@ -113,8 +79,7 @@ public class Barcode {
                 throw new IllegalArgumentException(Assets.getString("barcode.no.formatter", format.toString()));
         }
         BitMatrix bitMatrix = writer.encode(value, format.getBarcodeFormat(), width, height);
-        LAST_BARCODE_IMAGE = MatrixToImageWriter.toBufferedImage(bitMatrix);
-        return LAST_BARCODE_IMAGE;
+        return MatrixToImageWriter.toBufferedImage(bitMatrix);
     }
 
     /**
@@ -127,19 +92,71 @@ public class Barcode {
      * @return the barcode image as byte array
      */
     public static byte[] createByteArray(String value, SupportedBarcodeFormat format, int width, int height) throws Exception {
-        create(value, format, width, height);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        ImageIO.write(LAST_BARCODE_IMAGE, "png", byteArrayOutputStream);
+        ImageIO.write(create(value, format, width, height), "png", byteArrayOutputStream);
         return byteArrayOutputStream.toByteArray();
+    }
+
+    /**
+     * Converts a BufferedImage to an javaFX image.
+     *
+     * @param bufferedImage   the bufferedImage
+     * @param backgroundColor the background color
+     * @param barcodeColor    the barcode color
+     * @return the javaFX image
+     */
+    public static Image bufferedImageToFxImage(BufferedImage bufferedImage, Color backgroundColor, Color barcodeColor) {
+        if (bufferedImage != null) {
+            WritableImage writableImage = new WritableImage(bufferedImage.getWidth(), bufferedImage.getHeight());
+            PixelWriter pixelWriter = writableImage.getPixelWriter();
+            for (int x = 0; x < bufferedImage.getWidth(); x++) {
+                for (int y = 0; y < bufferedImage.getHeight(); y++) {
+                    if (bufferedImage.getRGB(x, y) == 0xFF000000) {
+                        bufferedImage.setRGB(x, y, barcodeColor.hashCode());
+                        pixelWriter.setColor(x, y, barcodeColor);
+                    } else {
+                        bufferedImage.setRGB(x, y, backgroundColor.hashCode());
+                        pixelWriter.setColor(x, y, backgroundColor);
+                    }
+                }
+            }
+            return new ImageView(writableImage).getImage();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Convert a fx image to a buffered image.
+     *
+     * @param image the fx image
+     * @return the buffered image
+     */
+    public static BufferedImage fxImageToBufferedImage(Image image) {
+        if (image != null) {
+            int width = Double.valueOf(image.getWidth()).intValue();
+            int height = Double.valueOf(image.getHeight()).intValue();
+            BufferedImage bufferedImage = new BufferedImage(width, height, 1);
+            PixelReader pixelReader = image.getPixelReader();
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    bufferedImage.setRGB(x, y, pixelReader.getArgb(x, y));
+                }
+            }
+            return bufferedImage;
+        } else {
+            return null;
+        }
     }
 
     /**
      * Writes the last generated barcode image to a file.
      *
      * @param stage the parent stage
+     * @param image the image to save.
      * @throws IOException if an error occurs
      */
-    public static void toFile(Stage stage) throws IOException {
+    public static void toFile(Stage stage, Image image) throws IOException {
         FileChooser fileChooser = new FileChooser();
         //Set extension filter for text files
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG (*.png)", "*.png"));
@@ -147,7 +164,7 @@ public class Barcode {
         //Show save file dialog
         File file = fileChooser.showSaveDialog(stage);
         if (file != null) {
-            ImageIO.write(LAST_BARCODE_IMAGE, file.getName().substring(file.getName().lastIndexOf(".") + 1), file);
+            ImageIO.write(fxImageToBufferedImage(image), file.getName().substring(file.getName().lastIndexOf(".") + 1), file);
         }
     }
 

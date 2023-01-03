@@ -8,17 +8,30 @@ import net.jacktools.barcode.barcodegenerator.utils.Assets;
 import net.jacktools.barcode.barcodegenerator.utils.Settings;
 import net.jacktools.barcode.barcodegenerator.web.AppServer;
 
-import java.io.IOException;
+import java.awt.*;
 import java.util.logging.Level;
 
 public class Application extends javafx.application.Application {
+
+    public static TrayIcon TRAY_ICON;
+    private static SystemTray TRAY;
 
     public static void main(String[] args) {
         launch();
     }
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage stage) throws Exception {
+        if (SystemTray.isSupported()) {
+            this.TRAY = SystemTray.getSystemTray();
+            Image image = Toolkit.getDefaultToolkit().createImage(getClass().getResource("/img/logo.jpg"));
+            TRAY_ICON = new TrayIcon(image, Assets.getString("application.title"));
+            //Let the system resize the image if needed
+            TRAY_ICON.setImageAutoSize(true);
+            //Set tooltip text for the tray icon
+            TRAY_ICON.setToolTip(Assets.getString("application.tray.tooltip"));
+            TRAY.add(TRAY_ICON);
+        }
         AppLog.log(Level.INFO, Assets.getString("application.log.start"));
         if (Settings.WEB_SERVER_AUTOSTART) {
             AppServer.start();

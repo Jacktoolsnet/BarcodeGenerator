@@ -113,31 +113,36 @@
                                             AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                                             AnchorPane.topAnchor="0.0">
                                     <top>
-                                        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                        <ButtonBar buttonMinWidth="40.0" BorderPane.alignment="CENTER">
                                             <buttons>
                                                 <Label alignment="CENTER_RIGHT" layoutX="218.0" layoutY="17.0"
-                                                       maxWidth="15.0" minWidth="15.0" prefWidth="15.0"
-                                                       text="%fxml.main.label.type"/>
-                                                <ChoiceBox fx:id="choiceBoxBarcodeType" maxWidth="150.0"
-                                                           minWidth="150.0" prefWidth="150.0"/>
-                                                <Label alignment="CENTER_RIGHT" maxWidth="15.0" minWidth="15.0"
-                                                       prefWidth="15.0" text="%fxml.main.label.value"/>
+                                                       maxWidth="40.0" text="%fxml.main.label.type"/>
+                                                <ChoiceBox fx:id="choiceBoxBarcodeType" maxWidth="100.0"
+                                                           minWidth="100.0" prefWidth="100.0"/>
+                                                <Label alignment="CENTER_RIGHT" maxWidth="40.0"
+                                                       text="%fxml.main.label.value"/>
                                                 <TextField fx:id="textFieldBarcodeValue"/>
                                                 <Label alignment="CENTER_RIGHT" layoutX="420.0" layoutY="22.0"
-                                                       maxWidth="15.0" minWidth="15.0" prefWidth="15.0"
-                                                       text="%fxml.main.label.width"/>
+                                                       maxWidth="40.0" text="%fxml.main.label.width"/>
                                                 <Spinner fx:id="spinnerBarcodeWidth" maxWidth="75.0" minWidth="75.0"
                                                          prefWidth="75.0"/>
                                                 <Label alignment="CENTER_RIGHT" layoutX="469.0" layoutY="26.0"
-                                                       maxWidth="15.0" minWidth="15.0" prefWidth="15.0"
-                                                       text="%fxml.main.label.height"/>
+                                                       maxWidth="40.0" text="%fxml.main.label.height"/>
                                                 <Spinner fx:id="spinnerBarcodeHeight" layoutX="554.0" layoutY="22.0"
                                                          maxWidth="75.0" minWidth="75.0" prefWidth="75.0"/>
-                                                <ColorPicker fx:id="colorPickerBarcode">
+                                                <Label alignment="CENTER_RIGHT" layoutX="578.0" layoutY="16.0"
+                                                       maxWidth="100.0" text="%fxml.main.label.barcodecolor"/>
+                                                <ColorPicker fx:id="colorPickerBarcode" maxWidth="100.0"
+                                                             minWidth="100.0" prefWidth="100.0">
                                                     <value>
                                                         <Color/>
                                                     </value>
                                                 </ColorPicker>
+                                                <Label alignment="CENTER_RIGHT" layoutX="716.0" layoutY="16.0"
+                                                       maxWidth="100.0" text="%fxml.main.label.backgroundcolor"/>
+                                                <ColorPicker fx:id="colorPickerBarcodeBackground" layoutX="801.0"
+                                                             layoutY="12.0" maxWidth="100.0" minWidth="100.0"
+                                                             prefWidth="100.0"/>
                                             </buttons>
                                             <padding>
                                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
@@ -167,19 +172,27 @@
                                 <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
                                             AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <top>
-                                        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                        <ButtonBar buttonMinWidth="40.0" BorderPane.alignment="CENTER">
                                             <buttons>
                                                 <Label alignment="CENTER_RIGHT" layoutX="420.0" layoutY="22.0"
-                                                       maxWidth="15.0" minWidth="15.0" prefWidth="15.0"
-                                                       text="%fxml.main.label.width"/>
+                                                       maxWidth="40.0" text="%fxml.main.label.width"/>
                                                 <Spinner fx:id="spinnerQrCodeWidth" maxWidth="75.0" minWidth="75.0"
                                                          prefWidth="75.0"/>
                                                 <Label alignment="CENTER_RIGHT" layoutX="469.0" layoutY="26.0"
-                                                       maxWidth="15.0" minWidth="15.0" prefWidth="15.0"
-                                                       text="%fxml.main.label.height"/>
-                                                <Spinner fx:id="spinnerQrCodeHeigth" layoutX="554.0" layoutY="22.0"
+                                                       maxWidth="40.0" text="%fxml.main.label.height"/>
+                                                <Spinner fx:id="spinnerQrCodeHeight" layoutX="554.0" layoutY="22.0"
                                                          maxWidth="75.0" minWidth="75.0" prefWidth="75.0"/>
+                                                <Label alignment="CENTER_RIGHT" layoutX="707.0" layoutY="14.0"
+                                                       maxWidth="100.0" text="%fxml.main.label.barcodecolor"/>
                                                 <ColorPicker fx:id="colorPickerQrCode">
+                                                    <value>
+                                                        <Color/>
+                                                    </value>
+                                                </ColorPicker>
+                                                <Label alignment="CENTER_RIGHT" layoutX="792.0" layoutY="14.0"
+                                                       maxWidth="100.0" text="%fxml.main.label.backgroundcolor"/>
+                                                <ColorPicker fx:id="colorPickerQrCodeBackground" layoutX="792.0"
+                                                             layoutY="10.0">
                                                     <value>
                                                         <Color/>
                                                     </value>
@@ -248,7 +261,7 @@
                                             AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                                             AnchorPane.topAnchor="0.0">
                                     <top>
-                                        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                        <ButtonBar buttonMinWidth="40.0" BorderPane.alignment="CENTER">
                                             <buttons>
                                                 <CheckBox fx:id="checkBoxWebServerAutoStart" mnemonicParsing="false"
                                                           text="beim Programmstart starten"/>

@@ -5,14 +5,18 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.converter.IntegerStringConverter;
 import net.jacktools.barcode.barcodegenerator.utils.*;
 
+import java.awt.*;
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Arrays;
@@ -49,7 +53,13 @@ public class MainViewController {
     private ColorPicker colorPickerBarcode;
 
     @FXML
+    private ColorPicker colorPickerBarcodeBackground;
+
+    @FXML
     private ColorPicker colorPickerQrCode;
+
+    @FXML
+    private ColorPicker colorPickerQrCodeBackground;
 
     @FXML
     private Hyperlink hyperlinkPreview;
@@ -79,7 +89,7 @@ public class MainViewController {
     @FXML
     private Spinner<Integer> spinnerBarcodeWidth;
     @FXML
-    private Spinner<Integer> spinnerQrCodeHeigth;
+    private Spinner<Integer> spinnerQrCodeHeight;
 
     @FXML
     private Tab tabBarcode;
@@ -165,6 +175,9 @@ public class MainViewController {
         this.colorPickerBarcode.valueProperty().addListener((observable, oldValue, newValue) -> {
             createBarcode();
         });
+        this.colorPickerBarcodeBackground.valueProperty().addListener((observable, oldValue, newValue) -> {
+            createBarcode();
+        });
         // Spinner
         this.spinnerBarcodeWidth.setEditable(true);
         this.spinnerBarcodeWidth.getEditor().setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, filter));
@@ -199,9 +212,9 @@ public class MainViewController {
         this.spinnerQrCodeWidth.setEditable(true);
         this.spinnerQrCodeWidth.getEditor().setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, filter));
         this.spinnerQrCodeWidth.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(16, 2048, Settings.BARCODE_DEFAULT_WIDTH));
-        this.spinnerQrCodeHeigth.setEditable(true);
-        this.spinnerQrCodeHeigth.getEditor().setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, filter));
-        this.spinnerQrCodeHeigth.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(16, 2048, Settings.BARCODE_DEFAULT_HEIGHT));
+        this.spinnerQrCodeHeight.setEditable(true);
+        this.spinnerQrCodeHeight.getEditor().setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, filter));
+        this.spinnerQrCodeHeight.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(16, 2048, Settings.BARCODE_DEFAULT_HEIGHT));
         this.spinnerWebServerPort.setEditable(true);
         this.spinnerWebServerPort.getEditor().setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, filter));
         this.spinnerWebServerPort.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1024, 65535, Settings.WEB_SERVER_PORT));
@@ -213,7 +226,7 @@ public class MainViewController {
             public void run() {
                 try {
                     if (!textFieldBarcodeValue.getText().isBlank() && null != choiceBoxBarcodeType.getSelectionModel().getSelectedItem()) {
-                        imageViewBarcode.setImage(Barcode.convertToFxImage(Barcode.create(textFieldBarcodeValue.getText(), choiceBoxBarcodeType.getSelectionModel().getSelectedItem(), spinnerBarcodeWidth.getValue(), spinnerBarcodeHeight.getValue()), Color.WHITE, colorPickerBarcode.getValue()));
+                        imageViewBarcode.setImage(Barcode.bufferedImageToFxImage(Barcode.create(textFieldBarcodeValue.getText(), choiceBoxBarcodeType.getSelectionModel().getSelectedItem(), spinnerBarcodeWidth.getValue(), spinnerBarcodeHeight.getValue()), colorPickerBarcodeBackground.getValue(), colorPickerBarcode.getValue()));
                         protectImageSize();
                     }
                 } catch (Exception exception) {
@@ -254,7 +267,13 @@ public class MainViewController {
 
     @FXML
     void buttonCopy_onAction(ActionEvent event) {
-
+        switch (this.tabPaneMain.getSelectionModel().getSelectedIndex()) {
+            case 0 -> Barcode.toClipboard(this.imageViewBarcode.getImage());
+            case 1 -> Barcode.toClipboard(this.imageViewQrCode.getImage());
+        }
+        if (null != Application.TRAY_ICON) {
+            Application.TRAY_ICON.displayMessage(Assets.getString("application.title"), Assets.getString("application.tray.copytoclipboard"), TrayIcon.MessageType.INFO);
+        }
     }
 
     @FXML
@@ -269,7 +288,14 @@ public class MainViewController {
 
     @FXML
     void buttonSave_onAction(ActionEvent event) {
-
+        try {
+            switch (this.tabPaneMain.getSelectionModel().getSelectedIndex()) {
+                case 0 -> Barcode.toFile(this.stage, this.imageViewBarcode.getImage());
+                case 1 -> Barcode.toFile(this.stage, this.imageViewQrCode.getImage());
+            }
+        } catch (IOException e) {
+            AppLog.log(Level.INFO, e.getLocalizedMessage());
+        }
     }
 
     @FXML
