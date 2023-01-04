@@ -33,7 +33,7 @@ public class UpceHandler implements HttpHandler {
             OutputStream outputStream = httpExchange.getResponseBody();
             outputStream.write(e.toString().getBytes());
             outputStream.close();
-            AppServer.LOG("ERROR: " + e.toString());
+            AppServer.LOG("ERROR: " + e);
         }
 
     }
