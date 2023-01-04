@@ -35,8 +35,7 @@ public class Application extends javafx.application.Application {
         AppLog.log(Level.INFO, Assets.getString("application.log.start"));
         if (Settings.WEB_SERVER_AUTOSTART) {
             AppServer.start();
-            AppLog.log(Level.INFO, Assets.getString("application.tray.webserver.start", Settings.WEB_SERVER_PORT));
-            AppServer.LOG.set(AppServer.LOG.getValue() + "\r\n" + Assets.getString("application.tray.webserver.start", Settings.WEB_SERVER_PORT));
+            AppServer.LOG(Assets.getString("application.tray.webserver.start", Settings.WEB_SERVER_PORT));
             Application.TRAY_ICON.displayMessage(Assets.getString("application.title"), Assets.getString("application.tray.webserver.start", Settings.WEB_SERVER_PORT), TrayIcon.MessageType.INFO);
         }
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("mainView.fxml"));

@@ -16,6 +16,7 @@ public class CodeBarHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         try {
+            AppServer.LOG(httpExchange.getRequestURI().toString());
             Map<String, String> queryParameter = AppServer.queryToMap(httpExchange.getRequestURI().getQuery());
             if (null != queryParameter.get("value")) {
                 byte[] bytes = Barcode.createByteArray(queryParameter.get("value"), SupportedBarcodeFormat.CODABAR, null != queryParameter.get("width") ? Integer.valueOf(queryParameter.get("width")) : Settings.BARCODE_DEFAULT_WIDTH, null != queryParameter.get("height") ? Integer.valueOf(queryParameter.get("height")) : Settings.BARCODE_DEFAULT_HEIGHT);
@@ -23,6 +24,7 @@ public class CodeBarHandler implements HttpHandler {
                 OutputStream outputStream = httpExchange.getResponseBody();
                 outputStream.write(bytes);
                 outputStream.close();
+                AppServer.LOG("OK");
             } else {
                 throw new IllegalArgumentException();
             }
@@ -31,6 +33,7 @@ public class CodeBarHandler implements HttpHandler {
             OutputStream outputStream = httpExchange.getResponseBody();
             outputStream.write(e.toString().getBytes());
             outputStream.close();
+            AppServer.LOG("ERROR: " + e.toString());
         }
 
     }

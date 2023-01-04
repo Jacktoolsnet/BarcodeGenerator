@@ -286,7 +286,7 @@ public class MainViewController {
             saveWebserverSettings();
         });
         // Webserver log
-        this.textAreaWebServerLog.textProperty().bind(AppServer.LOG);
+        this.textAreaWebServerLog.textProperty().bind(AppServer.LOG_PROPERTY);
     }
 
     private void createBarcode() {
@@ -384,12 +384,10 @@ public class MainViewController {
     void buttonWebServerStart_onAction(ActionEvent event) {
         try {
             AppServer.start();
-            AppLog.log(Level.INFO, Assets.getString("application.tray.webserver.start", this.spinnerWebServerPort.getValue()));
-            AppServer.LOG.set(AppServer.LOG.getValue() + "\r\n" + Assets.getString("application.tray.webserver.start", this.spinnerWebServerPort.getValue()));
+            AppServer.LOG(Assets.getString("application.tray.webserver.start", this.spinnerWebServerPort.getValue()));
             Application.TRAY_ICON.displayMessage(Assets.getString("application.title"), Assets.getString("application.tray.webserver.start", this.spinnerWebServerPort.getValue()), TrayIcon.MessageType.INFO);
         } catch (IOException e) {
-            AppLog.log(Level.INFO, e.getLocalizedMessage());
-            AppServer.LOG.set(AppServer.LOG.getValue() + "\r\n" + Assets.getString("application.tray.webserver.error") + "\r\n" + e.getLocalizedMessage());
+            AppServer.LOG(Assets.getString("application.tray.webserver.error") + "\r\n" + e.getLocalizedMessage());
             Application.TRAY_ICON.displayMessage(Assets.getString("application.title"), Assets.getString("application.tray.webserver.error"), TrayIcon.MessageType.INFO);
         }
     }
@@ -397,8 +395,7 @@ public class MainViewController {
     @FXML
     void buttonWebServerStop_onAction(ActionEvent event) {
         AppServer.stop();
-        AppLog.log(Level.INFO, Assets.getString("application.tray.webserver.stop"));
-        AppServer.LOG.set(AppServer.LOG.getValue() + "\r\n" + Assets.getString("application.tray.webserver.stop"));
+        AppServer.LOG(Assets.getString("application.tray.webserver.stop"));
         Application.TRAY_ICON.displayMessage(Assets.getString("application.title"), Assets.getString("application.tray.webserver.stop"), TrayIcon.MessageType.INFO);
     }
 

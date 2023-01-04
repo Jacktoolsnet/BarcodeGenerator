@@ -5,14 +5,19 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import net.jacktools.barcode.barcodegenerator.utils.AppLog;
 import net.jacktools.barcode.barcodegenerator.utils.Assets;
 import net.jacktools.barcode.barcodegenerator.utils.Settings;
 import net.jacktools.barcode.barcodegenerator.web.routes.*;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class AppServer {
 
@@ -21,7 +26,7 @@ public class AppServer {
     public static BooleanProperty RUNNING = new SimpleBooleanProperty();
     public static BooleanProperty NOT_RUNNING = new SimpleBooleanProperty();
 
-    public static StringProperty LOG = new SimpleStringProperty();
+    public static StringProperty LOG_PROPERTY = new SimpleStringProperty();
 
     /**
      * Stats the http web server.
@@ -29,7 +34,8 @@ public class AppServer {
      * @throws IOException
      */
     public static void start() throws IOException {
-        LOG.set(Assets.getString("application.log.start"));
+        LOG_PROPERTY.set("");
+        LOG(Assets.getString("application.log.start"));
         RUNNING.set(false);
         NOT_RUNNING.set(true);
         HTTP_SERVER = HttpServer.create(new InetSocketAddress(Settings.WEB_SERVER_PORT), 0);
@@ -77,5 +83,21 @@ public class AppServer {
             }
         }
         return result;
+    }
+
+    /**
+     * Add a Message to the AppServer log.
+     *
+     * @param message
+     */
+    public static void LOG(String message) {
+        AppLog.log(Level.INFO, message);
+        SimpleDateFormat logTime = new SimpleDateFormat("yyy.MM.dd HH:mm:ss.SSS");
+        Calendar cal = new GregorianCalendar();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(logTime.format(cal.getTime()))
+                .append(" || ")
+                .append(message + "\n");
+        LOG_PROPERTY.set(null != LOG_PROPERTY.get() ? stringBuilder + LOG_PROPERTY.get() : stringBuilder.toString());
     }
 }
