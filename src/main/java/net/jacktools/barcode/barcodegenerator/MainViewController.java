@@ -300,7 +300,7 @@ public class MainViewController {
                     if (!textFieldBarcodeValue.getText().isBlank() && null != choiceBoxBarcodeType.getSelectionModel().getSelectedItem()) {
                         imageViewBarcode.setImage(Barcode.bufferedImageToFxImage(Barcode.create(textFieldBarcodeValue.getText(), choiceBoxBarcodeType.getSelectionModel().getSelectedItem(), spinnerBarcodeWidth.getValue(), spinnerBarcodeHeight.getValue()), colorPickerBarcodeBackground.getValue(), colorPickerBarcode.getValue()));
                         protectImageSize();
-                        hyperlinkPreview.setText(Assets.getString("hyperlink.barcode", String.valueOf(Settings.WEB_SERVER_PORT), choiceBoxBarcodeType.getSelectionModel().getSelectedItem().getRoute(), URLEncoder.encode(textFieldBarcodeValue.getText(), "UTF-8"), String.valueOf(spinnerBarcodeWidth.getValue()), String.valueOf(spinnerBarcodeHeight.getValue()), colorPickerBarcodeBackground.getValue().toString(), colorPickerBarcode.getValue().toString()));
+                        hyperlinkPreview.setText(Assets.getString("hyperlink.barcode", String.valueOf(Settings.WEB_SERVER_PORT), choiceBoxBarcodeType.getSelectionModel().getSelectedItem().getRoute(), URLEncoder.encode(textFieldBarcodeValue.getText(), "UTF-8"), String.valueOf(spinnerBarcodeWidth.getValue()), String.valueOf(spinnerBarcodeHeight.getValue()), colorPickerBarcode.getValue().toString(), colorPickerBarcodeBackground.getValue().toString()));
                     }
                 } catch (Exception exception) {
                     Alert alert = Assets.getAlert(Alert.AlertType.INFORMATION, true);

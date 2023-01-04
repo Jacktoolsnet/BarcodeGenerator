@@ -85,15 +85,20 @@ public class Barcode {
     /**
      * Creates an EAN138 barcode image
      *
-     * @param value  The barcode text
-     * @param format the barcode format
-     * @param width  thw image width
-     * @param height the image height
+     * @param value           The barcode text
+     * @param format          the barcode format
+     * @param width           thw image width
+     * @param height          the image height
+     * @param backgroundColor the background color
+     * @param barcodeColor    the barcode color
      * @return the barcode image as byte array
      */
-    public static byte[] createByteArray(String value, SupportedBarcodeFormat format, int width, int height) throws Exception {
+    public static byte[] createByteArray(String value, SupportedBarcodeFormat format, int width, int height, Color backgroundColor, Color barcodeColor) throws Exception {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        ImageIO.write(create(value, format, width, height), "png", byteArrayOutputStream);
+        BufferedImage bufferedImage = create(value, format, width, height);
+        Image image = bufferedImageToFxImage(bufferedImage, backgroundColor, barcodeColor);
+        // Perhaps we do in the future some other thins with the image here.
+        ImageIO.write(fxImageToBufferedImage(image), "png", byteArrayOutputStream);
         return byteArrayOutputStream.toByteArray();
     }
 
