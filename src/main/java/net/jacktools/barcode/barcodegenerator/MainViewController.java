@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.converter.IntegerStringConverter;
 import net.jacktools.barcode.barcodegenerator.utils.*;
+import net.jacktools.barcode.barcodegenerator.web.AppServer;
 
 import java.awt.*;
 import java.io.IOException;
@@ -167,6 +168,8 @@ public class MainViewController {
         // buttons
         this.buttonCopy.disableProperty().bind(this.tabPaneMain.getSelectionModel().selectedIndexProperty().greaterThan(1));
         this.buttonSave.disableProperty().bind(this.tabPaneMain.getSelectionModel().selectedIndexProperty().greaterThan(1));
+        this.buttonWebServerStart.disableProperty().bind(AppServer.RUNNING);
+        this.buttonWebServerStop.disableProperty().bind(AppServer.NOT_RUNNING);
         // Barcode type
         this.choiceBoxBarcodeType.getSelectionModel().select(Settings.BARCODE_TYPE);
         this.choiceBoxBarcodeType.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -261,9 +264,10 @@ public class MainViewController {
             createBarcode();
             saveBarcodeSettings();
         });
+        this.spinnerWebServerPort.disableProperty().bind(AppServer.RUNNING);
         this.spinnerWebServerPort.setEditable(true);
         this.spinnerWebServerPort.getEditor().setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, filter));
-        this.spinnerWebServerPort.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1024, 65535, Settings.WEB_SERVER_PORT));
+        this.spinnerWebServerPort.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Settings.WEB_SERVER_PORT_MIN, Settings.WEB_SERVER_PORT_MAX, Settings.WEB_SERVER_PORT));
         this.spinnerWebServerPort.valueProperty().addListener((observable, oldValue, newValue) -> {
             Node increment = spinnerBarcodeWidth.lookup(".increment-arrow-button");
             if (increment != null) {
@@ -274,9 +278,15 @@ public class MainViewController {
             if (decrement != null) {
                 decrement.getOnMouseReleased().handle(null);
             }
-            createBarcode();
-            saveBarcodeSettings();
+            saveWebserverSettings();
         });
+        // checkbox
+        this.checkBoxWebServerAutoStart.setSelected(Settings.WEB_SERVER_AUTOSTART);
+        this.checkBoxWebServerAutoStart.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            saveWebserverSettings();
+        });
+        // Webserver log
+        this.textAreaWebServerLog.textProperty().bind(AppServer.LOG);
     }
 
     private void createBarcode() {
@@ -307,6 +317,11 @@ public class MainViewController {
         Settings.BARCODE_DEFAULT_HEIGHT = this.spinnerBarcodeWidth.getValue();
         Settings.BARCODE_COLOR = this.colorPickerBarcode.getValue();
         Settings.BARCODE_BACKGROUND_COLOR = this.colorPickerBarcodeBackground.getValue();
+    }
+
+    private void saveWebserverSettings() {
+        Settings.WEB_SERVER_AUTOSTART = this.checkBoxWebServerAutoStart.isSelected();
+        Settings.WEB_SERVER_PORT = this.spinnerWebServerPort.getValue();
     }
 
     private void protectImageSize() {
@@ -367,12 +382,24 @@ public class MainViewController {
 
     @FXML
     void buttonWebServerStart_onAction(ActionEvent event) {
-
+        try {
+            AppServer.start();
+            AppLog.log(Level.INFO, Assets.getString("application.tray.webserver.start", this.spinnerWebServerPort.getValue()));
+            AppServer.LOG.set(AppServer.LOG.getValue() + "\r\n" + Assets.getString("application.tray.webserver.start", this.spinnerWebServerPort.getValue()));
+            Application.TRAY_ICON.displayMessage(Assets.getString("application.title"), Assets.getString("application.tray.webserver.start", this.spinnerWebServerPort.getValue()), TrayIcon.MessageType.INFO);
+        } catch (IOException e) {
+            AppLog.log(Level.INFO, e.getLocalizedMessage());
+            AppServer.LOG.set(AppServer.LOG.getValue() + "\r\n" + Assets.getString("application.tray.webserver.error") + "\r\n" + e.getLocalizedMessage());
+            Application.TRAY_ICON.displayMessage(Assets.getString("application.title"), Assets.getString("application.tray.webserver.error"), TrayIcon.MessageType.INFO);
+        }
     }
 
     @FXML
     void buttonWebServerStop_onAction(ActionEvent event) {
-
+        AppServer.stop();
+        AppLog.log(Level.INFO, Assets.getString("application.tray.webserver.stop"));
+        AppServer.LOG.set(AppServer.LOG.getValue() + "\r\n" + Assets.getString("application.tray.webserver.stop"));
+        Application.TRAY_ICON.displayMessage(Assets.getString("application.title"), Assets.getString("application.tray.webserver.stop"), TrayIcon.MessageType.INFO);
     }
 
     @FXML

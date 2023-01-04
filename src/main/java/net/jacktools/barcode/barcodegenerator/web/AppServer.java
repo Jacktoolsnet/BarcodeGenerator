@@ -1,6 +1,11 @@
 package net.jacktools.barcode.barcodegenerator.web;
 
 import com.sun.net.httpserver.HttpServer;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import net.jacktools.barcode.barcodegenerator.utils.Assets;
 import net.jacktools.barcode.barcodegenerator.utils.Settings;
 import net.jacktools.barcode.barcodegenerator.web.routes.*;
 
@@ -13,12 +18,20 @@ public class AppServer {
 
     private static HttpServer HTTP_SERVER;
 
+    public static BooleanProperty RUNNING = new SimpleBooleanProperty();
+    public static BooleanProperty NOT_RUNNING = new SimpleBooleanProperty();
+
+    public static StringProperty LOG = new SimpleStringProperty();
+
     /**
      * Stats the http web server.
      *
      * @throws IOException
      */
     public static void start() throws IOException {
+        LOG.set(Assets.getString("application.log.start"));
+        RUNNING.set(false);
+        NOT_RUNNING.set(true);
         HTTP_SERVER = HttpServer.create(new InetSocketAddress(Settings.WEB_SERVER_PORT), 0);
         HTTP_SERVER.createContext("/aztec", new AztecHandler());
         HTTP_SERVER.createContext("/code39", new Code39Handler());
@@ -35,6 +48,8 @@ public class AppServer {
         HTTP_SERVER.createContext("/upce", new UpceHandler());
         HTTP_SERVER.setExecutor(null); // creates a default executor
         HTTP_SERVER.start();
+        RUNNING.set(true);
+        NOT_RUNNING.set(false);
     }
 
     /**
@@ -44,6 +59,8 @@ public class AppServer {
         if (null != HTTP_SERVER) {
             HTTP_SERVER.stop(0);
         }
+        RUNNING.set(false);
+        NOT_RUNNING.set(true);
     }
 
     public static Map<String, String> queryToMap(String query) {

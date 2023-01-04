@@ -13,6 +13,8 @@ public class Settings {
 
     public static String APP_ICON_COLOUR;
     public static int WEB_SERVER_PORT;
+    public static int WEB_SERVER_PORT_MIN;
+    public static int WEB_SERVER_PORT_MAX;
     public static boolean WEB_SERVER_AUTOSTART;
     public static int BARCODE_DEFAULT_HEIGHT;
     public static int BARCODE_DEFAULT_WIDTH;
@@ -71,6 +73,8 @@ public class Settings {
     private static void readProperties() throws NumberFormatException {
         APP_ICON_COLOUR = properties.getProperty("app.icon.colour");
         WEB_SERVER_PORT = Integer.valueOf(properties.getProperty("webserver.port"));
+        WEB_SERVER_PORT_MIN = Integer.valueOf(properties.getProperty("webserver.port.min"));
+        WEB_SERVER_PORT_MAX = Integer.valueOf(properties.getProperty("webserver.port.max"));
         WEB_SERVER_AUTOSTART = Boolean.valueOf(properties.getProperty("webserver.autostart"));
         BARCODE_DEFAULT_WIDTH = Integer.valueOf(properties.getProperty("barcode.default.width"));
         BARCODE_MIN_WIDTH = Integer.valueOf(properties.getProperty("barcode.min.width"));
@@ -97,7 +101,10 @@ public class Settings {
         AppLog.log(Level.INFO, Assets.getString("application.settings.save"));
         try (OutputStream output = new FileOutputStream(configPropertiesPath.toString())) {
             properties.setProperty("app.icon.colour", APP_ICON_COLOUR);
+            // Webserver
             properties.setProperty("webserver.port", String.valueOf(WEB_SERVER_PORT));
+            properties.setProperty("webserver.port.min", String.valueOf(WEB_SERVER_PORT_MIN));
+            properties.setProperty("webserver.port.max", String.valueOf(WEB_SERVER_PORT_MAX));
             properties.setProperty("webserver.autostart", String.valueOf(WEB_SERVER_AUTOSTART));
             // Barcode
             properties.setProperty("barcode.default.width", String.valueOf(BARCODE_DEFAULT_WIDTH));
