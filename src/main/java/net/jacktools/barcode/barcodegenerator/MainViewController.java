@@ -162,6 +162,9 @@ public class MainViewController {
         this.stage.heightProperty().addListener((observable, oldValue, newValue) -> {
             createBarcode();
         });
+        // buttons
+        this.buttonCopy.disableProperty().bind(this.tabPaneMain.getSelectionModel().selectedIndexProperty().greaterThan(1));
+        this.buttonSave.disableProperty().bind(this.tabPaneMain.getSelectionModel().selectedIndexProperty().greaterThan(1));
         // Barcode type
         this.choiceBoxBarcodeType.getSelectionModel().select(SupportedBarcodeFormat.QR_CODE);
         this.choiceBoxBarcodeType.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -181,7 +184,7 @@ public class MainViewController {
         // Spinner
         this.spinnerBarcodeWidth.setEditable(true);
         this.spinnerBarcodeWidth.getEditor().setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, filter));
-        this.spinnerBarcodeWidth.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10000, Settings.BARCODE_DEFAULT_WIDTH));
+        this.spinnerBarcodeWidth.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Settings.BARCODE_MIN_WIDTH, Settings.BARCODE_MAX_WIDTH, Settings.BARCODE_DEFAULT_WIDTH));
         this.spinnerBarcodeWidth.valueProperty().addListener((observable, oldValue, newValue) -> {
             Node increment = spinnerBarcodeWidth.lookup(".increment-arrow-button");
             if (increment != null) {
@@ -196,7 +199,7 @@ public class MainViewController {
         });
         this.spinnerBarcodeHeight.setEditable(true);
         this.spinnerBarcodeHeight.getEditor().setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, filter));
-        this.spinnerBarcodeHeight.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10000, Settings.BARCODE_DEFAULT_HEIGHT));
+        this.spinnerBarcodeHeight.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Settings.BARCODE_MIN_HEIGHT, Settings.BARCODE_MAX_HEIGHT, Settings.BARCODE_DEFAULT_HEIGHT));
         this.spinnerBarcodeHeight.valueProperty().addListener((observable, oldValue, newValue) -> {
             Node increment = spinnerBarcodeWidth.lookup(".increment-arrow-button");
             if (increment != null) {
@@ -211,13 +214,49 @@ public class MainViewController {
         });
         this.spinnerQrCodeWidth.setEditable(true);
         this.spinnerQrCodeWidth.getEditor().setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, filter));
-        this.spinnerQrCodeWidth.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(16, 2048, Settings.BARCODE_DEFAULT_WIDTH));
+        this.spinnerQrCodeWidth.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Settings.QRCODE_MIN_WIDTH, Settings.QRCODE_MAX_WIDTH, Settings.QRCODE_DEFAULT_WIDTH));
+        this.spinnerQrCodeWidth.valueProperty().addListener((observable, oldValue, newValue) -> {
+            Node increment = spinnerBarcodeWidth.lookup(".increment-arrow-button");
+            if (increment != null) {
+                increment.getOnMouseReleased().handle(null);
+            }
+
+            Node decrement = spinnerBarcodeWidth.lookup(".decrement-arrow-button");
+            if (decrement != null) {
+                decrement.getOnMouseReleased().handle(null);
+            }
+            createBarcode();
+        });
         this.spinnerQrCodeHeight.setEditable(true);
         this.spinnerQrCodeHeight.getEditor().setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, filter));
-        this.spinnerQrCodeHeight.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(16, 2048, Settings.BARCODE_DEFAULT_HEIGHT));
+        this.spinnerQrCodeHeight.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Settings.QRCODE_MIN_HEIGHT, Settings.QRCODE_MAX_HEIGHT, Settings.QRCODE_DEFAULT_HEIGHT));
+        this.spinnerQrCodeHeight.valueProperty().addListener((observable, oldValue, newValue) -> {
+            Node increment = spinnerBarcodeWidth.lookup(".increment-arrow-button");
+            if (increment != null) {
+                increment.getOnMouseReleased().handle(null);
+            }
+
+            Node decrement = spinnerBarcodeWidth.lookup(".decrement-arrow-button");
+            if (decrement != null) {
+                decrement.getOnMouseReleased().handle(null);
+            }
+            createBarcode();
+        });
         this.spinnerWebServerPort.setEditable(true);
         this.spinnerWebServerPort.getEditor().setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, filter));
         this.spinnerWebServerPort.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1024, 65535, Settings.WEB_SERVER_PORT));
+        this.spinnerWebServerPort.valueProperty().addListener((observable, oldValue, newValue) -> {
+            Node increment = spinnerBarcodeWidth.lookup(".increment-arrow-button");
+            if (increment != null) {
+                increment.getOnMouseReleased().handle(null);
+            }
+
+            Node decrement = spinnerBarcodeWidth.lookup(".decrement-arrow-button");
+            if (decrement != null) {
+                decrement.getOnMouseReleased().handle(null);
+            }
+            createBarcode();
+        });
     }
 
     private void createBarcode() {
