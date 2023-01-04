@@ -158,29 +158,44 @@ public class MainViewController {
         // stage
         this.stage.widthProperty().addListener((observable, oldValue, newValue) -> {
             createBarcode();
+            saveBarcodeSettings();
         });
         this.stage.heightProperty().addListener((observable, oldValue, newValue) -> {
             createBarcode();
+            saveBarcodeSettings();
         });
         // buttons
         this.buttonCopy.disableProperty().bind(this.tabPaneMain.getSelectionModel().selectedIndexProperty().greaterThan(1));
         this.buttonSave.disableProperty().bind(this.tabPaneMain.getSelectionModel().selectedIndexProperty().greaterThan(1));
         // Barcode type
-        this.choiceBoxBarcodeType.getSelectionModel().select(SupportedBarcodeFormat.QR_CODE);
+        this.choiceBoxBarcodeType.getSelectionModel().select(Settings.BARCODE_TYPE);
         this.choiceBoxBarcodeType.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             createBarcode();
+            saveBarcodeSettings();
         });
         // Barcode value
+        this.textFieldBarcodeValue.setText(Settings.BARCODE_VALUE);
         this.textFieldBarcodeValue.textProperty().addListener((observable, oldValue, newValue) -> {
             createBarcode();
+            saveBarcodeSettings();
         });
         // Barcode color
+        this.colorPickerBarcode.setValue(Settings.BARCODE_COLOR);
         this.colorPickerBarcode.valueProperty().addListener((observable, oldValue, newValue) -> {
             createBarcode();
+            saveBarcodeSettings();
         });
+        // Barcode Background color
+        this.colorPickerBarcodeBackground.setValue(Settings.BARCODE_BACKGROUND_COLOR);
         this.colorPickerBarcodeBackground.valueProperty().addListener((observable, oldValue, newValue) -> {
             createBarcode();
+            saveBarcodeSettings();
         });
+        // QR-Code value
+        // QR-Code color
+        // QR-Code background color
+        this.colorPickerQrCode.setValue(Settings.QRCODE_COLOR);
+        this.colorPickerQrCodeBackground.setValue(Settings.QRCODE_BACKGROUND_COLOR);
         // Spinner
         this.spinnerBarcodeWidth.setEditable(true);
         this.spinnerBarcodeWidth.getEditor().setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, filter));
@@ -196,6 +211,7 @@ public class MainViewController {
                 decrement.getOnMouseReleased().handle(null);
             }
             createBarcode();
+            saveBarcodeSettings();
         });
         this.spinnerBarcodeHeight.setEditable(true);
         this.spinnerBarcodeHeight.getEditor().setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, filter));
@@ -211,6 +227,7 @@ public class MainViewController {
                 decrement.getOnMouseReleased().handle(null);
             }
             createBarcode();
+            saveBarcodeSettings();
         });
         this.spinnerQrCodeWidth.setEditable(true);
         this.spinnerQrCodeWidth.getEditor().setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, filter));
@@ -226,6 +243,7 @@ public class MainViewController {
                 decrement.getOnMouseReleased().handle(null);
             }
             createBarcode();
+            saveBarcodeSettings();
         });
         this.spinnerQrCodeHeight.setEditable(true);
         this.spinnerQrCodeHeight.getEditor().setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, filter));
@@ -241,6 +259,7 @@ public class MainViewController {
                 decrement.getOnMouseReleased().handle(null);
             }
             createBarcode();
+            saveBarcodeSettings();
         });
         this.spinnerWebServerPort.setEditable(true);
         this.spinnerWebServerPort.getEditor().setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, filter));
@@ -256,6 +275,7 @@ public class MainViewController {
                 decrement.getOnMouseReleased().handle(null);
             }
             createBarcode();
+            saveBarcodeSettings();
         });
     }
 
@@ -278,7 +298,15 @@ public class MainViewController {
                 }
             }
         });
+    }
 
+    private void saveBarcodeSettings() {
+        Settings.BARCODE_VALUE = this.textFieldBarcodeValue.getText();
+        Settings.BARCODE_TYPE = this.choiceBoxBarcodeType.getValue();
+        Settings.BARCODE_DEFAULT_WIDTH = this.spinnerBarcodeWidth.getValue();
+        Settings.BARCODE_DEFAULT_HEIGHT = this.spinnerBarcodeWidth.getValue();
+        Settings.BARCODE_COLOR = this.colorPickerBarcode.getValue();
+        Settings.BARCODE_BACKGROUND_COLOR = this.colorPickerBarcodeBackground.getValue();
     }
 
     private void protectImageSize() {

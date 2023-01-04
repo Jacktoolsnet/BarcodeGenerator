@@ -22,6 +22,8 @@ public class Settings {
     public static int BARCODE_MIN_WIDTH;
     public static Color BARCODE_COLOR;
     public static Color BARCODE_BACKGROUND_COLOR;
+    public static String BARCODE_VALUE;
+    public static SupportedBarcodeFormat BARCODE_TYPE;
     public static int QRCODE_DEFAULT_HEIGHT;
     public static int QRCODE_DEFAULT_WIDTH;
     public static int QRCODE_MAX_HEIGHT;
@@ -30,6 +32,7 @@ public class Settings {
     public static int QRCODE_MIN_WIDTH;
     public static Color QRCODE_COLOR;
     public static Color QRCODE_BACKGROUND_COLOR;
+    public static String QRCODE_VALUE;
     private static Path configPropertiesPath;
     private static Properties properties = new Properties();
 
@@ -77,6 +80,8 @@ public class Settings {
         BARCODE_MAX_HEIGHT = Integer.valueOf(properties.getProperty("barcode.max.height"));
         BARCODE_COLOR = Color.valueOf(properties.getProperty("barcode.color"));
         BARCODE_BACKGROUND_COLOR = Color.valueOf(properties.getProperty("barcode.color.background"));
+        BARCODE_VALUE = properties.getProperty("barcode.value");
+        BARCODE_TYPE = SupportedBarcodeFormat.valueOf(properties.getProperty("barcode.type"));
         QRCODE_DEFAULT_WIDTH = Integer.valueOf(properties.getProperty("qrcode.default.width"));
         QRCODE_MIN_WIDTH = Integer.valueOf(properties.getProperty("qrcode.min.width"));
         QRCODE_MAX_WIDTH = Integer.valueOf(properties.getProperty("qrcode.max.width"));
@@ -84,6 +89,7 @@ public class Settings {
         QRCODE_MIN_HEIGHT = Integer.valueOf(properties.getProperty("qrcode.min.height"));
         QRCODE_MAX_HEIGHT = Integer.valueOf(properties.getProperty("qrcode.max.height"));
         QRCODE_COLOR = Color.valueOf(properties.getProperty("qrcode.color"));
+        QRCODE_VALUE = properties.getProperty("qrcode.value");
         QRCODE_BACKGROUND_COLOR = Color.valueOf(properties.getProperty("qrcode.color.background"));
     }
 
@@ -101,6 +107,8 @@ public class Settings {
             properties.setProperty("barcode.min.height", String.valueOf(BARCODE_MIN_HEIGHT));
             properties.setProperty("barcode.color", BARCODE_COLOR.toString());
             properties.setProperty("barcode.color.background", BARCODE_BACKGROUND_COLOR.toString());
+            properties.setProperty("barcode.value", BARCODE_VALUE);
+            properties.setProperty("barcode.type", BARCODE_TYPE.toString());
             // QR-Code
             properties.setProperty("qrcode.default.width", String.valueOf(QRCODE_DEFAULT_WIDTH));
             properties.setProperty("qrcode.min.width", String.valueOf(QRCODE_MIN_WIDTH));
@@ -109,6 +117,8 @@ public class Settings {
             properties.setProperty("qrcode.min.height", String.valueOf(QRCODE_MIN_HEIGHT));
             properties.setProperty("qrcode.color", QRCODE_COLOR.toString());
             properties.setProperty("qrcode.color.background", QRCODE_BACKGROUND_COLOR.toString());
+            properties.setProperty("qrcode.value", QRCODE_VALUE);
+            // Save
             properties.store(output, null);
         } catch (IOException io) {
             AppLog.log(Level.SEVERE, Assets.getString("application.settings.save.error"));

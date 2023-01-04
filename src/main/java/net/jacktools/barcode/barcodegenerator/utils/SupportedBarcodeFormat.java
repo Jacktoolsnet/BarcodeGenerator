@@ -30,4 +30,5 @@ public enum SupportedBarcodeFormat {
     public String toString() {
         return this.barcodeFormat.toString();
     }
+
 }
