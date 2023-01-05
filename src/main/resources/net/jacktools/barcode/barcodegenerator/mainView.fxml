@@ -227,13 +227,56 @@
                                         </ImageView>
                                     </center>
                                     <left>
-                                        <Accordion prefHeight="386.0" prefWidth="392.0" BorderPane.alignment="CENTER">
+                                        <Accordion BorderPane.alignment="CENTER">
                                             <panes>
-                                                <TitledPane fx:id="titledPaneTransver" animated="false"
+                                                <TitledPane fx:id="titledPaneTransfer" animated="false"
                                                             text="%fxml.main.titledpane.transfer">
                                                     <content>
-                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0"
-                                                                    prefWidth="200.0"/>
+                                                        <AnchorPane minHeight="0.0" minWidth="0.0">
+                                                            <children>
+                                                                <VBox layoutX="80.0" layoutY="14.0" spacing="5.0"
+                                                                      AnchorPane.bottomAnchor="0.0"
+                                                                      AnchorPane.leftAnchor="0.0"
+                                                                      AnchorPane.rightAnchor="0.0"
+                                                                      AnchorPane.topAnchor="0.0">
+                                                                    <children>
+                                                                        <Label text="%epc.label.bic"/>
+                                                                        <TextField fx:id="textFieldBic"/>
+                                                                        <Label layoutX="15.0" layoutY="15.0"
+                                                                               text="%epc.label.payee"/>
+                                                                        <TextField fx:id="textFieldPayee" layoutX="15.0"
+                                                                                   layoutY="37.0"/>
+                                                                        <Label layoutX="15.0" layoutY="68.0"
+                                                                               text="%epc.label.iban"/>
+                                                                        <TextField fx:id="textFieldIban" layoutX="15.0"
+                                                                                   layoutY="90.0"/>
+                                                                        <Label layoutX="15.0" layoutY="120.0"
+                                                                               text="%epc.label.paymentAmount"/>
+                                                                        <Spinner fx:id="spinnerPaymentAmount"/>
+                                                                        <Label layoutX="15.0" layoutY="120.0"
+                                                                               text="%epc.label.purpose"/>
+                                                                        <TextField fx:id="textFieldPurpose"
+                                                                                   layoutX="15.0" layoutY="143.0"/>
+                                                                        <Label layoutX="15.0" layoutY="173.0"
+                                                                               text="%epc.label.reference"/>
+                                                                        <TextField fx:id="textFieldReference"
+                                                                                   layoutX="15.0" layoutY="196.0"/>
+                                                                        <Label layoutX="15.0" layoutY="226.0"
+                                                                               text="%epc.label.purposeOfUse"/>
+                                                                        <TextField fx:id="textFieldPurposeOfUse"
+                                                                                   layoutX="15.0" layoutY="301.0"/>
+                                                                        <Label layoutX="15.0" layoutY="332.0"
+                                                                               text="%epc.label.notice"/>
+                                                                        <TextField fx:id="textFieldNotice"
+                                                                                   layoutX="15.0" layoutY="354.0"/>
+                                                                    </children>
+                                                                    <padding>
+                                                                        <Insets bottom="5.0" left="5.0" right="5.0"
+                                                                                top="5.0"/>
+                                                                    </padding>
+                                                                </VBox>
+                                                            </children>
+                                                        </AnchorPane>
                                                     </content>
                                                 </TitledPane>
                                                 <TitledPane fx:id="titledContact" animated="false"

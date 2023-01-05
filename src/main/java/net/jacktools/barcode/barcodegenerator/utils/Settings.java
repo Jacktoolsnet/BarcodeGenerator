@@ -1,6 +1,7 @@
 package net.jacktools.barcode.barcodegenerator.utils;
 
 import javafx.scene.paint.Color;
+import net.jacktools.barcode.barcodegenerator.epc.SupportedCurrency;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -35,6 +36,16 @@ public class Settings {
     public static Color QRCODE_COLOR;
     public static Color QRCODE_BACKGROUND_COLOR;
     public static String QRCODE_VALUE;
+    // Epc Code
+    public static String BIC;
+    public static String PAYEE;
+    public static String IBAN;
+    public static SupportedCurrency CURRENCY;
+    public static Double PAYMENT_AMOUNT;
+    public static String PURPOSE;
+    public static String REFERENCE;
+    public static String PURPOSE_OF_USE;
+    public static String NOTICE;
     private static Path configPropertiesPath;
     private static Properties properties = new Properties();
 
@@ -95,6 +106,16 @@ public class Settings {
         QRCODE_COLOR = Color.valueOf(properties.getProperty("qrcode.color"));
         QRCODE_VALUE = properties.getProperty("qrcode.value");
         QRCODE_BACKGROUND_COLOR = Color.valueOf(properties.getProperty("qrcode.color.background"));
+        // Epc Code
+        BIC = properties.getProperty("epc.bic");
+        PAYEE = properties.getProperty("epc.payee");
+        IBAN = properties.getProperty("epc.iban");
+        CURRENCY = SupportedCurrency.valueOf(properties.getProperty("epc.currency"));
+        PAYMENT_AMOUNT = Double.valueOf(properties.getProperty("epc.paymentamount"));
+        PURPOSE = properties.getProperty("epc.purpose");
+        REFERENCE = properties.getProperty("epc.reference");
+        PURPOSE_OF_USE = properties.getProperty("epc.purposeofuse");
+        NOTICE = properties.getProperty("epc.notice");
     }
 
     public static void saveProperties() {
@@ -125,6 +146,16 @@ public class Settings {
             properties.setProperty("qrcode.color", QRCODE_COLOR.toString());
             properties.setProperty("qrcode.color.background", QRCODE_BACKGROUND_COLOR.toString());
             properties.setProperty("qrcode.value", QRCODE_VALUE);
+            // Epc Code
+            properties.setProperty("epc.bic", BIC);
+            properties.setProperty("epc.payee", PAYEE);
+            properties.setProperty("epc.iban", IBAN);
+            properties.setProperty("epc.currency", CURRENCY.toString());
+            properties.setProperty("epc.paymentamount", String.valueOf(PAYMENT_AMOUNT));
+            properties.setProperty("epc.purpose", PURPOSE);
+            properties.setProperty("epc.reference", REFERENCE);
+            properties.setProperty("epc.purposeofuse", PURPOSE_OF_USE);
+            properties.setProperty("epc.notice", NOTICE);
             // Save
             properties.store(output, null);
         } catch (IOException io) {

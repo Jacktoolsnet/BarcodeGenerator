@@ -49,6 +49,7 @@ public class Application extends javafx.application.Application {
         MainViewController controller = fxmlLoader.getController();
         controller.setStage(stage);
         controller.setDefaultValues();
+        controller.setDefaultEpcValues();
         stage.show();
     }
 }
