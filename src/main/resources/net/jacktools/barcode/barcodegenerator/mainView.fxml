@@ -8,7 +8,7 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/19"
             fx:controller="net.jacktools.barcode.barcodegenerator.MainViewController">
     <top>
-        <ButtonBar BorderPane.alignment="CENTER">
+        <ButtonBar buttonMinWidth="40.0" BorderPane.alignment="CENTER">
             <buttons>
                 <Button fx:id="buttonSave" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" maxHeight="48.0"
                         maxWidth="48.0" minHeight="48.0" minWidth="48.0" mnemonicParsing="false"
@@ -23,6 +23,9 @@
                     <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                     </padding>
+                    <tooltip>
+                        <Tooltip text="%button.savebarcode.tooltop"/>
+                    </tooltip>
                 </Button>
                 <Button fx:id="buttonCopy" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" maxHeight="48.0"
                         maxWidth="48.0" minHeight="48.0" minWidth="48.0" mnemonicParsing="false"
@@ -37,8 +40,11 @@
                     <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                     </padding>
+                    <tooltip>
+                        <Tooltip text="%button.copytoclipboard.tooltop"/>
+                    </tooltip>
                 </Button>
-                <Button fx:id="buttonInfo" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" maxHeight="48.0"
+                <Button fx:id="buttonHelp" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" maxHeight="48.0"
                         maxWidth="48.0" minHeight="48.0" minWidth="48.0" mnemonicParsing="false"
                         onAction="#buttonHelp_onAction" prefHeight="48.0" prefWidth="48.0" textAlignment="CENTER">
                     <graphic>
@@ -51,6 +57,9 @@
                     <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                     </padding>
+                    <tooltip>
+                        <Tooltip text="Empty Tooltip"/>
+                    </tooltip>
                 </Button>
                 <Button fx:id="buttonInfo" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" layoutX="830.0"
                         layoutY="10.0" maxHeight="48.0" maxWidth="48.0" minHeight="48.0" minWidth="48.0"
@@ -66,6 +75,9 @@
                     <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                     </padding>
+                    <tooltip>
+                        <Tooltip text="Empty Tooltip"/>
+                    </tooltip>
                 </Button>
                 <Button fx:id="buttonCloseApplication" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" layoutX="915.0"
                         layoutY="10.0" maxHeight="48.0" maxWidth="48.0" minHeight="48.0" minWidth="48.0"
@@ -81,6 +93,9 @@
                     <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                     </padding>
+                    <tooltip>
+                        <Tooltip text="%button.closeApplication.tooltop"/>
+                    </tooltip>
                 </Button>
             </buttons>
             <BorderPane.margin>
@@ -286,6 +301,9 @@
                                                     <padding>
                                                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                                                     </padding>
+                                                    <tooltip>
+                                                        <Tooltip text="%button.webserverStart.tooltop"/>
+                                                    </tooltip>
                                                 </Button>
                                                 <Button fx:id="buttonWebServerStop" alignment="CENTER"
                                                         contentDisplay="GRAPHIC_ONLY" layoutX="496.0" layoutY="10.0"
@@ -304,6 +322,9 @@
                                                     <padding>
                                                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
                                                     </padding>
+                                                    <tooltip>
+                                                        <Tooltip text="%button.webserverStop.tooltop"/>
+                                                    </tooltip>
                                                 </Button>
                                             </buttons>
                                             <padding>

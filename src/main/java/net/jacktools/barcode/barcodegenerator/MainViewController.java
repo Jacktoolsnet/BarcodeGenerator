@@ -2,7 +2,6 @@ package net.jacktools.barcode.barcodegenerator;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -11,7 +10,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javafx.util.converter.IntegerStringConverter;
 import net.jacktools.barcode.barcodegenerator.utils.*;
 import net.jacktools.barcode.barcodegenerator.web.AppServer;
@@ -21,6 +19,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Arrays;
@@ -135,25 +134,22 @@ public class MainViewController {
 
     public void setStage(Stage stage) {
         this.stage = stage;
-        this.stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent e) {
-                Alert alert = Assets.getAlert(Alert.AlertType.CONFIRMATION, true);
-                alert.setHeaderText(Assets.getString("application.close.question.header"));
-                alert.setContentText(Assets.getString("application.close.question.content"));
-                alert.getButtonTypes().clear();
-                alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == ButtonType.NO) {
-                    e.consume();
-                } else {
-                    // Save settings.
-                    Settings.saveProperties();
-                    // Close the application.
-                    AppLog.log(Level.INFO, Assets.getString("application.log.stop"));
-                    Platform.exit();
-                    System.exit(0);
-                }
+        this.stage.setOnCloseRequest(e -> {
+            Alert alert = Assets.getAlert(Alert.AlertType.CONFIRMATION, true, stage);
+            alert.setHeaderText(Assets.getString("application.close.question.header"));
+            alert.setContentText(Assets.getString("application.close.question.content"));
+            alert.getButtonTypes().clear();
+            alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.NO) {
+                e.consume();
+            } else {
+                // Save settings.
+                Settings.saveProperties();
+                // Close the application.
+                AppLog.log(Level.INFO, Assets.getString("application.log.stop"));
+                Platform.exit();
+                System.exit(0);
             }
         });
     }
@@ -204,7 +200,7 @@ public class MainViewController {
         this.colorPickerQrCodeBackground.setValue(Settings.QRCODE_BACKGROUND_COLOR);
         // Spinner
         this.spinnerBarcodeWidth.setEditable(true);
-        this.spinnerBarcodeWidth.getEditor().setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, filter));
+        this.spinnerBarcodeWidth.getEditor().setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), 0, filter));
         this.spinnerBarcodeWidth.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Settings.BARCODE_MIN_WIDTH, Settings.BARCODE_MAX_WIDTH, Settings.BARCODE_DEFAULT_WIDTH));
         this.spinnerBarcodeWidth.valueProperty().addListener((observable, oldValue, newValue) -> {
             Node increment = spinnerBarcodeWidth.lookup(".increment-arrow-button");
@@ -220,7 +216,7 @@ public class MainViewController {
             saveBarcodeSettings();
         });
         this.spinnerBarcodeHeight.setEditable(true);
-        this.spinnerBarcodeHeight.getEditor().setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, filter));
+        this.spinnerBarcodeHeight.getEditor().setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), 0, filter));
         this.spinnerBarcodeHeight.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Settings.BARCODE_MIN_HEIGHT, Settings.BARCODE_MAX_HEIGHT, Settings.BARCODE_DEFAULT_HEIGHT));
         this.spinnerBarcodeHeight.valueProperty().addListener((observable, oldValue, newValue) -> {
             Node increment = spinnerBarcodeWidth.lookup(".increment-arrow-button");
@@ -236,7 +232,7 @@ public class MainViewController {
             saveBarcodeSettings();
         });
         this.spinnerQrCodeWidth.setEditable(true);
-        this.spinnerQrCodeWidth.getEditor().setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, filter));
+        this.spinnerQrCodeWidth.getEditor().setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), 0, filter));
         this.spinnerQrCodeWidth.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Settings.QRCODE_MIN_WIDTH, Settings.QRCODE_MAX_WIDTH, Settings.QRCODE_DEFAULT_WIDTH));
         this.spinnerQrCodeWidth.valueProperty().addListener((observable, oldValue, newValue) -> {
             Node increment = spinnerBarcodeWidth.lookup(".increment-arrow-button");
@@ -252,7 +248,7 @@ public class MainViewController {
             saveBarcodeSettings();
         });
         this.spinnerQrCodeHeight.setEditable(true);
-        this.spinnerQrCodeHeight.getEditor().setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, filter));
+        this.spinnerQrCodeHeight.getEditor().setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), 0, filter));
         this.spinnerQrCodeHeight.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Settings.QRCODE_MIN_HEIGHT, Settings.QRCODE_MAX_HEIGHT, Settings.QRCODE_DEFAULT_HEIGHT));
         this.spinnerQrCodeHeight.valueProperty().addListener((observable, oldValue, newValue) -> {
             Node increment = spinnerBarcodeWidth.lookup(".increment-arrow-button");
@@ -269,7 +265,7 @@ public class MainViewController {
         });
         this.spinnerWebServerPort.disableProperty().bind(AppServer.RUNNING);
         this.spinnerWebServerPort.setEditable(true);
-        this.spinnerWebServerPort.getEditor().setTextFormatter(new TextFormatter<Integer>(new IntegerStringConverter(), 0, filter));
+        this.spinnerWebServerPort.getEditor().setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), 0, filter));
         this.spinnerWebServerPort.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Settings.WEB_SERVER_PORT_MIN, Settings.WEB_SERVER_PORT_MAX, Settings.WEB_SERVER_PORT));
         this.spinnerWebServerPort.valueProperty().addListener((observable, oldValue, newValue) -> {
             Node increment = spinnerBarcodeWidth.lookup(".increment-arrow-button");
@@ -285,31 +281,26 @@ public class MainViewController {
         });
         // checkbox
         this.checkBoxWebServerAutoStart.setSelected(Settings.WEB_SERVER_AUTOSTART);
-        this.checkBoxWebServerAutoStart.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            saveWebserverSettings();
-        });
+        this.checkBoxWebServerAutoStart.selectedProperty().addListener((observable, oldValue, newValue) -> saveWebserverSettings());
         // Webserver log
         this.textAreaWebServerLog.textProperty().bind(AppServer.LOG_PROPERTY);
     }
 
     private void createBarcode() {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (!textFieldBarcodeValue.getText().isBlank() && null != choiceBoxBarcodeType.getSelectionModel().getSelectedItem()) {
-                        imageViewBarcode.setImage(Barcode.bufferedImageToFxImage(Barcode.create(textFieldBarcodeValue.getText(), choiceBoxBarcodeType.getSelectionModel().getSelectedItem(), spinnerBarcodeWidth.getValue(), spinnerBarcodeHeight.getValue()), colorPickerBarcodeBackground.getValue(), colorPickerBarcode.getValue()));
-                        protectImageSize();
-                        hyperlinkPreview.setText(Assets.getString("hyperlink.barcode", String.valueOf(Settings.WEB_SERVER_PORT), choiceBoxBarcodeType.getSelectionModel().getSelectedItem().getRoute(), URLEncoder.encode(textFieldBarcodeValue.getText(), "UTF-8"), String.valueOf(spinnerBarcodeWidth.getValue()), String.valueOf(spinnerBarcodeHeight.getValue()), colorPickerBarcode.getValue().toString(), colorPickerBarcodeBackground.getValue().toString()));
-                    }
-                } catch (Exception exception) {
-                    Alert alert = Assets.getAlert(Alert.AlertType.INFORMATION, true);
-                    alert.setHeaderText(Assets.getString("application.error.header"));
-                    alert.setContentText(exception.getLocalizedMessage());
-                    alert.getButtonTypes().clear();
-                    alert.getButtonTypes().addAll(ButtonType.OK);
-                    alert.show();
+        Platform.runLater(() -> {
+            try {
+                if (!textFieldBarcodeValue.getText().isBlank() && null != choiceBoxBarcodeType.getSelectionModel().getSelectedItem()) {
+                    imageViewBarcode.setImage(Barcode.bufferedImageToFxImage(Barcode.create(textFieldBarcodeValue.getText(), choiceBoxBarcodeType.getSelectionModel().getSelectedItem(), spinnerBarcodeWidth.getValue(), spinnerBarcodeHeight.getValue()), colorPickerBarcodeBackground.getValue(), colorPickerBarcode.getValue()));
+                    protectImageSize();
+                    hyperlinkPreview.setText(Assets.getString("hyperlink.barcode", String.valueOf(Settings.WEB_SERVER_PORT), choiceBoxBarcodeType.getSelectionModel().getSelectedItem().getRoute(), URLEncoder.encode(textFieldBarcodeValue.getText(), StandardCharsets.UTF_8), String.valueOf(spinnerBarcodeWidth.getValue()), String.valueOf(spinnerBarcodeHeight.getValue()), colorPickerBarcode.getValue().toString(), colorPickerBarcodeBackground.getValue().toString()));
                 }
+            } catch (Exception exception) {
+                Alert alert = Assets.getAlert(Alert.AlertType.INFORMATION, true, stage);
+                alert.setHeaderText(Assets.getString("application.error.header"));
+                alert.setContentText(exception.getLocalizedMessage());
+                alert.getButtonTypes().clear();
+                alert.getButtonTypes().addAll(ButtonType.OK);
+                alert.show();
             }
         });
     }
@@ -335,13 +326,13 @@ public class MainViewController {
 
     @FXML
     void buttonCloseApplication_onAction(ActionEvent event) {
-        Alert alert = Assets.getAlert(Alert.AlertType.CONFIRMATION, true);
+        Alert alert = Assets.getAlert(Alert.AlertType.CONFIRMATION, true, this.stage);
         alert.setHeaderText(Assets.getString("application.close.question.header"));
         alert.setContentText(Assets.getString("application.close.question.content"));
         alert.getButtonTypes().clear();
         alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.YES) {
+        if (result.isPresent() && result.get() == ButtonType.YES) {
             // Save settings.
             Settings.saveProperties();
             // Close the application.
@@ -407,9 +398,7 @@ public class MainViewController {
     void hyperlinkPreview_onAction(ActionEvent event) {
         try {
             Desktop.getDesktop().browse(new URL(this.hyperlinkPreview.getText()).toURI());
-        } catch (IOException e) {
-            AppLog.log(Level.SEVERE, e.getLocalizedMessage());
-        } catch (URISyntaxException e) {
+        } catch (IOException | URISyntaxException e) {
             AppLog.log(Level.SEVERE, e.getLocalizedMessage());
         }
     }
