@@ -12,7 +12,8 @@ import java.util.logging.Level;
 
 public class Settings {
 
-    public static String APP_ICON_COLOUR;
+    public static String APP_ICON_COLOR;
+    public static String APP_INVALID_VALUE_COLOR;
     public static int WEB_SERVER_PORT;
     public static int WEB_SERVER_PORT_MIN;
     public static int WEB_SERVER_PORT_MAX;
@@ -82,7 +83,8 @@ public class Settings {
     }
 
     private static void readProperties() throws NumberFormatException {
-        APP_ICON_COLOUR = properties.getProperty("app.icon.colour");
+        APP_ICON_COLOR = properties.getProperty("app.icon.color");
+        APP_INVALID_VALUE_COLOR = properties.getProperty("app.invalid.value.color");
         WEB_SERVER_PORT = Integer.valueOf(properties.getProperty("webserver.port"));
         WEB_SERVER_PORT_MIN = Integer.valueOf(properties.getProperty("webserver.port.min"));
         WEB_SERVER_PORT_MAX = Integer.valueOf(properties.getProperty("webserver.port.max"));
@@ -107,21 +109,22 @@ public class Settings {
         QRCODE_VALUE = properties.getProperty("qrcode.value");
         QRCODE_BACKGROUND_COLOR = Color.valueOf(properties.getProperty("qrcode.color.background"));
         // Epc Code
-        BIC = properties.getProperty("epc.bic");
-        PAYEE = properties.getProperty("epc.payee");
-        IBAN = properties.getProperty("epc.iban");
-        CURRENCY = SupportedCurrency.valueOf(properties.getProperty("epc.currency"));
-        PAYMENT_AMOUNT = Double.valueOf(properties.getProperty("epc.paymentamount"));
-        PURPOSE = properties.getProperty("epc.purpose");
-        REFERENCE = properties.getProperty("epc.reference");
-        PURPOSE_OF_USE = properties.getProperty("epc.purposeofuse");
-        NOTICE = properties.getProperty("epc.notice");
+        BIC = "null".equals(properties.getProperty("epc.bic")) ? properties.getProperty("epc.bic") : "";
+        PAYEE = "null".equals(properties.getProperty("epc.payee")) ? properties.getProperty("epc.payee") : "";
+        IBAN = "null".equals(properties.getProperty("epc.iban")) ? properties.getProperty("epc.iban") : "";
+        CURRENCY = "null".equals(properties.getProperty("epc.currency")) ? SupportedCurrency.valueOf(properties.getProperty("epc.currency")) : SupportedCurrency.EUR;
+        PAYMENT_AMOUNT = "null".equals(properties.getProperty("epc.paymentamount")) ? Double.valueOf(properties.getProperty("epc.paymentamount")) : 0.00;
+        PURPOSE = "null".equals(properties.getProperty("epc.purpose")) ? properties.getProperty("epc.purpose") : "";
+        REFERENCE = "null".equals(properties.getProperty("epc.reference")) ? properties.getProperty("epc.reference") : "";
+        PURPOSE_OF_USE = "null".equals(properties.getProperty("epc.purposeofuse")) ? properties.getProperty("epc.purposeofuse") : "";
+        NOTICE = "null".equals(properties.getProperty("epc.notice")) ? properties.getProperty("epc.notice") : "";
     }
 
     public static void saveProperties() {
         AppLog.log(Level.INFO, Assets.getString("application.settings.save"));
         try (OutputStream output = new FileOutputStream(configPropertiesPath.toString())) {
-            properties.setProperty("app.icon.colour", APP_ICON_COLOUR);
+            properties.setProperty("app.icon.color", String.valueOf(APP_ICON_COLOR));
+            properties.setProperty("app.invalid.value.color", String.valueOf(APP_INVALID_VALUE_COLOR));
             // Webserver
             properties.setProperty("webserver.port", String.valueOf(WEB_SERVER_PORT));
             properties.setProperty("webserver.port.min", String.valueOf(WEB_SERVER_PORT_MIN));
@@ -133,29 +136,29 @@ public class Settings {
             properties.setProperty("barcode.max.width", String.valueOf(BARCODE_MAX_WIDTH));
             properties.setProperty("barcode.default.height", String.valueOf(BARCODE_DEFAULT_HEIGHT));
             properties.setProperty("barcode.min.height", String.valueOf(BARCODE_MIN_HEIGHT));
-            properties.setProperty("barcode.color", BARCODE_COLOR.toString());
-            properties.setProperty("barcode.color.background", BARCODE_BACKGROUND_COLOR.toString());
-            properties.setProperty("barcode.value", BARCODE_VALUE);
-            properties.setProperty("barcode.type", BARCODE_TYPE.toString());
+            properties.setProperty("barcode.color", String.valueOf(BARCODE_COLOR));
+            properties.setProperty("barcode.color.background", String.valueOf(BARCODE_BACKGROUND_COLOR));
+            properties.setProperty("barcode.value", String.valueOf(BARCODE_VALUE));
+            properties.setProperty("barcode.type", String.valueOf(BARCODE_TYPE));
             // QR-Code
             properties.setProperty("qrcode.default.width", String.valueOf(QRCODE_DEFAULT_WIDTH));
             properties.setProperty("qrcode.min.width", String.valueOf(QRCODE_MIN_WIDTH));
             properties.setProperty("qrcode.max.width", String.valueOf(QRCODE_MAX_WIDTH));
             properties.setProperty("qrcode.default.height", String.valueOf(QRCODE_DEFAULT_HEIGHT));
             properties.setProperty("qrcode.min.height", String.valueOf(QRCODE_MIN_HEIGHT));
-            properties.setProperty("qrcode.color", QRCODE_COLOR.toString());
-            properties.setProperty("qrcode.color.background", QRCODE_BACKGROUND_COLOR.toString());
-            properties.setProperty("qrcode.value", QRCODE_VALUE);
+            properties.setProperty("qrcode.color", String.valueOf(QRCODE_COLOR));
+            properties.setProperty("qrcode.color.background", String.valueOf(QRCODE_BACKGROUND_COLOR));
+            properties.setProperty("qrcode.value", String.valueOf(QRCODE_VALUE));
             // Epc Code
-            properties.setProperty("epc.bic", BIC);
-            properties.setProperty("epc.payee", PAYEE);
-            properties.setProperty("epc.iban", IBAN);
-            properties.setProperty("epc.currency", CURRENCY.toString());
+            properties.setProperty("epc.bic", String.valueOf(BIC));
+            properties.setProperty("epc.payee", String.valueOf(PAYEE));
+            properties.setProperty("epc.iban", String.valueOf(IBAN));
+            properties.setProperty("epc.currency", String.valueOf(CURRENCY));
             properties.setProperty("epc.paymentamount", String.valueOf(PAYMENT_AMOUNT));
-            properties.setProperty("epc.purpose", PURPOSE);
-            properties.setProperty("epc.reference", REFERENCE);
-            properties.setProperty("epc.purposeofuse", PURPOSE_OF_USE);
-            properties.setProperty("epc.notice", NOTICE);
+            properties.setProperty("epc.purpose", String.valueOf(PURPOSE));
+            properties.setProperty("epc.reference", String.valueOf(REFERENCE));
+            properties.setProperty("epc.purposeofuse", String.valueOf(PURPOSE_OF_USE));
+            properties.setProperty("epc.notice", String.valueOf(NOTICE));
             // Save
             properties.store(output, null);
         } catch (IOException io) {

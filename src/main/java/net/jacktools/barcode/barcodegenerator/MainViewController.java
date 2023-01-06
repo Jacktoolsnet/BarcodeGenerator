@@ -159,6 +159,7 @@ public class MainViewController {
     void initialize() {
         choiceBoxBarcodeType.getItems().setAll(Arrays.asList(SupportedBarcodeFormat.values()));
     }
+
     @FXML
     private TextField textFieldPayee;
     @FXML
@@ -342,9 +343,70 @@ public class MainViewController {
     }
 
     public void setDefaultEpcValues() {
+        // TextFields - tf.setTextFormatter(new TextFormatter<>(c -> c.getControlNewText().matches(".{0,5}") ? c : null));
+        this.textFieldBic.setTextFormatter(new TextFormatter<Object>(c -> {
+            if (!c.getControlNewText().isBlank()) {
+                if (c.getControlNewText().toUpperCase(Locale.ENGLISH).matches(EpcCode.BIC_CHECK)) {
+                    this.textFieldBic.setStyle("");
+                } else {
+                    this.textFieldBic.setStyle(null != Settings.APP_INVALID_VALUE_COLOR ? "-fx-control-inner-background: " + Settings.APP_INVALID_VALUE_COLOR : "");
+                }
+            }
+            return c;
+        }));
+        this.textFieldPayee.setTextFormatter(new TextFormatter<Object>(c -> {
+            if (!c.getControlNewText().isBlank()) {
+                if (c.getControlNewText().matches(EpcCode.PAYEE_CHECK)) {
+                    this.textFieldPayee.setStyle("");
+                } else {
+                    this.textFieldPayee.setStyle(null != Settings.APP_INVALID_VALUE_COLOR ? "-fx-control-inner-background: " + Settings.APP_INVALID_VALUE_COLOR : "");
+                }
+            }
+            return c;
+        }));
+        this.textFieldPurpose.setTextFormatter(new TextFormatter<Object>(c -> {
+            if (!c.getControlNewText().isBlank()) {
+                if (c.getControlNewText().matches(EpcCode.PURPOSE_CHECK)) {
+                    this.textFieldPurpose.setStyle("");
+                } else {
+                    this.textFieldPurpose.setStyle(null != Settings.APP_INVALID_VALUE_COLOR ? "-fx-control-inner-background: " + Settings.APP_INVALID_VALUE_COLOR : "");
+                }
+            }
+            return c;
+        }));
+        this.textFieldReference.setTextFormatter(new TextFormatter<Object>(c -> {
+            if (!c.getControlNewText().isBlank()) {
+                if (c.getControlNewText().matches(EpcCode.REFERENCE_CHECK)) {
+                    this.textFieldReference.setStyle("");
+                } else {
+                    this.textFieldReference.setStyle(null != Settings.APP_INVALID_VALUE_COLOR ? "-fx-control-inner-background: " + Settings.APP_INVALID_VALUE_COLOR : "");
+                }
+            }
+            return c;
+        }));
+        this.textFieldPurposeOfUse.setTextFormatter(new TextFormatter<Object>(c -> {
+            if (!c.getControlNewText().isBlank()) {
+                if (c.getControlNewText().matches(EpcCode.PURPOSE_OF_USE_CHECK)) {
+                    this.textFieldPurposeOfUse.setStyle("");
+                } else {
+                    this.textFieldPurposeOfUse.setStyle(null != Settings.APP_INVALID_VALUE_COLOR ? "-fx-control-inner-background: " + Settings.APP_INVALID_VALUE_COLOR : "");
+                }
+            }
+            return c;
+        }));
+        this.textFieldNotice.setTextFormatter(new TextFormatter<Object>(c -> {
+            if (!c.getControlNewText().isBlank()) {
+                if (c.getControlNewText().matches(EpcCode.NOTICE_CHECK)) {
+                    this.textFieldNotice.setStyle("");
+                } else {
+                    this.textFieldNotice.setStyle(null != Settings.APP_INVALID_VALUE_COLOR ? "-fx-control-inner-background: " + Settings.APP_INVALID_VALUE_COLOR : "");
+                }
+            }
+            return c;
+        }));
         //  Spinner
         this.spinnerPaymentAmount.setEditable(true);
-        SpinnerValueFactory spinnerPaymentAmountFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(EpcCode.MIN_PAYMENT_AMOUNT, EpcCode.MAX_PAYMENT_AMOUNT, Settings.PAYMENT_AMOUNT, 1.00);
+        SpinnerValueFactory spinnerPaymentAmountFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(EpcCode.MIN_PAYMENT_AMOUNT, EpcCode.MAX_PAYMENT_AMOUNT, null != Settings.PAYMENT_AMOUNT ? Settings.PAYMENT_AMOUNT : 0.00, 1.00);
         spinnerPaymentAmountFactory.setConverter(new CurrencyStringConverter());
         this.spinnerPaymentAmount.setValueFactory(spinnerPaymentAmountFactory);
         this.spinnerPaymentAmount.getEditor().setTextFormatter(new TextFormatter<>(new CurrencyStringConverter(), Settings.PAYMENT_AMOUNT, currencyFilter));
