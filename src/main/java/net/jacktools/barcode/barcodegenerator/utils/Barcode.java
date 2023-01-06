@@ -1,5 +1,6 @@
 package net.jacktools.barcode.barcodegenerator.utils;
 
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.Writer;
 import com.google.zxing.WriterException;
 import com.google.zxing.aztec.AztecWriter;
@@ -21,6 +22,8 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Barcode {
 
@@ -34,6 +37,21 @@ public class Barcode {
      * @return the barcode image as buffered image
      */
     public static BufferedImage create(String value, SupportedBarcodeFormat format, int width, int height) throws WriterException {
+        Map<EncodeHintType, ?> hints = new HashMap<>();
+        return create(value, format, width, height, hints);
+    }
+
+    /**
+     * Creates an EAN138 barcode image
+     *
+     * @param value  The barcode text
+     * @param format the barcode format
+     * @param width  thw image width
+     * @param height the image height
+     * @param hints  the map of hints
+     * @return the barcode image as buffered image
+     */
+    public static BufferedImage create(String value, SupportedBarcodeFormat format, int width, int height, Map<EncodeHintType, ?> hints) throws WriterException {
         Writer writer;
         switch (format) {
             case AZTEC:
@@ -78,7 +96,7 @@ public class Barcode {
             default:
                 throw new IllegalArgumentException(Assets.getString("barcode.no.formatter", format.toString()));
         }
-        BitMatrix bitMatrix = writer.encode(value, format.getBarcodeFormat(), width, height);
+        BitMatrix bitMatrix = writer.encode(value, format.getBarcodeFormat(), width, height, hints);
         return MatrixToImageWriter.toBufferedImage(bitMatrix);
     }
 
@@ -94,13 +112,31 @@ public class Barcode {
      * @return the barcode image as byte array
      */
     public static byte[] createByteArray(String value, SupportedBarcodeFormat format, int width, int height, Color backgroundColor, Color barcodeColor) throws Exception {
+        Map<EncodeHintType, ?> hints = new HashMap<>();
+        return createByteArray(value, format, width, height, backgroundColor, barcodeColor, hints);
+    }
+
+    /**
+     * Creates an EAN138 barcode image
+     *
+     * @param value           The barcode text
+     * @param format          the barcode format
+     * @param width           thw image width
+     * @param height          the image height
+     * @param backgroundColor the background color
+     * @param barcodeColor    the barcode color
+     * @param hints           the map of hints
+     * @return the barcode image as byte array
+     */
+    public static byte[] createByteArray(String value, SupportedBarcodeFormat format, int width, int height, Color backgroundColor, Color barcodeColor, Map<EncodeHintType, ?> hints) throws Exception {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        BufferedImage bufferedImage = create(value, format, width, height);
+        BufferedImage bufferedImage = create(value, format, width, height, hints);
         Image image = bufferedImageToFxImage(bufferedImage, backgroundColor, barcodeColor);
         // Perhaps we do in the future some other thins with the image here.
         ImageIO.write(fxImageToBufferedImage(image), "png", byteArrayOutputStream);
         return byteArrayOutputStream.toByteArray();
     }
+
 
     /**
      * Converts a BufferedImage to an javaFX image.

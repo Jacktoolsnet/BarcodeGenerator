@@ -1,5 +1,7 @@
 package net.jacktools.barcode.barcodegenerator;
 
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,9 +27,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.UnaryOperator;
 import java.util.logging.Level;
 
@@ -343,7 +343,11 @@ public class MainViewController {
     }
 
     public void setDefaultEpcValues() {
-        // TextFields - tf.setTextFormatter(new TextFormatter<>(c -> c.getControlNewText().matches(".{0,5}") ? c : null));
+        this.textFieldBic.setText(Settings.BIC);
+        this.textFieldBic.textProperty().addListener((observable, oldValue, newValue) -> {
+            createEpcBarcode();
+            saveEpcSettings();
+        });
         this.textFieldBic.setTextFormatter(new TextFormatter<Object>(c -> {
             if (!c.getControlNewText().isBlank()) {
                 if (c.getControlNewText().toUpperCase(Locale.ENGLISH).matches(EpcCode.BIC_CHECK)) {
@@ -354,6 +358,11 @@ public class MainViewController {
             }
             return c;
         }));
+        this.textFieldPayee.setText(Settings.PAYEE);
+        this.textFieldPayee.textProperty().addListener((observable, oldValue, newValue) -> {
+            createEpcBarcode();
+            saveEpcSettings();
+        });
         this.textFieldPayee.setTextFormatter(new TextFormatter<Object>(c -> {
             if (!c.getControlNewText().isBlank()) {
                 if (c.getControlNewText().matches(EpcCode.PAYEE_CHECK)) {
@@ -362,8 +371,32 @@ public class MainViewController {
                     this.textFieldPayee.setStyle(null != Settings.APP_INVALID_VALUE_COLOR ? "-fx-control-inner-background: " + Settings.APP_INVALID_VALUE_COLOR : "");
                 }
             }
+            createEpcBarcode();
+            saveEpcSettings();
             return c;
         }));
+        this.textFieldIban.setText(Settings.IBAN);
+        this.textFieldIban.textProperty().addListener((observable, oldValue, newValue) -> {
+            createEpcBarcode();
+            saveEpcSettings();
+        });
+        this.textFieldIban.setTextFormatter(new TextFormatter<Object>(c -> {
+            if (!c.getControlNewText().isBlank()) {
+                if (c.getControlNewText().matches(EpcCode.IBAN_CHECK)) {
+                    this.textFieldIban.setStyle("");
+                } else {
+                    this.textFieldIban.setStyle(null != Settings.APP_INVALID_VALUE_COLOR ? "-fx-control-inner-background: " + Settings.APP_INVALID_VALUE_COLOR : "");
+                }
+            }
+            createEpcBarcode();
+            saveEpcSettings();
+            return c;
+        }));
+        this.textFieldPurpose.setText(Settings.PURPOSE);
+        this.textFieldPurpose.textProperty().addListener((observable, oldValue, newValue) -> {
+            createEpcBarcode();
+            saveEpcSettings();
+        });
         this.textFieldPurpose.setTextFormatter(new TextFormatter<Object>(c -> {
             if (!c.getControlNewText().isBlank()) {
                 if (c.getControlNewText().matches(EpcCode.PURPOSE_CHECK)) {
@@ -374,6 +407,12 @@ public class MainViewController {
             }
             return c;
         }));
+        this.textFieldReference.setText(Settings.REFERENCE);
+        this.textFieldReference.textProperty().addListener((observable, oldValue, newValue) -> {
+            createEpcBarcode();
+            saveEpcSettings();
+        });
+        this.textFieldReference.disableProperty().bind(this.textFieldPurposeOfUse.textProperty().isNotEqualTo(""));
         this.textFieldReference.setTextFormatter(new TextFormatter<Object>(c -> {
             if (!c.getControlNewText().isBlank()) {
                 if (c.getControlNewText().matches(EpcCode.REFERENCE_CHECK)) {
@@ -384,6 +423,12 @@ public class MainViewController {
             }
             return c;
         }));
+        this.textFieldPurposeOfUse.setText(Settings.PURPOSE_OF_USE);
+        this.textFieldPurposeOfUse.textProperty().addListener((observable, oldValue, newValue) -> {
+            createEpcBarcode();
+            saveEpcSettings();
+        });
+        this.textFieldPurposeOfUse.disableProperty().bind(this.textFieldReference.textProperty().isNotEqualTo(""));
         this.textFieldPurposeOfUse.setTextFormatter(new TextFormatter<Object>(c -> {
             if (!c.getControlNewText().isBlank()) {
                 if (c.getControlNewText().matches(EpcCode.PURPOSE_OF_USE_CHECK)) {
@@ -394,6 +439,11 @@ public class MainViewController {
             }
             return c;
         }));
+        this.textFieldNotice.setText(Settings.NOTICE);
+        this.textFieldNotice.textProperty().addListener((observable, oldValue, newValue) -> {
+            createEpcBarcode();
+            saveEpcSettings();
+        });
         this.textFieldNotice.setTextFormatter(new TextFormatter<Object>(c -> {
             if (!c.getControlNewText().isBlank()) {
                 if (c.getControlNewText().matches(EpcCode.NOTICE_CHECK)) {
@@ -437,11 +487,12 @@ public class MainViewController {
                 EpcCode.REFERENCE = this.textFieldReference.getText();
                 EpcCode.PURPOSE_OF_USE = this.textFieldPurposeOfUse.getText();
                 EpcCode.NOTICE = this.textFieldNotice.getText();
-                if (!textFieldBarcodeValue.getText().isBlank() && null != choiceBoxBarcodeType.getSelectionModel().getSelectedItem()) {
-                    imageViewQrCode.setImage(Barcode.bufferedImageToFxImage(Barcode.create(textFieldBarcodeValue.getText(), choiceBoxBarcodeType.getSelectionModel().getSelectedItem(), spinnerBarcodeWidth.getValue(), spinnerBarcodeHeight.getValue()), colorPickerBarcodeBackground.getValue(), colorPickerBarcode.getValue()));
-                    protectImageSize(this.imageViewQrCode);
-                    hyperlinkPreview.setText(Assets.getString("hyperlink.barcode", String.valueOf(Settings.WEB_SERVER_PORT), choiceBoxBarcodeType.getSelectionModel().getSelectedItem().getRoute(), URLEncoder.encode(textFieldBarcodeValue.getText(), StandardCharsets.UTF_8), String.valueOf(spinnerBarcodeWidth.getValue()), String.valueOf(spinnerBarcodeHeight.getValue()), colorPickerBarcode.getValue().toString(), colorPickerBarcodeBackground.getValue().toString()));
-                }
+                Map<EncodeHintType, Object> hints = new HashMap<>();
+                hints.put(EncodeHintType.CHARACTER_SET, StandardCharsets.UTF_8.toString());
+                hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
+                imageViewQrCode.setImage(Barcode.bufferedImageToFxImage(Barcode.create(EpcCode.getValue(), SupportedBarcodeFormat.QR_CODE, spinnerQrCodeWidth.getValue(), spinnerQrCodeHeight.getValue(), EpcCode.HINTS), colorPickerQrCodeBackground.getValue(), colorPickerQrCode.getValue()));
+                protectImageSize(this.imageViewQrCode);
+                hyperlinkPreview.setText(Assets.getString("hyperlink.barcode", String.valueOf(Settings.WEB_SERVER_PORT), SupportedBarcodeFormat.EPC_CODE.getRoute(), URLEncoder.encode(EpcCode.getValue(), StandardCharsets.UTF_8), String.valueOf(spinnerBarcodeWidth.getValue()), String.valueOf(spinnerBarcodeHeight.getValue()), colorPickerBarcode.getValue().toString(), colorPickerBarcodeBackground.getValue().toString()));
             } catch (Exception exception) {
                 Alert alert = Assets.getAlert(Alert.AlertType.INFORMATION, true, stage);
                 alert.setHeaderText(Assets.getString("application.error.header"));

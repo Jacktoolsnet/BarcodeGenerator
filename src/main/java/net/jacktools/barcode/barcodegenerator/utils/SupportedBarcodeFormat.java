@@ -15,7 +15,8 @@ public enum SupportedBarcodeFormat {
     PDF_417(BarcodeFormat.PDF_417, "/pdf417"),
     QR_CODE(BarcodeFormat.QR_CODE, "/qrcode"),
     UPC_A(BarcodeFormat.UPC_A, "/upca"),
-    UPC_E(BarcodeFormat.UPC_E, "/upce");
+    UPC_E(BarcodeFormat.UPC_E, "/upce"),
+    EPC_CODE(BarcodeFormat.QR_CODE, "/girocode");
 
     private BarcodeFormat barcodeFormat;
     private String route;

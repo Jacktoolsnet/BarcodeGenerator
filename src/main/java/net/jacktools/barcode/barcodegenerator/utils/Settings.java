@@ -109,15 +109,15 @@ public class Settings {
         QRCODE_VALUE = properties.getProperty("qrcode.value");
         QRCODE_BACKGROUND_COLOR = Color.valueOf(properties.getProperty("qrcode.color.background"));
         // Epc Code
-        BIC = "null".equals(properties.getProperty("epc.bic")) ? properties.getProperty("epc.bic") : "";
-        PAYEE = "null".equals(properties.getProperty("epc.payee")) ? properties.getProperty("epc.payee") : "";
-        IBAN = "null".equals(properties.getProperty("epc.iban")) ? properties.getProperty("epc.iban") : "";
-        CURRENCY = "null".equals(properties.getProperty("epc.currency")) ? SupportedCurrency.valueOf(properties.getProperty("epc.currency")) : SupportedCurrency.EUR;
-        PAYMENT_AMOUNT = "null".equals(properties.getProperty("epc.paymentamount")) ? Double.valueOf(properties.getProperty("epc.paymentamount")) : 0.00;
-        PURPOSE = "null".equals(properties.getProperty("epc.purpose")) ? properties.getProperty("epc.purpose") : "";
-        REFERENCE = "null".equals(properties.getProperty("epc.reference")) ? properties.getProperty("epc.reference") : "";
-        PURPOSE_OF_USE = "null".equals(properties.getProperty("epc.purposeofuse")) ? properties.getProperty("epc.purposeofuse") : "";
-        NOTICE = "null".equals(properties.getProperty("epc.notice")) ? properties.getProperty("epc.notice") : "";
+        BIC = !"null".equals(properties.getProperty("epc.bic")) ? properties.getProperty("epc.bic") : "";
+        PAYEE = !"null".equals(properties.getProperty("epc.payee")) ? properties.getProperty("epc.payee") : "";
+        IBAN = !"null".equals(properties.getProperty("epc.iban")) ? properties.getProperty("epc.iban") : "";
+        CURRENCY = !"null".equals(properties.getProperty("epc.currency")) ? SupportedCurrency.valueOf(properties.getProperty("epc.currency")) : SupportedCurrency.EUR;
+        PAYMENT_AMOUNT = !"null".equals(properties.getProperty("epc.paymentamount")) ? Double.valueOf(properties.getProperty("epc.paymentamount")) : 0.00;
+        PURPOSE = !"null".equals(properties.getProperty("epc.purpose")) ? properties.getProperty("epc.purpose") : "";
+        REFERENCE = !"null".equals(properties.getProperty("epc.reference")) ? properties.getProperty("epc.reference") : "";
+        PURPOSE_OF_USE = !"null".equals(properties.getProperty("epc.purposeofuse")) ? properties.getProperty("epc.purposeofuse") : "";
+        NOTICE = !"null".equals(properties.getProperty("epc.notice")) ? properties.getProperty("epc.notice") : "";
     }
 
     public static void saveProperties() {
