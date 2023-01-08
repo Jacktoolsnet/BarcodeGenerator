@@ -227,7 +227,7 @@
                                         </ImageView>
                                     </center>
                                     <left>
-                                        <Accordion BorderPane.alignment="CENTER">
+                                        <Accordion fx:id="accordionQrCodes" BorderPane.alignment="CENTER">
                                             <panes>
                                                 <TitledPane fx:id="titledPaneTransfer" animated="false"
                                                             text="%fxml.main.titledpane.transfer">
