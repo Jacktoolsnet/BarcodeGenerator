@@ -114,6 +114,9 @@ public class MainViewController {
     @FXML
     private TitledPane titledPaneMeeting;
 
+    @FXML
+    private TitledPane titledPaneHyoerlink;
+
     NumberFormat integerFormat = NumberFormat.getIntegerInstance();
 
     @FXML
