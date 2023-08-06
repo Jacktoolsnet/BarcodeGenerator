@@ -10,12 +10,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.converter.CurrencyStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import net.jacktools.barcode.barcodegenerator.epc.EpcCode;
 import net.jacktools.barcode.barcodegenerator.epc.SupportedCurrency;
+import net.jacktools.barcode.barcodegenerator.models.BarcodeTableCell;
+import net.jacktools.barcode.barcodegenerator.models.BarcodeTableCellValue;
+import net.jacktools.barcode.barcodegenerator.models.BarcodeTableView;
+import net.jacktools.barcode.barcodegenerator.models.TableViewDefinition;
 import net.jacktools.barcode.barcodegenerator.utils.*;
 import net.jacktools.barcode.barcodegenerator.web.AppServer;
 
@@ -65,6 +70,13 @@ public class MainViewController {
 
     @FXML
     private ColorPicker colorPickerBarcodeBackground;
+
+    // Settings
+    BarcodeTableView barcodeTableView;
+    @FXML
+    private TableView<TableViewDefinition> tableViewBarcode;
+    @FXML
+    private TableColumn<TableViewDefinition, String> tableColumnBarcodeDesignation;
 
     @FXML
     private ColorPicker colorPickerQrCode;
@@ -161,10 +173,21 @@ public class MainViewController {
     private TextField textFieldIban;
     @FXML
     private TextField textFieldNotice;
+    @FXML
+    private TableColumn<TableViewDefinition, BarcodeTableCellValue> tableColumnBarcodeValue;
 
     @FXML
     void initialize() {
         choiceBoxBarcodeType.getItems().setAll(Arrays.asList(SupportedBarcodeFormat.values()));
+        // Barcode
+        this.tableColumnBarcodeDesignation.setCellValueFactory(new PropertyValueFactory<TableViewDefinition, String>("designation"));
+        this.tableColumnBarcodeValue.setCellValueFactory(cellData -> cellData.getValue().getTableCellValue());
+        this.tableColumnBarcodeValue.setCellFactory((TableColumn<TableViewDefinition, BarcodeTableCellValue> tableColumn) -> {
+            return new BarcodeTableCell();
+        });
+        this.barcodeTableView = new BarcodeTableView();
+        this.tableViewBarcode.setItems(barcodeTableView.getObservableList());
+        this.tableViewBarcode.refresh();
     }
 
     @FXML

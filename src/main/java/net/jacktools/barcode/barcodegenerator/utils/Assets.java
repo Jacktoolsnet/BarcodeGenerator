@@ -1,6 +1,5 @@
 package net.jacktools.barcode.barcodegenerator.utils;
 
-
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;

@@ -175,6 +175,22 @@
                                             </viewport>
                                         </ImageView>
                                     </center>
+                                    <left>
+                                        <TableView fx:id="tableViewBarcode" editable="true"
+                                                   BorderPane.alignment="CENTER">
+                                            <columns>
+                                                <TableColumn fx:id="tableColumnBarcodeDesignation" editable="false"
+                                                             maxWidth="150.0" minWidth="150.0" prefWidth="150.0"
+                                                             text="%tableColumnBarcodeDesignation"/>
+                                                <TableColumn fx:id="tableColumnBarcodeValue" maxWidth="150.0"
+                                                             minWidth="150.0" prefWidth="150.0"
+                                                             text="%tableColumnBarcodeValue"/>
+                                            </columns>
+                                            <BorderPane.margin>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                            </BorderPane.margin>
+                                        </TableView>
+                                    </left>
                                 </BorderPane>
                             </children>
                         </AnchorPane>

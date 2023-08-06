@@ -8,5 +8,6 @@ module net.jacktools.barcode.barcodegenerator {
     requires java.logging;
 
     opens net.jacktools.barcode.barcodegenerator to javafx.fxml;
+    opens net.jacktools.barcode.barcodegenerator.models to javafx.base;
     exports net.jacktools.barcode.barcodegenerator;
 }
