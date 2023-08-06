@@ -54,8 +54,8 @@ public class BarcodeTableCellValue implements ObservableValue {
         return tableCellValue.get();
     }
 
-    public void setTableCellValue(String tableCellValue) {
-        this.tableCellValue.set(tableCellValue);
+    public void setTableCellValue() {
+        this.tableCellValue.set(tableCellValue.toString());
     }
 
     public SimpleStringProperty tableCellValueProperty() {
