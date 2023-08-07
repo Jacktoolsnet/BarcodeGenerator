@@ -2,7 +2,7 @@
  * Copyright (c) 2023.
  */
 
-package net.jacktools.barcode.barcodegenerator.models;
+package net.jacktools.barcode.barcodegenerator.models.barcode;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.SimpleStringProperty;

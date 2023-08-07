@@ -2,7 +2,7 @@
  * Copyright (c) 2023.
  */
 
-package net.jacktools.barcode.barcodegenerator.models;
+package net.jacktools.barcode.barcodegenerator.models.barcode;
 
 public enum BarcodeSettings {
     TYPE,

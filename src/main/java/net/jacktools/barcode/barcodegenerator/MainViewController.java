@@ -18,10 +18,14 @@ import javafx.util.converter.CurrencyStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import net.jacktools.barcode.barcodegenerator.epc.EpcCode;
 import net.jacktools.barcode.barcodegenerator.epc.SupportedCurrency;
-import net.jacktools.barcode.barcodegenerator.models.BarcodeTableCell;
-import net.jacktools.barcode.barcodegenerator.models.BarcodeTableCellValue;
-import net.jacktools.barcode.barcodegenerator.models.BarcodeTableView;
-import net.jacktools.barcode.barcodegenerator.models.TableViewDefinition;
+import net.jacktools.barcode.barcodegenerator.models.barcode.BarcodeTableCell;
+import net.jacktools.barcode.barcodegenerator.models.barcode.BarcodeTableCellValue;
+import net.jacktools.barcode.barcodegenerator.models.barcode.BarcodeTableView;
+import net.jacktools.barcode.barcodegenerator.models.barcode.BarcodeTableViewDefinition;
+import net.jacktools.barcode.barcodegenerator.models.epc.EpcTableCell;
+import net.jacktools.barcode.barcodegenerator.models.epc.EpcTableCellValue;
+import net.jacktools.barcode.barcodegenerator.models.epc.EpcTableView;
+import net.jacktools.barcode.barcodegenerator.models.epc.EpcTableViewDefinition;
 import net.jacktools.barcode.barcodegenerator.utils.*;
 import net.jacktools.barcode.barcodegenerator.web.AppServer;
 
@@ -66,15 +70,24 @@ public class MainViewController {
     @FXML
     private CheckBox checkBoxWebServerAutoStart;
 
-    // Settings
+    // Barcode TableView
     BarcodeTableView barcodeTableView;
+    // EPC TableView
+    EpcTableView epcTableView;
     @FXML
-    private TableView<TableViewDefinition> tableViewBarcode;
+    private TableView<BarcodeTableViewDefinition> tableViewBarcode;
     @FXML
-    private TableColumn<TableViewDefinition, String> tableColumnBarcodeDesignation;
+    private TableColumn<BarcodeTableViewDefinition, String> tableColumnBarcodeDesignation;
+    @FXML
+    private TableColumn<BarcodeTableViewDefinition, BarcodeTableCellValue> tableColumnBarcodeValue;
+    @FXML
+    private TableView<EpcTableViewDefinition> tableViewEpc;
 
     @FXML
-    private TableColumn<TableViewDefinition, BarcodeTableCellValue> tableColumnBarcodeValue;
+    private TableColumn<EpcTableViewDefinition, String> tableColumnEpcDesignation;
+
+    @FXML
+    private TableColumn<EpcTableViewDefinition, EpcTableCellValue> tableColumnEpcValue;
 
     @FXML
     private ColorPicker colorPickerQrCode;
@@ -167,20 +180,35 @@ public class MainViewController {
     @FXML
     void initialize() {
         // Barcode
-        this.tableColumnBarcodeDesignation.setCellValueFactory(new PropertyValueFactory<TableViewDefinition, String>("designation"));
+        this.tableColumnBarcodeDesignation.setCellValueFactory(new PropertyValueFactory<BarcodeTableViewDefinition, String>("designation"));
         this.tableColumnBarcodeValue.setCellValueFactory(cellData -> cellData.getValue().getTableCellValue());
-        this.tableColumnBarcodeValue.setCellFactory((TableColumn<TableViewDefinition, BarcodeTableCellValue> tableColumn) -> {
+        this.tableColumnBarcodeValue.setCellFactory((TableColumn<BarcodeTableViewDefinition, BarcodeTableCellValue> tableColumn) -> {
             return new BarcodeTableCell();
         });
-        this.tableColumnBarcodeValue.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<TableViewDefinition, BarcodeTableCellValue>>() {
+        this.tableColumnBarcodeValue.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<BarcodeTableViewDefinition, BarcodeTableCellValue>>() {
             @Override
-            public void handle(TableColumn.CellEditEvent<TableViewDefinition, BarcodeTableCellValue> t) {
+            public void handle(TableColumn.CellEditEvent<BarcodeTableViewDefinition, BarcodeTableCellValue> t) {
                 createBarcode();
             }
         });
         this.barcodeTableView = new BarcodeTableView();
         this.tableViewBarcode.setItems(barcodeTableView.getObservableList());
         this.tableViewBarcode.refresh();
+        // EPC
+        this.tableColumnEpcDesignation.setCellValueFactory(new PropertyValueFactory<EpcTableViewDefinition, String>("designation"));
+        this.tableColumnEpcValue.setCellValueFactory(cellData -> cellData.getValue().getTableCellValue());
+        this.tableColumnEpcValue.setCellFactory((TableColumn<EpcTableViewDefinition, EpcTableCellValue> tableColumn) -> {
+            return new EpcTableCell();
+        });
+        this.tableColumnEpcValue.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<EpcTableViewDefinition, EpcTableCellValue>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<EpcTableViewDefinition, EpcTableCellValue> t) {
+                createEpcBarcode();
+            }
+        });
+        this.epcTableView = new EpcTableView();
+        this.tableViewEpc.setItems(epcTableView.getObservableList());
+        this.tableViewEpc.refresh();
     }
 
     @FXML

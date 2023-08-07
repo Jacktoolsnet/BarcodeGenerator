@@ -251,6 +251,24 @@
                                                                                text="%epc.label.notice"/>
                                                                         <TextField fx:id="textFieldNotice"
                                                                                    layoutX="15.0" layoutY="354.0"/>
+                                                                        <TableView fx:id="tableViewEpc" editable="true">
+                                                                            <columns>
+                                                                                <TableColumn
+                                                                                        fx:id="tableColumnEpcDesignation"
+                                                                                        editable="false"
+                                                                                        maxWidth="150.0"
+                                                                                        minWidth="150.0"
+                                                                                        prefWidth="150.0"
+                                                                                        sortable="false"
+                                                                                        text="%tableColumnBarcodeDesignation"/>
+                                                                                <TableColumn fx:id="tableColumnEpcValue"
+                                                                                             maxWidth="300.0"
+                                                                                             minWidth="150.0"
+                                                                                             prefWidth="300.0"
+                                                                                             sortable="false"
+                                                                                             text="%tableColumnBarcodeValue"/>
+                                                                            </columns>
+                                                                        </TableView>
                                                                     </children>
                                                                     <padding>
                                                                         <Insets bottom="5.0" left="5.0" right="5.0"

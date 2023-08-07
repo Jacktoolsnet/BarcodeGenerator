@@ -1,15 +1,19 @@
-package net.jacktools.barcode.barcodegenerator.models;
+/*
+ * Copyright (c) 2023.
+ */
+
+package net.jacktools.barcode.barcodegenerator.models.epc;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 
-public final class TableViewDefinition {
+public final class EpcTableViewDefinition {
     private final SimpleStringProperty designation;
 
-    private final BarcodeTableCellValue tableCellValue;
+    private final EpcTableCellValue tableCellValue;
 
 
-    public TableViewDefinition(String designation, BarcodeTableCellValue tableCellValue) {
+    public EpcTableViewDefinition(String designation, EpcTableCellValue tableCellValue) {
         this.designation = new SimpleStringProperty(designation);
         this.tableCellValue = tableCellValue;
     }
@@ -26,7 +30,7 @@ public final class TableViewDefinition {
         return designation;
     }
 
-    public ObservableValue<BarcodeTableCellValue> getTableCellValue() {
+    public ObservableValue<EpcTableCellValue> getTableCellValue() {
         return tableCellValue;
     }
 }

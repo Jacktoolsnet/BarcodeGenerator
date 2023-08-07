@@ -2,7 +2,7 @@
  * Copyright (c) 2023.
  */
 
-package net.jacktools.barcode.barcodegenerator.models;
+package net.jacktools.barcode.barcodegenerator.models.barcode;
 
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -18,7 +18,7 @@ import java.text.ParsePosition;
 import java.util.Arrays;
 import java.util.function.UnaryOperator;
 
-public class BarcodeTableCell extends TableCell<TableViewDefinition, BarcodeTableCellValue> {
+public class BarcodeTableCell extends TableCell<BarcodeTableViewDefinition, BarcodeTableCellValue> {
 
     private Label label = new Label();
     private TextField textField = new TextField();
