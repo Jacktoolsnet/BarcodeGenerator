@@ -4,6 +4,7 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -32,7 +33,10 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.UnaryOperator;
 import java.util.logging.Level;
 
@@ -62,21 +66,15 @@ public class MainViewController {
     @FXML
     private CheckBox checkBoxWebServerAutoStart;
 
-    @FXML
-    private ChoiceBox<SupportedBarcodeFormat> choiceBoxBarcodeType;
-
-    @FXML
-    private ColorPicker colorPickerBarcode;
-
-    @FXML
-    private ColorPicker colorPickerBarcodeBackground;
-
     // Settings
     BarcodeTableView barcodeTableView;
     @FXML
     private TableView<TableViewDefinition> tableViewBarcode;
     @FXML
     private TableColumn<TableViewDefinition, String> tableColumnBarcodeDesignation;
+
+    @FXML
+    private TableColumn<TableViewDefinition, BarcodeTableCellValue> tableColumnBarcodeValue;
 
     @FXML
     private ColorPicker colorPickerQrCode;
@@ -92,12 +90,6 @@ public class MainViewController {
 
     @FXML
     private ImageView imageViewQrCode;
-
-    @FXML
-    private Spinner<Integer> spinnerBarcodeHeight;
-
-    @FXML
-    private Spinner<Integer> spinnerBarcodeWidth;
 
     @FXML
     private Spinner<Integer> spinnerQrCodeHeight;
@@ -116,9 +108,6 @@ public class MainViewController {
 
     @FXML
     private TextArea textAreaWebServerLog;
-
-    @FXML
-    private TextField textFieldBarcodeValue;
 
     @FXML
     private TitledPane titledContact;
@@ -173,17 +162,21 @@ public class MainViewController {
     private TextField textFieldIban;
     @FXML
     private TextField textFieldNotice;
-    @FXML
-    private TableColumn<TableViewDefinition, BarcodeTableCellValue> tableColumnBarcodeValue;
+
 
     @FXML
     void initialize() {
-        choiceBoxBarcodeType.getItems().setAll(Arrays.asList(SupportedBarcodeFormat.values()));
         // Barcode
         this.tableColumnBarcodeDesignation.setCellValueFactory(new PropertyValueFactory<TableViewDefinition, String>("designation"));
         this.tableColumnBarcodeValue.setCellValueFactory(cellData -> cellData.getValue().getTableCellValue());
         this.tableColumnBarcodeValue.setCellFactory((TableColumn<TableViewDefinition, BarcodeTableCellValue> tableColumn) -> {
             return new BarcodeTableCell();
+        });
+        this.tableColumnBarcodeValue.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<TableViewDefinition, BarcodeTableCellValue>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<TableViewDefinition, BarcodeTableCellValue> t) {
+                createBarcode();
+            }
         });
         this.barcodeTableView = new BarcodeTableView();
         this.tableViewBarcode.setItems(barcodeTableView.getObservableList());
@@ -248,77 +241,21 @@ public class MainViewController {
         this.buttonSave.disableProperty().bind(this.tabPaneMain.getSelectionModel().selectedIndexProperty().greaterThan(1));
         this.buttonWebServerStart.disableProperty().bind(AppServer.RUNNING);
         this.buttonWebServerStop.disableProperty().bind(AppServer.NOT_RUNNING);
-        // Barcode type
-        this.choiceBoxBarcodeType.getSelectionModel().select(Settings.BARCODE_TYPE);
-        this.choiceBoxBarcodeType.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            this.createBarcode();
-            this.saveBarcodeSettings();
-        });
-        // Barcode value
-        this.textFieldBarcodeValue.setText(Settings.BARCODE_VALUE);
-        this.textFieldBarcodeValue.textProperty().addListener((observable, oldValue, newValue) -> {
-            this.createBarcode();
-            this.saveBarcodeSettings();
-        });
-        // Barcode color
-        this.colorPickerBarcode.setValue(Settings.BARCODE_COLOR);
-        this.colorPickerBarcode.valueProperty().addListener((observable, oldValue, newValue) -> {
-            this.createBarcode();
-            this.saveBarcodeSettings();
-        });
-        // Barcode Background color
-        this.colorPickerBarcodeBackground.setValue(Settings.BARCODE_BACKGROUND_COLOR);
-        this.colorPickerBarcodeBackground.valueProperty().addListener((observable, oldValue, newValue) -> {
-            this.createBarcode();
-            this.saveBarcodeSettings();
-        });
+
         // QR-Code color
         this.colorPickerQrCode.setValue(Settings.QRCODE_COLOR);
         // QR-Code background color
         this.colorPickerQrCodeBackground.setValue(Settings.QRCODE_BACKGROUND_COLOR);
-        // Spinner
-        this.spinnerBarcodeWidth.setEditable(true);
-        this.spinnerBarcodeWidth.getEditor().setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), 0, integerFilter));
-        this.spinnerBarcodeWidth.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Settings.BARCODE_MIN_WIDTH, Settings.BARCODE_MAX_WIDTH, Settings.BARCODE_DEFAULT_WIDTH));
-        this.spinnerBarcodeWidth.valueProperty().addListener((observable, oldValue, newValue) -> {
-            Node increment = spinnerBarcodeWidth.lookup(".increment-arrow-button");
-            if (increment != null) {
-                increment.getOnMouseReleased().handle(null);
-            }
-
-            Node decrement = spinnerBarcodeWidth.lookup(".decrement-arrow-button");
-            if (decrement != null) {
-                decrement.getOnMouseReleased().handle(null);
-            }
-            this.createBarcode();
-            this.saveBarcodeSettings();
-        });
-        this.spinnerBarcodeHeight.setEditable(true);
-        this.spinnerBarcodeHeight.getEditor().setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), 0, integerFilter));
-        this.spinnerBarcodeHeight.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Settings.BARCODE_MIN_HEIGHT, Settings.BARCODE_MAX_HEIGHT, Settings.BARCODE_DEFAULT_HEIGHT));
-        this.spinnerBarcodeHeight.valueProperty().addListener((observable, oldValue, newValue) -> {
-            Node increment = spinnerBarcodeWidth.lookup(".increment-arrow-button");
-            if (increment != null) {
-                increment.getOnMouseReleased().handle(null);
-            }
-
-            Node decrement = spinnerBarcodeWidth.lookup(".decrement-arrow-button");
-            if (decrement != null) {
-                decrement.getOnMouseReleased().handle(null);
-            }
-            this.createBarcode();
-            this.saveBarcodeSettings();
-        });
         this.spinnerQrCodeWidth.setEditable(true);
         this.spinnerQrCodeWidth.getEditor().setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), 0, integerFilter));
         this.spinnerQrCodeWidth.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Settings.QRCODE_MIN_WIDTH, Settings.QRCODE_MAX_WIDTH, Settings.QRCODE_DEFAULT_WIDTH));
         this.spinnerQrCodeWidth.valueProperty().addListener((observable, oldValue, newValue) -> {
-            Node increment = spinnerBarcodeWidth.lookup(".increment-arrow-button");
+            Node increment = spinnerQrCodeWidth.lookup(".increment-arrow-button");
             if (increment != null) {
                 increment.getOnMouseReleased().handle(null);
             }
 
-            Node decrement = spinnerBarcodeWidth.lookup(".decrement-arrow-button");
+            Node decrement = spinnerQrCodeWidth.lookup(".decrement-arrow-button");
             if (decrement != null) {
                 decrement.getOnMouseReleased().handle(null);
             }
@@ -329,12 +266,12 @@ public class MainViewController {
         this.spinnerQrCodeHeight.getEditor().setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), 0, integerFilter));
         this.spinnerQrCodeHeight.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Settings.QRCODE_MIN_HEIGHT, Settings.QRCODE_MAX_HEIGHT, Settings.QRCODE_DEFAULT_HEIGHT));
         this.spinnerQrCodeHeight.valueProperty().addListener((observable, oldValue, newValue) -> {
-            Node increment = spinnerBarcodeWidth.lookup(".increment-arrow-button");
+            Node increment = spinnerQrCodeHeight.lookup(".increment-arrow-button");
             if (increment != null) {
                 increment.getOnMouseReleased().handle(null);
             }
 
-            Node decrement = spinnerBarcodeWidth.lookup(".decrement-arrow-button");
+            Node decrement = spinnerQrCodeHeight.lookup(".decrement-arrow-button");
             if (decrement != null) {
                 decrement.getOnMouseReleased().handle(null);
             }
@@ -346,12 +283,12 @@ public class MainViewController {
         this.spinnerWebServerPort.getEditor().setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), 0, integerFilter));
         this.spinnerWebServerPort.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Settings.WEB_SERVER_PORT_MIN, Settings.WEB_SERVER_PORT_MAX, Settings.WEB_SERVER_PORT));
         this.spinnerWebServerPort.valueProperty().addListener((observable, oldValue, newValue) -> {
-            Node increment = spinnerBarcodeWidth.lookup(".increment-arrow-button");
+            Node increment = spinnerWebServerPort.lookup(".increment-arrow-button");
             if (increment != null) {
                 increment.getOnMouseReleased().handle(null);
             }
 
-            Node decrement = spinnerBarcodeWidth.lookup(".decrement-arrow-button");
+            Node decrement = spinnerWebServerPort.lookup(".decrement-arrow-button");
             if (decrement != null) {
                 decrement.getOnMouseReleased().handle(null);
             }
@@ -373,8 +310,8 @@ public class MainViewController {
     private void createBarcode() {
         Platform.runLater(() -> {
             try {
-                if (!textFieldBarcodeValue.getText().isBlank() && null != choiceBoxBarcodeType.getSelectionModel().getSelectedItem()) {
-                    imageViewBarcode.setImage(Barcode.bufferedImageToFxImage(Barcode.create(textFieldBarcodeValue.getText(), choiceBoxBarcodeType.getSelectionModel().getSelectedItem(), spinnerBarcodeWidth.getValue(), spinnerBarcodeHeight.getValue()), colorPickerBarcodeBackground.getValue(), colorPickerBarcode.getValue()));
+                if (!Settings.BARCODE_VALUE.isBlank() && null != Settings.BARCODE_TYPE) {
+                    imageViewBarcode.setImage(Barcode.bufferedImageToFxImage(Barcode.create(Settings.BARCODE_VALUE, Settings.BARCODE_TYPE, Settings.BARCODE_DEFAULT_WIDTH, Settings.BARCODE_DEFAULT_HEIGHT), Settings.BARCODE_BACKGROUND_COLOR, Settings.BARCODE_COLOR));
                     protectImageSize(this.imageViewBarcode);
                     this.createPreviewHyperlink();
                 }
@@ -508,12 +445,12 @@ public class MainViewController {
         this.spinnerPaymentAmount.setValueFactory(spinnerPaymentAmountFactory);
         this.spinnerPaymentAmount.getEditor().setTextFormatter(new TextFormatter<>(new CurrencyStringConverter(), Settings.PAYMENT_AMOUNT, currencyFilter));
         this.spinnerPaymentAmount.valueProperty().addListener((observable, oldValue, newValue) -> {
-            Node increment = spinnerBarcodeWidth.lookup(".increment-arrow-button");
+            Node increment = spinnerPaymentAmount.lookup(".increment-arrow-button");
             if (increment != null) {
                 increment.getOnMouseReleased().handle(null);
             }
 
-            Node decrement = spinnerBarcodeWidth.lookup(".decrement-arrow-button");
+            Node decrement = spinnerPaymentAmount.lookup(".decrement-arrow-button");
             if (decrement != null) {
                 decrement.getOnMouseReleased().handle(null);
             }
@@ -551,13 +488,8 @@ public class MainViewController {
         });
     }
 
+    @Deprecated
     private void saveBarcodeSettings() {
-        Settings.BARCODE_VALUE = this.textFieldBarcodeValue.getText();
-        Settings.BARCODE_TYPE = this.choiceBoxBarcodeType.getValue();
-        Settings.BARCODE_DEFAULT_WIDTH = this.spinnerBarcodeWidth.getValue();
-        Settings.BARCODE_DEFAULT_HEIGHT = this.spinnerBarcodeWidth.getValue();
-        Settings.BARCODE_COLOR = this.colorPickerBarcode.getValue();
-        Settings.BARCODE_BACKGROUND_COLOR = this.colorPickerBarcodeBackground.getValue();
     }
 
     private void saveEpcSettings() {
@@ -578,8 +510,8 @@ public class MainViewController {
     }
 
     private void protectImageSize(ImageView imageView) {
-        imageView.setFitWidth(this.spinnerBarcodeWidth.getValue() > this.stage.getWidth() - 100 ? this.stage.getWidth() - 100 : 0);
-        imageView.setFitHeight(this.spinnerBarcodeHeight.getValue() > this.stage.getHeight() - 200 ? this.stage.getHeight() - 200 : 0);
+        imageView.setFitWidth(Settings.BARCODE_DEFAULT_WIDTH > this.stage.getWidth() - 100 ? this.stage.getWidth() - 100 : 0);
+        imageView.setFitHeight(Settings.BARCODE_DEFAULT_HEIGHT > this.stage.getHeight() - 200 ? this.stage.getHeight() - 200 : 0);
     }
 
     @FXML
@@ -603,11 +535,11 @@ public class MainViewController {
     private void createPreviewHyperlink() {
         switch (this.tabPaneMain.getSelectionModel().getSelectedIndex()) {
             case 0:
-                hyperlinkPreview.setText(Assets.getString("hyperlink.barcode", String.valueOf(Settings.WEB_SERVER_PORT), choiceBoxBarcodeType.getSelectionModel().getSelectedItem().getRoute(), URLEncoder.encode(textFieldBarcodeValue.getText(), StandardCharsets.UTF_8), String.valueOf(spinnerBarcodeWidth.getValue()), String.valueOf(spinnerBarcodeHeight.getValue()), colorPickerBarcode.getValue().toString(), colorPickerBarcodeBackground.getValue().toString()));
+                hyperlinkPreview.setText(Assets.getString("hyperlink.barcode", String.valueOf(Settings.WEB_SERVER_PORT), Settings.BARCODE_TYPE.getRoute(), URLEncoder.encode(Settings.BARCODE_VALUE, StandardCharsets.UTF_8), String.valueOf(Settings.BARCODE_DEFAULT_WIDTH), String.valueOf(Settings.BARCODE_DEFAULT_HEIGHT), Settings.BARCODE_COLOR, Settings.BARCODE_BACKGROUND_COLOR));
                 break;
             case 1:
                 if (this.titledPaneTransfer.isExpanded()) {
-                    hyperlinkPreview.setText(Assets.getString("hyperlink.barcode", String.valueOf(Settings.WEB_SERVER_PORT), SupportedBarcodeFormat.EPC_CODE.getRoute(), URLEncoder.encode(EpcCode.getValue(), StandardCharsets.UTF_8), String.valueOf(spinnerBarcodeWidth.getValue()), String.valueOf(spinnerBarcodeHeight.getValue()), colorPickerBarcode.getValue().toString(), colorPickerBarcodeBackground.getValue().toString()));
+                    hyperlinkPreview.setText(Assets.getString("hyperlink.barcode", String.valueOf(Settings.WEB_SERVER_PORT), SupportedBarcodeFormat.EPC_CODE.getRoute(), URLEncoder.encode(EpcCode.getValue(), StandardCharsets.UTF_8), String.valueOf(Settings.BARCODE_DEFAULT_WIDTH), String.valueOf(Settings.BARCODE_DEFAULT_HEIGHT), Settings.BARCODE_COLOR, Settings.BARCODE_BACKGROUND_COLOR));
                 } else {
                     hyperlinkPreview.setText("");
                 }

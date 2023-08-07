@@ -128,41 +128,7 @@
                                             AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                                             AnchorPane.topAnchor="0.0">
                                     <top>
-                                        <ButtonBar buttonMinWidth="40.0" BorderPane.alignment="CENTER">
-                                            <buttons>
-                                                <Label alignment="CENTER_RIGHT" layoutX="218.0" layoutY="17.0"
-                                                       maxWidth="40.0" text="%fxml.main.label.type"/>
-                                                <ChoiceBox fx:id="choiceBoxBarcodeType" maxWidth="100.0"
-                                                           minWidth="100.0" prefWidth="100.0"/>
-                                                <Label alignment="CENTER_RIGHT" maxWidth="40.0"
-                                                       text="%fxml.main.label.value"/>
-                                                <TextField fx:id="textFieldBarcodeValue"/>
-                                                <Label alignment="CENTER_RIGHT" layoutX="420.0" layoutY="22.0"
-                                                       maxWidth="40.0" text="%fxml.main.label.width"/>
-                                                <Spinner fx:id="spinnerBarcodeWidth" maxWidth="75.0" minWidth="75.0"
-                                                         prefWidth="75.0"/>
-                                                <Label alignment="CENTER_RIGHT" layoutX="469.0" layoutY="26.0"
-                                                       maxWidth="40.0" text="%fxml.main.label.height"/>
-                                                <Spinner fx:id="spinnerBarcodeHeight" layoutX="554.0" layoutY="22.0"
-                                                         maxWidth="75.0" minWidth="75.0" prefWidth="75.0"/>
-                                                <Label alignment="CENTER_RIGHT" layoutX="578.0" layoutY="16.0"
-                                                       maxWidth="100.0" text="%fxml.main.label.barcodecolor"/>
-                                                <ColorPicker fx:id="colorPickerBarcode" maxWidth="100.0"
-                                                             minWidth="100.0" prefWidth="100.0">
-                                                    <value>
-                                                        <Color/>
-                                                    </value>
-                                                </ColorPicker>
-                                                <Label alignment="CENTER_RIGHT" layoutX="716.0" layoutY="16.0"
-                                                       maxWidth="100.0" text="%fxml.main.label.backgroundcolor"/>
-                                                <ColorPicker fx:id="colorPickerBarcodeBackground" layoutX="801.0"
-                                                             layoutY="12.0" maxWidth="100.0" minWidth="100.0"
-                                                             prefWidth="100.0"/>
-                                            </buttons>
-                                            <padding>
-                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                                            </padding>
-                                        </ButtonBar>
+                                        <ButtonBar buttonMinWidth="0.0" BorderPane.alignment="CENTER"/>
                                     </top>
                                     <center>
                                         <ImageView fx:id="imageViewBarcode" pickOnBounds="true" preserveRatio="true"
@@ -181,9 +147,9 @@
                                             <columns>
                                                 <TableColumn fx:id="tableColumnBarcodeDesignation" editable="false"
                                                              maxWidth="150.0" minWidth="150.0" prefWidth="150.0"
-                                                             text="%tableColumnBarcodeDesignation"/>
-                                                <TableColumn fx:id="tableColumnBarcodeValue" maxWidth="150.0"
-                                                             minWidth="150.0" prefWidth="150.0"
+                                                             sortable="false" text="%tableColumnBarcodeDesignation"/>
+                                                <TableColumn fx:id="tableColumnBarcodeValue" maxWidth="300.0"
+                                                             minWidth="150.0" prefWidth="300.0" sortable="false"
                                                              text="%tableColumnBarcodeValue"/>
                                             </columns>
                                             <BorderPane.margin>

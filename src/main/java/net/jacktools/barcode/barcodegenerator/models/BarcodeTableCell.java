@@ -116,10 +116,30 @@ public class BarcodeTableCell extends TableCell<TableViewDefinition, BarcodeTabl
 
     @Override
     public void commitEdit(BarcodeTableCellValue value) {
-        super.commitEdit(value);
         this.setText(value.getTableCellValue());
         this.label.setText(value.getTableCellValue());
         this.setGraphic(this.label);
+        switch (this.getItem().getSetting()) {
+            case TYPE -> {
+                Settings.BARCODE_TYPE = this.choiceBox.getValue();
+            }
+            case VALUE -> {
+                Settings.BARCODE_VALUE = this.textField.getText();
+            }
+            case WIDTH -> {
+                Settings.BARCODE_DEFAULT_WIDTH = this.integerSpinner.getValue();
+            }
+            case HEIGHT -> {
+                Settings.BARCODE_DEFAULT_HEIGHT = this.integerSpinner.getValue();
+            }
+            case BARCODECOLOR -> {
+                Settings.BARCODE_COLOR = this.colorPicker.getValue();
+            }
+            case BACKGROUNDCOLOR -> {
+                Settings.BARCODE_BACKGROUND_COLOR = this.colorPicker.getValue();
+            }
+        }
+        super.commitEdit(value);
     }
 
     @Override
@@ -140,4 +160,5 @@ public class BarcodeTableCell extends TableCell<TableViewDefinition, BarcodeTabl
             setGraphic(null);
         }
     }
+
 }
