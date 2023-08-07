@@ -52,8 +52,9 @@ public class BarcodeTableCell extends TableCell<TableViewDefinition, BarcodeTabl
                 event.consume();
             }
         });
+        this.integerSpinner.setEditable(true);
         this.integerSpinner.getEditor().setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), 0, integerFilter));
-        this.integerSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Settings.BARCODE_MIN_WIDTH, Settings.BARCODE_MAX_WIDTH, Settings.BARCODE_DEFAULT_WIDTH));
+        this.integerSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 4096, 0));
         this.integerSpinner.valueProperty().addListener((observable, oldValue, newValue) -> {
             Node increment = integerSpinner.lookup(".increment-arrow-button");
             if (increment != null) {
@@ -70,7 +71,7 @@ public class BarcodeTableCell extends TableCell<TableViewDefinition, BarcodeTabl
                 cancelEdit();
                 event.consume();
             } else if (event.getCode() == KeyCode.ENTER) {
-                this.getItem().tableCellValueProperty().set(String.valueOf(this.integerSpinner.getValue()));
+                this.getItem().tableCellValueProperty().set(String.valueOf(this.integerSpinner.getEditor().getText()));
                 commitEdit(this.getItem());
                 event.consume();
             }
@@ -105,6 +106,14 @@ public class BarcodeTableCell extends TableCell<TableViewDefinition, BarcodeTabl
             }
             case NUMBER -> {
                 this.integerSpinner.getValueFactory().setValue(Integer.valueOf(this.getItem().getTableCellValue()));
+                switch (this.getItem().getSetting()) {
+                    case WIDTH -> {
+                        this.integerSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Settings.BARCODE_MIN_WIDTH, Settings.BARCODE_MAX_WIDTH, Settings.BARCODE_DEFAULT_WIDTH));
+                    }
+                    case HEIGHT -> {
+                        this.integerSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Settings.BARCODE_MIN_HEIGHT, Settings.BARCODE_MAX_HEIGHT, Settings.BARCODE_DEFAULT_HEIGHT));
+                    }
+                }
                 setGraphic(this.integerSpinner);
             }
             case COLOR -> {
@@ -124,19 +133,19 @@ public class BarcodeTableCell extends TableCell<TableViewDefinition, BarcodeTabl
                 Settings.BARCODE_TYPE = this.choiceBox.getValue();
             }
             case VALUE -> {
-                Settings.BARCODE_VALUE = this.textField.getText();
+                Settings.BARCODE_VALUE = this.label.getText();
             }
             case WIDTH -> {
-                Settings.BARCODE_DEFAULT_WIDTH = this.integerSpinner.getValue();
+                Settings.BARCODE_DEFAULT_WIDTH = Integer.valueOf(this.label.getText());
             }
             case HEIGHT -> {
-                Settings.BARCODE_DEFAULT_HEIGHT = this.integerSpinner.getValue();
+                Settings.BARCODE_DEFAULT_HEIGHT = Integer.valueOf(this.label.getText());
             }
             case BARCODECOLOR -> {
-                Settings.BARCODE_COLOR = this.colorPicker.getValue();
+                Settings.BARCODE_COLOR = Color.valueOf(this.label.getText());
             }
             case BACKGROUNDCOLOR -> {
-                Settings.BARCODE_BACKGROUND_COLOR = this.colorPicker.getValue();
+                Settings.BARCODE_BACKGROUND_COLOR = Color.valueOf(this.label.getText());
             }
         }
         super.commitEdit(value);
