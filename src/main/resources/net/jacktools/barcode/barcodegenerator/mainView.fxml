@@ -275,25 +275,6 @@
                                                                     prefWidth="200.0"/>
                                                     </content>
                                                 </TitledPane>
-                                                <TitledPane fx:id="titledPaneHyoerlink" animated="false" layoutX="10.0"
-                                                            layoutY="60.0" text="%fxml.main.titledpane.hyperlink">
-                                                    <content>
-                                                        <AnchorPane>
-                                                            <children>
-                                                                <VBox layoutX="58.0" layoutY="61.0"
-                                                                      AnchorPane.bottomAnchor="0.0"
-                                                                      AnchorPane.leftAnchor="0.0"
-                                                                      AnchorPane.rightAnchor="0.0"
-                                                                      AnchorPane.topAnchor="0.0">
-                                                                    <children>
-                                                                        <Label text="%hyperlink.label.hyperlink"/>
-                                                                        <TextField fx:id="textfieldHyperlink"/>
-                                                                    </children>
-                                                                </VBox>
-                                                            </children>
-                                                        </AnchorPane>
-                                                    </content>
-                                                </TitledPane>
                                             </panes>
                                         </Accordion>
                                     </left>
@@ -378,7 +359,11 @@
                                     </top>
                                     <center>
                                         <TextArea fx:id="textAreaWebServerLog" editable="false" prefHeight="200.0"
-                                                  prefWidth="200.0" BorderPane.alignment="CENTER"/>
+                                                  prefWidth="200.0" BorderPane.alignment="CENTER">
+                                            <BorderPane.margin>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                            </BorderPane.margin>
+                                        </TextArea>
                                     </center>
                                 </BorderPane>
                             </children>

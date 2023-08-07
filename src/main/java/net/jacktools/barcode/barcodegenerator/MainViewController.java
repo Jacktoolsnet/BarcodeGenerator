@@ -311,7 +311,9 @@ public class MainViewController {
         Platform.runLater(() -> {
             try {
                 if (!Settings.BARCODE_VALUE.isBlank() && null != Settings.BARCODE_TYPE) {
-                    imageViewBarcode.setImage(Barcode.bufferedImageToFxImage(Barcode.create(Settings.BARCODE_VALUE, Settings.BARCODE_TYPE, Settings.BARCODE_DEFAULT_WIDTH, Settings.BARCODE_DEFAULT_HEIGHT), Settings.BARCODE_BACKGROUND_COLOR, Settings.BARCODE_COLOR));
+                    Map<EncodeHintType, Object> hints = new HashMap<>();
+                    hints.put(EncodeHintType.MARGIN, Settings.BARCODE_DEFAULT_MARGIN);
+                    imageViewBarcode.setImage(Barcode.bufferedImageToFxImage(Barcode.create(Settings.BARCODE_VALUE, Settings.BARCODE_TYPE, Settings.BARCODE_DEFAULT_WIDTH, Settings.BARCODE_DEFAULT_HEIGHT, hints), Settings.BARCODE_BACKGROUND_COLOR, Settings.BARCODE_COLOR));
                     protectImageSize(this.imageViewBarcode);
                     this.createPreviewHyperlink();
                 }
@@ -474,7 +476,7 @@ public class MainViewController {
                 Map<EncodeHintType, Object> hints = new HashMap<>();
                 hints.put(EncodeHintType.CHARACTER_SET, StandardCharsets.UTF_8.toString());
                 hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
-                imageViewQrCode.setImage(Barcode.bufferedImageToFxImage(Barcode.create(EpcCode.getValue(), SupportedBarcodeFormat.QR_CODE, spinnerQrCodeWidth.getValue(), spinnerQrCodeHeight.getValue(), EpcCode.HINTS), colorPickerQrCodeBackground.getValue(), colorPickerQrCode.getValue()));
+                imageViewQrCode.setImage(Barcode.bufferedImageToFxImage(Barcode.create(EpcCode.getValue(), SupportedBarcodeFormat.QR_CODE, spinnerQrCodeWidth.getValue(), spinnerQrCodeHeight.getValue(), hints), colorPickerQrCodeBackground.getValue(), colorPickerQrCode.getValue()));
                 protectImageSize(this.imageViewQrCode);
                 this.createPreviewHyperlink();
             } catch (Exception exception) {

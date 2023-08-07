@@ -18,6 +18,7 @@ public class BarcodeTableView {
         this.observableList.add(new TableViewDefinition(Assets.getString("fxml.main.label.value"), new BarcodeTableCellValue(BarcodeSettings.VALUE, BarcodeSettingType.TEXT, Settings.BARCODE_VALUE)));
         this.observableList.add(new TableViewDefinition(Assets.getString("fxml.main.label.width"), new BarcodeTableCellValue(BarcodeSettings.WIDTH, BarcodeSettingType.NUMBER, Settings.BARCODE_DEFAULT_WIDTH)));
         this.observableList.add(new TableViewDefinition(Assets.getString("fxml.main.label.height"), new BarcodeTableCellValue(BarcodeSettings.HEIGHT, BarcodeSettingType.NUMBER, Settings.BARCODE_DEFAULT_HEIGHT)));
+        this.observableList.add(new TableViewDefinition(Assets.getString("fxml.main.label.margin"), new BarcodeTableCellValue(BarcodeSettings.MARGIN, BarcodeSettingType.NUMBER, Settings.BARCODE_DEFAULT_MARGIN)));
         this.observableList.add(new TableViewDefinition(Assets.getString("fxml.main.label.barcodecolor"), new BarcodeTableCellValue(BarcodeSettings.BARCODECOLOR, BarcodeSettingType.COLOR, Settings.BARCODE_COLOR)));
         this.observableList.add(new TableViewDefinition(Assets.getString("fxml.main.label.backgroundcolor"), new BarcodeTableCellValue(BarcodeSettings.BACKGROUNDCOLOR, BarcodeSettingType.COLOR, Settings.BARCODE_BACKGROUND_COLOR)));
 

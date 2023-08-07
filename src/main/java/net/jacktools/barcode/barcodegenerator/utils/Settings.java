@@ -18,6 +18,7 @@ public class Settings {
     public static int WEB_SERVER_PORT_MIN;
     public static int WEB_SERVER_PORT_MAX;
     public static boolean WEB_SERVER_AUTOSTART;
+    public static int BARCODE_DEFAULT_MARGIN;
     public static int BARCODE_DEFAULT_HEIGHT;
     public static int BARCODE_DEFAULT_WIDTH;
     public static int BARCODE_MAX_HEIGHT;
@@ -89,6 +90,7 @@ public class Settings {
         WEB_SERVER_PORT_MIN = Integer.valueOf(properties.getProperty("webserver.port.min"));
         WEB_SERVER_PORT_MAX = Integer.valueOf(properties.getProperty("webserver.port.max"));
         WEB_SERVER_AUTOSTART = Boolean.valueOf(properties.getProperty("webserver.autostart"));
+        BARCODE_DEFAULT_MARGIN = Integer.valueOf(properties.getProperty("barcode.default.margin"));
         BARCODE_DEFAULT_WIDTH = Integer.valueOf(properties.getProperty("barcode.default.width"));
         BARCODE_MIN_WIDTH = Integer.valueOf(properties.getProperty("barcode.min.width"));
         BARCODE_MAX_WIDTH = Integer.valueOf(properties.getProperty("barcode.max.width"));
@@ -131,6 +133,7 @@ public class Settings {
             properties.setProperty("webserver.port.max", String.valueOf(WEB_SERVER_PORT_MAX));
             properties.setProperty("webserver.autostart", String.valueOf(WEB_SERVER_AUTOSTART));
             // Barcode
+            properties.setProperty("barcode.default.margin", String.valueOf(BARCODE_DEFAULT_MARGIN));
             properties.setProperty("barcode.default.width", String.valueOf(BARCODE_DEFAULT_WIDTH));
             properties.setProperty("barcode.min.width", String.valueOf(BARCODE_MIN_WIDTH));
             properties.setProperty("barcode.max.width", String.valueOf(BARCODE_MAX_WIDTH));

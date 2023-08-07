@@ -9,6 +9,7 @@ public enum BarcodeSettings {
     VALUE,
     WIDTH,
     HEIGHT,
+    MARGIN,
     BARCODECOLOR,
     BACKGROUNDCOLOR
 }
