@@ -13,7 +13,7 @@ import java.util.Locale;
 import java.util.logging.*;
 
 public class AppLog {
-    private static Logger LOGGER;
+    private static final Logger LOGGER;
 
     static {
         LOGGER = Logger.getLogger(Assets.getString("application.title"));

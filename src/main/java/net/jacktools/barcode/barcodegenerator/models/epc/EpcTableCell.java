@@ -32,10 +32,10 @@ public class EpcTableCell extends TableCell<EpcTableViewDefinition, EpcTableCell
         }
         return c;
     };
-    private Label label = new Label();
-    private TextField textField = new TextField();
-    private Spinner<Integer> integerSpinner = new Spinner<>();
-    private ColorPicker colorPicker = new ColorPicker();
+    private final Label label = new Label();
+    private final TextField textField = new TextField();
+    private final Spinner<Integer> integerSpinner = new Spinner<>();
+    private final ColorPicker colorPicker = new ColorPicker();
 
     public EpcTableCell() {
         this.textField.addEventFilter(KeyEvent.KEY_PRESSED, event -> {

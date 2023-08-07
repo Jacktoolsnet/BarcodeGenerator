@@ -15,8 +15,8 @@ public class EpcCode {
     private final static String VERSION = "002";
     private final static int CHARSET = 1;
     private final static String IDENTIFICATION = "SCT";
-    public static String BIC;
     private final static String ALLOWED_CHARS = "[0-9A-ZÄÖÜßa-zäöü’:?,\\-(+.)/&*\\$% ]";
+    public static String BIC;
     public static String PAYEE;
     public static String PAYEE_CHECK = "^" + ALLOWED_CHARS + "{0,70}$";
     public static String IBAN;
@@ -39,32 +39,31 @@ public class EpcCode {
     }
 
     public static String getValue() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(SERVICE_TAG)
-                .append(System.lineSeparator())
-                .append(VERSION)
-                .append(System.lineSeparator())
-                .append(CHARSET)
-                .append(System.lineSeparator())
-                .append(IDENTIFICATION)
-                .append(System.lineSeparator())
-                .append(BIC)
-                .append(System.lineSeparator())
-                .append(PAYEE)
-                .append(System.lineSeparator())
-                .append(IBAN)
-                .append(System.lineSeparator())
-                .append(CURRENCY.toString())
-                .append(PAYMENT_AMOUNT)
-                .append(System.lineSeparator())
-                .append(PURPOSE)
-                .append(System.lineSeparator())
-                .append(REFERENCE)
-                .append(System.lineSeparator())
-                .append(PURPOSE_OF_USE)
-                .append(System.lineSeparator())
-                .append(NOTICE);
-        return stringBuilder.toString();
+        String stringBuilder = SERVICE_TAG +
+                System.lineSeparator() +
+                VERSION +
+                System.lineSeparator() +
+                CHARSET +
+                System.lineSeparator() +
+                IDENTIFICATION +
+                System.lineSeparator() +
+                BIC +
+                System.lineSeparator() +
+                PAYEE +
+                System.lineSeparator() +
+                IBAN +
+                System.lineSeparator() +
+                CURRENCY.toString() +
+                PAYMENT_AMOUNT +
+                System.lineSeparator() +
+                PURPOSE +
+                System.lineSeparator() +
+                REFERENCE +
+                System.lineSeparator() +
+                PURPOSE_OF_USE +
+                System.lineSeparator() +
+                NOTICE;
+        return stringBuilder;
     }
 
 }

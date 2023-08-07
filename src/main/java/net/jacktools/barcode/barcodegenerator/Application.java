@@ -23,7 +23,7 @@ public class Application extends javafx.application.Application {
     @Override
     public void start(Stage stage) throws Exception {
         if (SystemTray.isSupported()) {
-            this.TRAY = SystemTray.getSystemTray();
+            TRAY = SystemTray.getSystemTray();
             Image image = Toolkit.getDefaultToolkit().createImage(getClass().getResource("/img/logo.jpg"));
             TRAY_ICON = new TrayIcon(image, Assets.getString("application.title"));
             //Let the system resize the image if needed

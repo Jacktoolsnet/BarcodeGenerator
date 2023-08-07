@@ -46,98 +46,11 @@ import java.util.logging.Level;
 
 public class MainViewController {
 
-    @FXML
-    private Accordion accordionQrCodes;
-
-    @FXML
-    private Button buttonCloseApplication;
-
-    @FXML
-    private Button buttonCopy;
-
-    @FXML
-    private Button buttonInfo;
-
-    @FXML
-    private Button buttonSave;
-
-    @FXML
-    private Button buttonWebServerStart;
-
-    @FXML
-    private Button buttonWebServerStop;
-
-    @FXML
-    private CheckBox checkBoxWebServerAutoStart;
-
     // Barcode TableView
     BarcodeTableView barcodeTableView;
     // EPC TableView
     EpcTableView epcTableView;
-    @FXML
-    private TableView<BarcodeTableViewDefinition> tableViewBarcode;
-    @FXML
-    private TableColumn<BarcodeTableViewDefinition, String> tableColumnBarcodeDesignation;
-    @FXML
-    private TableColumn<BarcodeTableViewDefinition, BarcodeTableCellValue> tableColumnBarcodeValue;
-    @FXML
-    private TableView<EpcTableViewDefinition> tableViewEpc;
-
-    @FXML
-    private TableColumn<EpcTableViewDefinition, String> tableColumnEpcDesignation;
-
-    @FXML
-    private TableColumn<EpcTableViewDefinition, EpcTableCellValue> tableColumnEpcValue;
-
-    @FXML
-    private ColorPicker colorPickerQrCode;
-
-    @FXML
-    private ColorPicker colorPickerQrCodeBackground;
-
-    @FXML
-    private Hyperlink hyperlinkPreview;
-
-    @FXML
-    private ImageView imageViewBarcode;
-
-    @FXML
-    private ImageView imageViewQrCode;
-
-    @FXML
-    private Spinner<Integer> spinnerQrCodeHeight;
-
-    @FXML
-    private Tab tabBarcode;
-
-    @FXML
-    private TabPane tabPaneMain;
-
-    @FXML
-    private Tab tabQrCode;
-
-    @FXML
-    private Tab tabWebServer;
-
-    @FXML
-    private TextArea textAreaWebServerLog;
-
-    @FXML
-    private TitledPane titledContact;
-
-    @FXML
-    private TitledPane titledPaneMeeting;
-
-    @FXML
-    private TitledPane titledPaneHyoerlink;
-
     NumberFormat integerFormat = NumberFormat.getIntegerInstance();
-
-    @FXML
-    private Spinner<Integer> spinnerQrCodeWidth;
-
-    @FXML
-    private Spinner<Integer> spinnerWebServerPort;
     UnaryOperator<TextFormatter.Change> integerFilter = c -> {
         if (c.isContentChange()) {
             ParsePosition parsePosition = new ParsePosition(0);
@@ -166,6 +79,66 @@ public class MainViewController {
         return c;
     };
     @FXML
+    private Accordion accordionQrCodes;
+    @FXML
+    private Button buttonCloseApplication;
+    @FXML
+    private Button buttonCopy;
+    @FXML
+    private Button buttonInfo;
+    @FXML
+    private Button buttonSave;
+    @FXML
+    private Button buttonWebServerStart;
+    @FXML
+    private Button buttonWebServerStop;
+    @FXML
+    private CheckBox checkBoxWebServerAutoStart;
+    @FXML
+    private TableView<BarcodeTableViewDefinition> tableViewBarcode;
+    @FXML
+    private TableColumn<BarcodeTableViewDefinition, String> tableColumnBarcodeDesignation;
+    @FXML
+    private TableColumn<BarcodeTableViewDefinition, BarcodeTableCellValue> tableColumnBarcodeValue;
+    @FXML
+    private TableView<EpcTableViewDefinition> tableViewEpc;
+    @FXML
+    private TableColumn<EpcTableViewDefinition, String> tableColumnEpcDesignation;
+    @FXML
+    private TableColumn<EpcTableViewDefinition, EpcTableCellValue> tableColumnEpcValue;
+    @FXML
+    private ColorPicker colorPickerQrCode;
+    @FXML
+    private ColorPicker colorPickerQrCodeBackground;
+    @FXML
+    private Hyperlink hyperlinkPreview;
+    @FXML
+    private ImageView imageViewBarcode;
+    @FXML
+    private ImageView imageViewQrCode;
+    @FXML
+    private Spinner<Integer> spinnerQrCodeHeight;
+    @FXML
+    private Tab tabBarcode;
+    @FXML
+    private TabPane tabPaneMain;
+    @FXML
+    private Tab tabQrCode;
+    @FXML
+    private Tab tabWebServer;
+    @FXML
+    private TextArea textAreaWebServerLog;
+    @FXML
+    private TitledPane titledContact;
+    @FXML
+    private TitledPane titledPaneMeeting;
+    @FXML
+    private TitledPane titledPaneHyoerlink;
+    @FXML
+    private Spinner<Integer> spinnerQrCodeWidth;
+    @FXML
+    private Spinner<Integer> spinnerWebServerPort;
+    @FXML
     private TitledPane titledPaneTransfer;
     @FXML
     private Spinner<Double> spinnerPaymentAmount;
@@ -175,7 +148,15 @@ public class MainViewController {
     private TextField textFieldIban;
     @FXML
     private TextField textFieldNotice;
-
+    @FXML
+    private TextField textFieldPayee;
+    @FXML
+    private TextField textFieldPurpose;
+    @FXML
+    private TextField textFieldPurposeOfUse;
+    @FXML
+    private TextField textFieldReference;
+    private Stage stage;
 
     @FXML
     void initialize() {
@@ -210,16 +191,6 @@ public class MainViewController {
         this.tableViewEpc.setItems(epcTableView.getObservableList());
         this.tableViewEpc.refresh();
     }
-
-    @FXML
-    private TextField textFieldPayee;
-    @FXML
-    private TextField textFieldPurpose;
-    @FXML
-    private TextField textFieldPurposeOfUse;
-    @FXML
-    private TextField textFieldReference;
-    private Stage stage;
 
     public void setStage(Stage stage) {
         this.stage = stage;

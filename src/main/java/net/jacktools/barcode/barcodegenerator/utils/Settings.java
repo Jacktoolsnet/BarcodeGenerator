@@ -48,8 +48,8 @@ public class Settings {
     public static String REFERENCE;
     public static String PURPOSE_OF_USE;
     public static String NOTICE;
-    private static Path configPropertiesPath;
-    private static Properties properties = new Properties();
+    private static final Path configPropertiesPath;
+    private static final Properties properties = new Properties();
 
     static {
         configPropertiesPath = Paths.get(System.getProperty("user.home")).resolve(Assets.getString("application.path.root")).resolve(Assets.getString("application.path.env")).resolve("config.properties");

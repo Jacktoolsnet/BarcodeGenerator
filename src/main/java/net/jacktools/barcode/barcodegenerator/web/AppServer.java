@@ -23,12 +23,10 @@ import java.util.logging.Level;
 
 public class AppServer {
 
-    private static HttpServer HTTP_SERVER;
-
     public static BooleanProperty RUNNING = new SimpleBooleanProperty();
     public static BooleanProperty NOT_RUNNING = new SimpleBooleanProperty();
-
     public static StringProperty LOG_PROPERTY = new SimpleStringProperty();
+    private static HttpServer HTTP_SERVER;
 
     /**
      * Stats the http web server.

@@ -20,9 +20,6 @@ import java.util.function.UnaryOperator;
 
 public class BarcodeTableCell extends TableCell<BarcodeTableViewDefinition, BarcodeTableCellValue> {
 
-    private Label label = new Label();
-    private TextField textField = new TextField();
-
     NumberFormat integerFormat = NumberFormat.getIntegerInstance();
     UnaryOperator<TextFormatter.Change> integerFilter = c -> {
         if (c.isContentChange()) {
@@ -37,9 +34,11 @@ public class BarcodeTableCell extends TableCell<BarcodeTableViewDefinition, Barc
         }
         return c;
     };
-    private Spinner<Integer> integerSpinner = new Spinner<>();
-    private ChoiceBox<SupportedBarcodeFormat> choiceBox = new ChoiceBox<>();
-    private ColorPicker colorPicker = new ColorPicker();
+    private final Label label = new Label();
+    private final TextField textField = new TextField();
+    private final Spinner<Integer> integerSpinner = new Spinner<>();
+    private final ChoiceBox<SupportedBarcodeFormat> choiceBox = new ChoiceBox<>();
+    private final ColorPicker colorPicker = new ColorPicker();
 
     public BarcodeTableCell() {
         this.textField.addEventFilter(KeyEvent.KEY_PRESSED, event -> {

@@ -18,9 +18,9 @@ public enum SupportedBarcodeFormat {
     UPC_E(BarcodeFormat.UPC_E, "UPC E", "/upce"),
     EPC_CODE(BarcodeFormat.QR_CODE, "GIROCODE", "/girocode");
 
-    private BarcodeFormat barcodeFormat;
-    private String barcodeName;
-    private String route;
+    private final BarcodeFormat barcodeFormat;
+    private final String barcodeName;
+    private final String route;
 
     SupportedBarcodeFormat(BarcodeFormat barcodeFormat, String barcodeName, String route) {
         this.barcodeFormat = barcodeFormat;
