@@ -31,8 +31,8 @@ import net.jacktools.barcode.barcodegenerator.web.AppServer;
 
 import java.awt.*;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.NumberFormat;
@@ -107,17 +107,11 @@ public class MainViewController {
     @FXML
     private TableColumn<EpcTableViewDefinition, EpcTableCellValue> tableColumnEpcValue;
     @FXML
-    private ColorPicker colorPickerQrCode;
-    @FXML
-    private ColorPicker colorPickerQrCodeBackground;
-    @FXML
     private Hyperlink hyperlinkPreview;
     @FXML
     private ImageView imageViewBarcode;
     @FXML
     private ImageView imageViewQrCode;
-    @FXML
-    private Spinner<Integer> spinnerQrCodeHeight;
     @FXML
     private Tab tabBarcode;
     @FXML
@@ -132,10 +126,6 @@ public class MainViewController {
     private TitledPane titledContact;
     @FXML
     private TitledPane titledPaneMeeting;
-    @FXML
-    private TitledPane titledPaneHyoerlink;
-    @FXML
-    private Spinner<Integer> spinnerQrCodeWidth;
     @FXML
     private Spinner<Integer> spinnerWebServerPort;
     @FXML
@@ -240,43 +230,6 @@ public class MainViewController {
         this.buttonSave.disableProperty().bind(this.tabPaneMain.getSelectionModel().selectedIndexProperty().greaterThan(1));
         this.buttonWebServerStart.disableProperty().bind(AppServer.RUNNING);
         this.buttonWebServerStop.disableProperty().bind(AppServer.NOT_RUNNING);
-
-        // QR-Code color
-        this.colorPickerQrCode.setValue(Settings.QRCODE_COLOR);
-        // QR-Code background color
-        this.colorPickerQrCodeBackground.setValue(Settings.QRCODE_BACKGROUND_COLOR);
-        this.spinnerQrCodeWidth.setEditable(true);
-        this.spinnerQrCodeWidth.getEditor().setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), 0, integerFilter));
-        this.spinnerQrCodeWidth.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Settings.QRCODE_MIN_WIDTH, Settings.QRCODE_MAX_WIDTH, Settings.QRCODE_DEFAULT_WIDTH));
-        this.spinnerQrCodeWidth.valueProperty().addListener((observable, oldValue, newValue) -> {
-            Node increment = spinnerQrCodeWidth.lookup(".increment-arrow-button");
-            if (increment != null) {
-                increment.getOnMouseReleased().handle(null);
-            }
-
-            Node decrement = spinnerQrCodeWidth.lookup(".decrement-arrow-button");
-            if (decrement != null) {
-                decrement.getOnMouseReleased().handle(null);
-            }
-            this.createBarcode();
-            this.saveBarcodeSettings();
-        });
-        this.spinnerQrCodeHeight.setEditable(true);
-        this.spinnerQrCodeHeight.getEditor().setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), 0, integerFilter));
-        this.spinnerQrCodeHeight.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Settings.QRCODE_MIN_HEIGHT, Settings.QRCODE_MAX_HEIGHT, Settings.QRCODE_DEFAULT_HEIGHT));
-        this.spinnerQrCodeHeight.valueProperty().addListener((observable, oldValue, newValue) -> {
-            Node increment = spinnerQrCodeHeight.lookup(".increment-arrow-button");
-            if (increment != null) {
-                increment.getOnMouseReleased().handle(null);
-            }
-
-            Node decrement = spinnerQrCodeHeight.lookup(".decrement-arrow-button");
-            if (decrement != null) {
-                decrement.getOnMouseReleased().handle(null);
-            }
-            this.createBarcode();
-            this.saveBarcodeSettings();
-        });
         this.spinnerWebServerPort.disableProperty().bind(AppServer.RUNNING);
         this.spinnerWebServerPort.setEditable(true);
         this.spinnerWebServerPort.getEditor().setTextFormatter(new TextFormatter<>(new IntegerStringConverter(), 0, integerFilter));
@@ -473,9 +426,10 @@ public class MainViewController {
                 EpcCode.PURPOSE_OF_USE = this.textFieldPurposeOfUse.getText();
                 EpcCode.NOTICE = this.textFieldNotice.getText();
                 Map<EncodeHintType, Object> hints = new HashMap<>();
+                hints.put(EncodeHintType.MARGIN, Settings.QRCODE_DEFAULT_MARGIN);
                 hints.put(EncodeHintType.CHARACTER_SET, StandardCharsets.UTF_8.toString());
                 hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
-                imageViewQrCode.setImage(Barcode.bufferedImageToFxImage(Barcode.create(EpcCode.getValue(), SupportedBarcodeFormat.QR_CODE, spinnerQrCodeWidth.getValue(), spinnerQrCodeHeight.getValue(), hints), colorPickerQrCodeBackground.getValue(), colorPickerQrCode.getValue()));
+                imageViewQrCode.setImage(Barcode.bufferedImageToFxImage(Barcode.create(EpcCode.getValue(), SupportedBarcodeFormat.QR_CODE, Settings.QRCODE_DEFAULT_WIDTH, Settings.QRCODE_DEFAULT_HEIGHT, hints), Settings.QRCODE_BACKGROUND_COLOR, Settings.QRCODE_COLOR));
                 protectImageSize(this.imageViewQrCode);
                 this.createPreviewHyperlink();
             } catch (Exception exception) {
@@ -605,7 +559,7 @@ public class MainViewController {
     @FXML
     void hyperlinkPreview_onAction(ActionEvent event) {
         try {
-            Desktop.getDesktop().browse(new URL(this.hyperlinkPreview.getText()).toURI());
+            Desktop.getDesktop().browse(new URI(this.hyperlinkPreview.getText()));
         } catch (IOException | URISyntaxException e) {
             AppLog.log(Level.SEVERE, e.getLocalizedMessage());
         }
