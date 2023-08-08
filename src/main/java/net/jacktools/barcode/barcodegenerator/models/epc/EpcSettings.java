@@ -8,6 +8,6 @@ public enum EpcSettings {
     WIDTH,
     HEIGHT,
     MARGIN,
-    BARCODECOLOR,
+    QRCODECOLOR,
     BACKGROUNDCOLOR
 }

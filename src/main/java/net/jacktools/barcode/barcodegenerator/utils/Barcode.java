@@ -93,6 +93,12 @@ public class Barcode {
             case UPC_E:
                 writer = new UPCEWriter();
                 break;
+            case EPC:
+                writer = new QRCodeWriter();
+                break;
+            case WIFI:
+                writer = new QRCodeWriter();
+                break;
             default:
                 throw new IllegalArgumentException(Assets.getString("barcode.no.formatter", format.toString()));
         }

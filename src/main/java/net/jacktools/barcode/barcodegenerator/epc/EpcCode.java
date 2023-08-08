@@ -39,31 +39,32 @@ public class EpcCode {
     }
 
     public static String getValue() {
-        String stringBuilder = SERVICE_TAG +
-                System.lineSeparator() +
-                VERSION +
-                System.lineSeparator() +
-                CHARSET +
-                System.lineSeparator() +
-                IDENTIFICATION +
-                System.lineSeparator() +
-                BIC +
-                System.lineSeparator() +
-                PAYEE +
-                System.lineSeparator() +
-                IBAN +
-                System.lineSeparator() +
-                CURRENCY.toString() +
-                PAYMENT_AMOUNT +
-                System.lineSeparator() +
-                PURPOSE +
-                System.lineSeparator() +
-                REFERENCE +
-                System.lineSeparator() +
-                PURPOSE_OF_USE +
-                System.lineSeparator() +
-                NOTICE;
-        return stringBuilder;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(SERVICE_TAG)
+                .append(System.lineSeparator())
+                .append(VERSION)
+                .append(System.lineSeparator())
+                .append(CHARSET)
+                .append(System.lineSeparator())
+                .append(IDENTIFICATION)
+                .append(System.lineSeparator())
+                .append(BIC)
+                .append(System.lineSeparator())
+                .append(PAYEE)
+                .append(System.lineSeparator())
+                .append(IBAN)
+                .append(System.lineSeparator())
+                .append(CURRENCY.toString())
+                .append(PAYMENT_AMOUNT)
+                .append(System.lineSeparator())
+                .append(PURPOSE)
+                .append(System.lineSeparator())
+                .append(REFERENCE)
+                .append(System.lineSeparator())
+                .append(PURPOSE_OF_USE)
+                .append(System.lineSeparator())
+                .append(NOTICE);
+        return stringBuilder.toString();
     }
 
 }

@@ -95,13 +95,13 @@ public class EpcTableCell extends TableCell<EpcTableViewDefinition, EpcTableCell
                 this.integerSpinner.getValueFactory().setValue(Integer.valueOf(this.getItem().getTableCellValue()));
                 switch (this.getItem().getSetting()) {
                     case WIDTH -> {
-                        this.integerSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Settings.BARCODE_MIN_WIDTH, Settings.BARCODE_MAX_WIDTH, Settings.BARCODE_DEFAULT_WIDTH));
+                        this.integerSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Settings.QRCODE_MIN_WIDTH, Settings.QRCODE_MAX_WIDTH, Settings.QRCODE_DEFAULT_WIDTH));
                     }
                     case HEIGHT -> {
-                        this.integerSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Settings.BARCODE_MIN_HEIGHT, Settings.BARCODE_MAX_HEIGHT, Settings.BARCODE_DEFAULT_HEIGHT));
+                        this.integerSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Settings.QRCODE_MIN_HEIGHT, Settings.QRCODE_MAX_HEIGHT, Settings.QRCODE_DEFAULT_HEIGHT));
                     }
                     case MARGIN -> {
-                        this.integerSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, Settings.BARCODE_DEFAULT_MARGIN));
+                        this.integerSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, Settings.QRCODE_DEFAULT_MARGIN));
                     }
                 }
                 setGraphic(this.integerSpinner);
@@ -120,19 +120,19 @@ public class EpcTableCell extends TableCell<EpcTableViewDefinition, EpcTableCell
         this.setGraphic(this.label);
         switch (this.getItem().getSetting()) {
             case WIDTH -> {
-                Settings.BARCODE_DEFAULT_WIDTH = Integer.valueOf(this.label.getText());
+                Settings.QRCODE_DEFAULT_WIDTH = Integer.valueOf(this.label.getText());
             }
             case HEIGHT -> {
-                Settings.BARCODE_DEFAULT_HEIGHT = Integer.valueOf(this.label.getText());
+                Settings.QRCODE_DEFAULT_HEIGHT = Integer.valueOf(this.label.getText());
             }
             case MARGIN -> {
-                Settings.BARCODE_DEFAULT_MARGIN = Integer.valueOf(this.label.getText());
+                Settings.QRCODE_DEFAULT_MARGIN = Integer.valueOf(this.label.getText());
             }
-            case BARCODECOLOR -> {
-                Settings.BARCODE_COLOR = Color.valueOf(this.label.getText());
+            case QRCODECOLOR -> {
+                Settings.QRCODE_COLOR = Color.valueOf(this.label.getText());
             }
             case BACKGROUNDCOLOR -> {
-                Settings.BARCODE_BACKGROUND_COLOR = Color.valueOf(this.label.getText());
+                Settings.QRCODE_BACKGROUND_COLOR = Color.valueOf(this.label.getText());
             }
         }
         super.commitEdit(value);

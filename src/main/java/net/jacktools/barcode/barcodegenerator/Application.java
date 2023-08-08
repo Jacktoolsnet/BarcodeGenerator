@@ -50,6 +50,7 @@ public class Application extends javafx.application.Application {
         controller.setStage(stage);
         controller.setDefaultValues();
         controller.setDefaultEpcValues();
+        controller.setDefaultWiFiValues();
         stage.show();
     }
 }

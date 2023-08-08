@@ -29,6 +29,7 @@ public class Settings {
     public static Color BARCODE_BACKGROUND_COLOR;
     public static String BARCODE_VALUE;
     public static SupportedBarcodeFormat BARCODE_TYPE;
+    public static int QRCODE_DEFAULT_MARGIN;
     public static int QRCODE_DEFAULT_HEIGHT;
     public static int QRCODE_DEFAULT_WIDTH;
     public static int QRCODE_MAX_HEIGHT;
@@ -48,6 +49,11 @@ public class Settings {
     public static String REFERENCE;
     public static String PURPOSE_OF_USE;
     public static String NOTICE;
+    //WIFI
+    public static String T;
+    public static String S;
+    public static String P;
+    public static boolean H;
     private static final Path configPropertiesPath;
     private static final Properties properties = new Properties();
 
@@ -101,6 +107,7 @@ public class Settings {
         BARCODE_BACKGROUND_COLOR = Color.valueOf(properties.getProperty("barcode.color.background"));
         BARCODE_VALUE = properties.getProperty("barcode.value");
         BARCODE_TYPE = SupportedBarcodeFormat.valueOf(properties.getProperty("barcode.type"));
+        QRCODE_DEFAULT_MARGIN = Integer.valueOf(properties.getProperty("qrcode.default.margin"));
         QRCODE_DEFAULT_WIDTH = Integer.valueOf(properties.getProperty("qrcode.default.width"));
         QRCODE_MIN_WIDTH = Integer.valueOf(properties.getProperty("qrcode.min.width"));
         QRCODE_MAX_WIDTH = Integer.valueOf(properties.getProperty("qrcode.max.width"));
@@ -120,6 +127,11 @@ public class Settings {
         REFERENCE = !"null".equals(properties.getProperty("epc.reference")) ? properties.getProperty("epc.reference") : "";
         PURPOSE_OF_USE = !"null".equals(properties.getProperty("epc.purposeofuse")) ? properties.getProperty("epc.purposeofuse") : "";
         NOTICE = !"null".equals(properties.getProperty("epc.notice")) ? properties.getProperty("epc.notice") : "";
+        // WiFi Code
+        T = !"null".equals(properties.getProperty("wifi.t")) ? properties.getProperty("wifi.t") : "";
+        S = !"null".equals(properties.getProperty("wifi.s")) ? properties.getProperty("wifi.s") : "";
+        P = !"null".equals(properties.getProperty("wifi.p")) ? properties.getProperty("wifi.p") : "";
+        H = !"null".equals(properties.getProperty("wifi.h")) ? Boolean.valueOf(properties.getProperty("wifi.h")) : false;
     }
 
     public static void saveProperties() {
@@ -144,6 +156,7 @@ public class Settings {
             properties.setProperty("barcode.value", String.valueOf(BARCODE_VALUE));
             properties.setProperty("barcode.type", String.valueOf(BARCODE_TYPE));
             // QR-Code
+            properties.setProperty("qrcode.default.margin", String.valueOf(QRCODE_DEFAULT_MARGIN));
             properties.setProperty("qrcode.default.width", String.valueOf(QRCODE_DEFAULT_WIDTH));
             properties.setProperty("qrcode.min.width", String.valueOf(QRCODE_MIN_WIDTH));
             properties.setProperty("qrcode.max.width", String.valueOf(QRCODE_MAX_WIDTH));
@@ -162,6 +175,11 @@ public class Settings {
             properties.setProperty("epc.reference", String.valueOf(REFERENCE));
             properties.setProperty("epc.purposeofuse", String.valueOf(PURPOSE_OF_USE));
             properties.setProperty("epc.notice", String.valueOf(NOTICE));
+            // WiFi Code
+            properties.setProperty("wifi.t", String.valueOf(T));
+            properties.setProperty("wifi.s", String.valueOf(S));
+            properties.setProperty("wifi.p", String.valueOf(P));
+            properties.setProperty("wifi.h", String.valueOf(H));
             // Save
             properties.store(output, null);
         } catch (IOException io) {

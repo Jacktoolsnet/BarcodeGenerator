@@ -11,6 +11,7 @@ import net.jacktools.barcode.barcodegenerator.utils.Settings;
 import net.jacktools.barcode.barcodegenerator.utils.SupportedBarcodeFormat;
 import net.jacktools.barcode.barcodegenerator.web.routes.*;
 import net.jacktools.barcode.barcodegenerator.web.routes.epc.EpcCodeHandler;
+import net.jacktools.barcode.barcodegenerator.web.routes.wifi.WiFiCodeHandler;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -52,7 +53,8 @@ public class AppServer {
         HTTP_SERVER.createContext(SupportedBarcodeFormat.QR_CODE.getRoute(), new QrCodeHandler());
         HTTP_SERVER.createContext(SupportedBarcodeFormat.UPC_A.getRoute(), new UpcaHandler());
         HTTP_SERVER.createContext(SupportedBarcodeFormat.UPC_E.getRoute(), new UpceHandler());
-        HTTP_SERVER.createContext(SupportedBarcodeFormat.EPC_CODE.getRoute(), new EpcCodeHandler());
+        HTTP_SERVER.createContext(SupportedBarcodeFormat.EPC.getRoute(), new EpcCodeHandler());
+        HTTP_SERVER.createContext(SupportedBarcodeFormat.WIFI.getRoute(), new WiFiCodeHandler());
         HTTP_SERVER.setExecutor(null); // creates a default executor
         HTTP_SERVER.start();
         RUNNING.set(true);

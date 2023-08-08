@@ -1,7 +1,6 @@
 package net.jacktools.barcode.barcodegenerator;
 
 import com.google.zxing.EncodeHintType;
-import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -28,6 +27,7 @@ import net.jacktools.barcode.barcodegenerator.models.epc.EpcTableView;
 import net.jacktools.barcode.barcodegenerator.models.epc.EpcTableViewDefinition;
 import net.jacktools.barcode.barcodegenerator.utils.*;
 import net.jacktools.barcode.barcodegenerator.web.AppServer;
+import net.jacktools.barcode.barcodegenerator.wifi.WiFiCode;
 
 import java.awt.*;
 import java.io.IOException;
@@ -123,9 +123,15 @@ public class MainViewController {
     @FXML
     private TextArea textAreaWebServerLog;
     @FXML
-    private TitledPane titledContact;
+    private TitledPane titledPaneWifi;
     @FXML
-    private TitledPane titledPaneMeeting;
+    private TextField textFieldWiFiNetworkName;
+    @FXML
+    private PasswordField passwordFieldWiFiAuthentication;
+    @FXML
+    private CheckBox checkBoxWiFiHidden;
+    @FXML
+    private ChoiceBox<String> choiceBoxWiFiEncryption;
     @FXML
     private Spinner<Integer> spinnerWebServerPort;
     @FXML
@@ -180,6 +186,12 @@ public class MainViewController {
         this.epcTableView = new EpcTableView();
         this.tableViewEpc.setItems(epcTableView.getObservableList());
         this.tableViewEpc.refresh();
+        // WiFi
+        this.choiceBoxWiFiEncryption.getItems().clear();
+        this.choiceBoxWiFiEncryption.getItems().add("WEP");
+        this.choiceBoxWiFiEncryption.getItems().add("WPA");
+        this.choiceBoxWiFiEncryption.getItems().add("WPA-EAP");
+        this.choiceBoxWiFiEncryption.getItems().add("WPA/WPA2");
     }
 
     public void setStage(Stage stage) {
@@ -208,16 +220,13 @@ public class MainViewController {
         // stage
         this.stage.widthProperty().addListener((observable, oldValue, newValue) -> {
             this.createBarcode();
-            this.saveBarcodeSettings();
         });
         this.stage.heightProperty().addListener((observable, oldValue, newValue) -> {
             this.createBarcode();
-            this.saveBarcodeSettings();
         });
         // Tabs
         this.tabBarcode.selectedProperty().addListener((observable, oldValue, newValue) -> {
             this.createBarcode();
-            this.saveBarcodeSettings();
         });
         this.tabQrCode.selectedProperty().addListener((observable, oldValue, newValue) -> {
             this.createPreviewHyperlink();
@@ -253,9 +262,18 @@ public class MainViewController {
         this.textAreaWebServerLog.textProperty().bind(AppServer.LOG_PROPERTY);
         // Accordion tabs
         this.titledPaneTransfer.expandedProperty().addListener((observable, oldValue, newValue) -> {
-            this.createEpcBarcode();
-            this.saveEpcSettings();
-            this.createPreviewHyperlink();
+            if (newValue) {
+                this.createEpcBarcode();
+                this.saveEpcSettings();
+                this.createPreviewHyperlink();
+            }
+        });
+        this.titledPaneWifi.expandedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                this.createWiFiBarcode();
+                this.saveWiFiSettings();
+                this.createPreviewHyperlink();
+            }
         });
     }
 
@@ -283,8 +301,10 @@ public class MainViewController {
     public void setDefaultEpcValues() {
         this.textFieldBic.setText(Settings.BIC);
         this.textFieldBic.textProperty().addListener((observable, oldValue, newValue) -> {
-            this.createEpcBarcode();
-            this.saveEpcSettings();
+            if (this.titledPaneTransfer.isExpanded()) {
+                this.createEpcBarcode();
+                this.saveEpcSettings();
+            }
         });
         this.textFieldBic.setTextFormatter(new TextFormatter<Object>(c -> {
             if (!c.getControlNewText().isBlank()) {
@@ -298,8 +318,10 @@ public class MainViewController {
         }));
         this.textFieldPayee.setText(Settings.PAYEE);
         this.textFieldPayee.textProperty().addListener((observable, oldValue, newValue) -> {
-            this.createEpcBarcode();
-            this.saveEpcSettings();
+            if (this.titledPaneTransfer.isExpanded()) {
+                this.createEpcBarcode();
+                this.saveEpcSettings();
+            }
         });
         this.textFieldPayee.setTextFormatter(new TextFormatter<Object>(c -> {
             if (!c.getControlNewText().isBlank()) {
@@ -309,14 +331,18 @@ public class MainViewController {
                     this.textFieldPayee.setStyle(null != Settings.APP_INVALID_VALUE_COLOR ? "-fx-control-inner-background: " + Settings.APP_INVALID_VALUE_COLOR : "");
                 }
             }
-            this.createEpcBarcode();
-            this.saveEpcSettings();
+            if (this.titledPaneTransfer.isExpanded()) {
+                this.createEpcBarcode();
+                this.saveEpcSettings();
+            }
             return c;
         }));
         this.textFieldIban.setText(Settings.IBAN);
         this.textFieldIban.textProperty().addListener((observable, oldValue, newValue) -> {
-            this.createEpcBarcode();
-            this.saveEpcSettings();
+            if (this.titledPaneTransfer.isExpanded()) {
+                this.createEpcBarcode();
+                this.saveEpcSettings();
+            }
         });
         this.textFieldIban.setTextFormatter(new TextFormatter<Object>(c -> {
             if (!c.getControlNewText().isBlank()) {
@@ -326,14 +352,18 @@ public class MainViewController {
                     this.textFieldIban.setStyle(null != Settings.APP_INVALID_VALUE_COLOR ? "-fx-control-inner-background: " + Settings.APP_INVALID_VALUE_COLOR : "");
                 }
             }
-            this.createEpcBarcode();
-            this.saveEpcSettings();
+            if (this.titledPaneTransfer.isExpanded()) {
+                this.createEpcBarcode();
+                this.saveEpcSettings();
+            }
             return c;
         }));
         this.textFieldPurpose.setText(Settings.PURPOSE);
         this.textFieldPurpose.textProperty().addListener((observable, oldValue, newValue) -> {
-            this.createEpcBarcode();
-            this.saveEpcSettings();
+            if (this.titledPaneTransfer.isExpanded()) {
+                this.createEpcBarcode();
+                this.saveEpcSettings();
+            }
         });
         this.textFieldPurpose.setTextFormatter(new TextFormatter<Object>(c -> {
             if (!c.getControlNewText().isBlank()) {
@@ -347,8 +377,10 @@ public class MainViewController {
         }));
         this.textFieldReference.setText(Settings.REFERENCE);
         this.textFieldReference.textProperty().addListener((observable, oldValue, newValue) -> {
-            this.createEpcBarcode();
-            this.saveEpcSettings();
+            if (this.titledPaneTransfer.isExpanded()) {
+                this.createEpcBarcode();
+                this.saveEpcSettings();
+            }
         });
         this.textFieldReference.disableProperty().bind(this.textFieldPurposeOfUse.textProperty().isNotEqualTo(""));
         this.textFieldReference.setTextFormatter(new TextFormatter<Object>(c -> {
@@ -363,8 +395,10 @@ public class MainViewController {
         }));
         this.textFieldPurposeOfUse.setText(Settings.PURPOSE_OF_USE);
         this.textFieldPurposeOfUse.textProperty().addListener((observable, oldValue, newValue) -> {
-            this.createEpcBarcode();
-            this.saveEpcSettings();
+            if (this.titledPaneTransfer.isExpanded()) {
+                this.createEpcBarcode();
+                this.saveEpcSettings();
+            }
         });
         this.textFieldPurposeOfUse.disableProperty().bind(this.textFieldReference.textProperty().isNotEqualTo(""));
         this.textFieldPurposeOfUse.setTextFormatter(new TextFormatter<Object>(c -> {
@@ -379,8 +413,10 @@ public class MainViewController {
         }));
         this.textFieldNotice.setText(Settings.NOTICE);
         this.textFieldNotice.textProperty().addListener((observable, oldValue, newValue) -> {
-            this.createEpcBarcode();
-            this.saveEpcSettings();
+            if (this.titledPaneTransfer.isExpanded()) {
+                this.createEpcBarcode();
+                this.saveEpcSettings();
+            }
         });
         this.textFieldNotice.setTextFormatter(new TextFormatter<Object>(c -> {
             if (!c.getControlNewText().isBlank()) {
@@ -408,8 +444,40 @@ public class MainViewController {
             if (decrement != null) {
                 decrement.getOnMouseReleased().handle(null);
             }
-            this.createEpcBarcode();
-            this.saveEpcSettings();
+            if (this.titledPaneTransfer.isExpanded()) {
+                this.saveEpcSettings();
+            }
+        });
+    }
+
+    public void setDefaultWiFiValues() {
+        this.textFieldWiFiNetworkName.setText(Settings.S);
+        this.textFieldWiFiNetworkName.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (this.titledPaneWifi.isExpanded()) {
+                this.createWiFiBarcode();
+                this.saveWiFiSettings();
+            }
+        });
+        this.passwordFieldWiFiAuthentication.setText(Settings.P);
+        this.passwordFieldWiFiAuthentication.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (this.titledPaneWifi.isExpanded()) {
+                this.createWiFiBarcode();
+                this.saveWiFiSettings();
+            }
+        });
+        this.choiceBoxWiFiEncryption.setValue(Settings.T);
+        this.choiceBoxWiFiEncryption.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (this.titledPaneWifi.isExpanded()) {
+                this.createWiFiBarcode();
+                this.saveWiFiSettings();
+            }
+        });
+        this.checkBoxWiFiHidden.setSelected(Settings.H);
+        this.checkBoxWiFiHidden.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (this.titledPaneWifi.isExpanded()) {
+                this.createWiFiBarcode();
+                this.saveWiFiSettings();
+            }
         });
     }
 
@@ -425,11 +493,8 @@ public class MainViewController {
                 EpcCode.REFERENCE = this.textFieldReference.getText();
                 EpcCode.PURPOSE_OF_USE = this.textFieldPurposeOfUse.getText();
                 EpcCode.NOTICE = this.textFieldNotice.getText();
-                Map<EncodeHintType, Object> hints = new HashMap<>();
-                hints.put(EncodeHintType.MARGIN, Settings.QRCODE_DEFAULT_MARGIN);
-                hints.put(EncodeHintType.CHARACTER_SET, StandardCharsets.UTF_8.toString());
-                hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
-                imageViewQrCode.setImage(Barcode.bufferedImageToFxImage(Barcode.create(EpcCode.getValue(), SupportedBarcodeFormat.QR_CODE, Settings.QRCODE_DEFAULT_WIDTH, Settings.QRCODE_DEFAULT_HEIGHT, hints), Settings.QRCODE_BACKGROUND_COLOR, Settings.QRCODE_COLOR));
+                EpcCode.HINTS.put(EncodeHintType.MARGIN, Settings.QRCODE_DEFAULT_MARGIN);
+                imageViewQrCode.setImage(Barcode.bufferedImageToFxImage(Barcode.create(EpcCode.getValue(), SupportedBarcodeFormat.QR_CODE, Settings.QRCODE_DEFAULT_WIDTH, Settings.QRCODE_DEFAULT_HEIGHT, EpcCode.HINTS), Settings.QRCODE_BACKGROUND_COLOR, Settings.QRCODE_COLOR));
                 protectImageSize(this.imageViewQrCode);
                 this.createPreviewHyperlink();
             } catch (Exception exception) {
@@ -443,8 +508,26 @@ public class MainViewController {
         });
     }
 
-    @Deprecated
-    private void saveBarcodeSettings() {
+    private void createWiFiBarcode() {
+        Platform.runLater(() -> {
+            try {
+                WiFiCode.S = this.textFieldWiFiNetworkName.getText();
+                WiFiCode.P = this.passwordFieldWiFiAuthentication.getText();
+                WiFiCode.T = this.choiceBoxWiFiEncryption.getValue();
+                WiFiCode.H = String.valueOf(this.checkBoxWiFiHidden.isSelected());
+                WiFiCode.HINTS.put(EncodeHintType.MARGIN, Settings.QRCODE_DEFAULT_MARGIN);
+                imageViewQrCode.setImage(Barcode.bufferedImageToFxImage(Barcode.create(WiFiCode.getValue(), SupportedBarcodeFormat.QR_CODE, Settings.QRCODE_DEFAULT_WIDTH, Settings.QRCODE_DEFAULT_HEIGHT, WiFiCode.HINTS), Settings.QRCODE_BACKGROUND_COLOR, Settings.QRCODE_COLOR));
+                protectImageSize(this.imageViewQrCode);
+                this.createPreviewHyperlink();
+            } catch (Exception exception) {
+                Alert alert = Assets.getAlert(Alert.AlertType.INFORMATION, true, stage);
+                alert.setHeaderText(Assets.getString("application.error.header"));
+                alert.setContentText(exception.getLocalizedMessage());
+                alert.getButtonTypes().clear();
+                alert.getButtonTypes().addAll(ButtonType.OK);
+                alert.show();
+            }
+        });
     }
 
     private void saveEpcSettings() {
@@ -457,6 +540,13 @@ public class MainViewController {
         Settings.REFERENCE = this.textFieldReference.getText();
         Settings.PURPOSE_OF_USE = this.textFieldPurposeOfUse.getText();
         Settings.NOTICE = this.textFieldNotice.getText();
+    }
+
+    private void saveWiFiSettings() {
+        Settings.S = this.textFieldWiFiNetworkName.getText();
+        Settings.P = this.passwordFieldWiFiAuthentication.getText();
+        Settings.T = this.choiceBoxWiFiEncryption.getValue();
+        Settings.H = this.checkBoxWiFiHidden.isSelected();
     }
 
     private void saveWebserverSettings() {
@@ -494,7 +584,9 @@ public class MainViewController {
                 break;
             case 1:
                 if (this.titledPaneTransfer.isExpanded()) {
-                    hyperlinkPreview.setText(Assets.getString("hyperlink.barcode", String.valueOf(Settings.WEB_SERVER_PORT), SupportedBarcodeFormat.EPC_CODE.getRoute(), URLEncoder.encode(EpcCode.getValue(), StandardCharsets.UTF_8), String.valueOf(Settings.BARCODE_DEFAULT_WIDTH), String.valueOf(Settings.BARCODE_DEFAULT_HEIGHT), Settings.BARCODE_COLOR, Settings.BARCODE_BACKGROUND_COLOR));
+                    hyperlinkPreview.setText(Assets.getString("hyperlink.barcode", String.valueOf(Settings.WEB_SERVER_PORT), SupportedBarcodeFormat.EPC.getRoute(), URLEncoder.encode(EpcCode.getValue(), StandardCharsets.UTF_8), String.valueOf(Settings.BARCODE_DEFAULT_WIDTH), String.valueOf(Settings.BARCODE_DEFAULT_HEIGHT), Settings.BARCODE_COLOR, Settings.BARCODE_BACKGROUND_COLOR));
+                } else if (this.titledPaneWifi.isExpanded()) {
+                    hyperlinkPreview.setText("");
                 } else {
                     hyperlinkPreview.setText("");
                 }
