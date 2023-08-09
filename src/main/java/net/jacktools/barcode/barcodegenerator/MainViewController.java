@@ -580,13 +580,13 @@ public class MainViewController {
     private void createPreviewHyperlink() {
         switch (this.tabPaneMain.getSelectionModel().getSelectedIndex()) {
             case 0:
-                hyperlinkPreview.setText(Assets.getString("hyperlink.barcode", String.valueOf(Settings.WEB_SERVER_PORT), Settings.BARCODE_TYPE.getRoute(), URLEncoder.encode(Settings.BARCODE_VALUE, StandardCharsets.UTF_8), String.valueOf(Settings.BARCODE_DEFAULT_WIDTH), String.valueOf(Settings.BARCODE_DEFAULT_HEIGHT), Settings.BARCODE_COLOR, Settings.BARCODE_BACKGROUND_COLOR));
+                hyperlinkPreview.setText(Assets.getString("hyperlink.barcode", String.valueOf(Settings.WEB_SERVER_PORT), Settings.BARCODE_TYPE.getRoute(), URLEncoder.encode(Settings.BARCODE_VALUE, StandardCharsets.UTF_8), String.valueOf(Settings.BARCODE_DEFAULT_WIDTH), String.valueOf(Settings.BARCODE_DEFAULT_HEIGHT), Settings.BARCODE_COLOR, Settings.BARCODE_BACKGROUND_COLOR, Settings.BARCODE_DEFAULT_MARGIN));
                 break;
             case 1:
                 if (this.titledPaneTransfer.isExpanded()) {
-                    hyperlinkPreview.setText(Assets.getString("hyperlink.barcode", String.valueOf(Settings.WEB_SERVER_PORT), SupportedBarcodeFormat.EPC.getRoute(), URLEncoder.encode(EpcCode.getValue(), StandardCharsets.UTF_8), String.valueOf(Settings.BARCODE_DEFAULT_WIDTH), String.valueOf(Settings.BARCODE_DEFAULT_HEIGHT), Settings.BARCODE_COLOR, Settings.BARCODE_BACKGROUND_COLOR));
+                    hyperlinkPreview.setText(Assets.getString("hyperlink.barcode", String.valueOf(Settings.WEB_SERVER_PORT), SupportedBarcodeFormat.EPC.getRoute(), URLEncoder.encode(EpcCode.getValue(), StandardCharsets.UTF_8), String.valueOf(Settings.QRCODE_DEFAULT_WIDTH), String.valueOf(Settings.QRCODE_DEFAULT_HEIGHT), Settings.QRCODE_COLOR, Settings.QRCODE_BACKGROUND_COLOR, Settings.QRCODE_DEFAULT_MARGIN));
                 } else if (this.titledPaneWifi.isExpanded()) {
-                    hyperlinkPreview.setText("");
+                    hyperlinkPreview.setText(Assets.getString("hyperlink.barcode", String.valueOf(Settings.WEB_SERVER_PORT), SupportedBarcodeFormat.WIFI.getRoute(), URLEncoder.encode(WiFiCode.getValue(), StandardCharsets.UTF_8), String.valueOf(Settings.QRCODE_DEFAULT_WIDTH), String.valueOf(Settings.QRCODE_DEFAULT_HEIGHT), Settings.QRCODE_COLOR, Settings.QRCODE_BACKGROUND_COLOR, Settings.QRCODE_DEFAULT_MARGIN));
                 } else {
                     hyperlinkPreview.setText("");
                 }
