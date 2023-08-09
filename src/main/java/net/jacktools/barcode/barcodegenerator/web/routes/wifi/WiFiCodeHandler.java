@@ -1,9 +1,9 @@
 package net.jacktools.barcode.barcodegenerator.web.routes.wifi;
 
+import com.google.zxing.EncodeHintType;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import javafx.scene.paint.Color;
-import net.jacktools.barcode.barcodegenerator.epc.EpcCode;
 import net.jacktools.barcode.barcodegenerator.utils.Barcode;
 import net.jacktools.barcode.barcodegenerator.utils.Settings;
 import net.jacktools.barcode.barcodegenerator.utils.SupportedBarcodeFormat;
@@ -27,7 +27,8 @@ public class WiFiCodeHandler implements HttpHandler {
             WiFiCode.S = null != queryParameter.get("ssid") && !queryParameter.get("ssid").isBlank() ? queryParameter.get("ssid") : Settings.S;
             WiFiCode.P = null != queryParameter.get("psk") && !queryParameter.get("psk").isBlank() ? queryParameter.get("psk") : Settings.P;
             WiFiCode.H = null != queryParameter.get("hidden") && !queryParameter.get("hidden").isBlank() ? String.valueOf(queryParameter.get("hidden")) : String.valueOf(Settings.H);
-            byte[] bytes = Barcode.createByteArray(null != queryParameter.get("value") ? URLDecoder.decode(queryParameter.get("value")) : WiFiCode.getValue(), SupportedBarcodeFormat.QR_CODE, null != queryParameter.get("width") ? Integer.valueOf(queryParameter.get("width")) : Settings.QRCODE_DEFAULT_WIDTH, null != queryParameter.get("height") ? Integer.valueOf(queryParameter.get("height")) : Settings.QRCODE_DEFAULT_HEIGHT, null != queryParameter.get("backgroundcolor") ? Color.valueOf(queryParameter.get("backgroundcolor")) : Settings.BARCODE_BACKGROUND_COLOR, null != queryParameter.get("color") ? Color.valueOf(queryParameter.get("color")) : Settings.BARCODE_COLOR, EpcCode.HINTS);
+            WiFiCode.HINTS.put(EncodeHintType.MARGIN, null != queryParameter.get("margin") ? Integer.valueOf(queryParameter.get("margin")) : Settings.QRCODE_DEFAULT_MARGIN);
+            byte[] bytes = Barcode.createByteArray(null != queryParameter.get("value") ? URLDecoder.decode(queryParameter.get("value")) : WiFiCode.getValue(), SupportedBarcodeFormat.QR_CODE, null != queryParameter.get("width") ? Integer.valueOf(queryParameter.get("width")) : Settings.QRCODE_DEFAULT_WIDTH, null != queryParameter.get("height") ? Integer.valueOf(queryParameter.get("height")) : Settings.QRCODE_DEFAULT_HEIGHT, null != queryParameter.get("backgroundcolor") ? Color.valueOf(queryParameter.get("backgroundcolor")) : Settings.BARCODE_BACKGROUND_COLOR, null != queryParameter.get("color") ? Color.valueOf(queryParameter.get("color")) : Settings.BARCODE_COLOR, WiFiCode.HINTS);
             httpExchange.sendResponseHeaders(200, bytes.length);
             OutputStream outputStream = httpExchange.getResponseBody();
             outputStream.write(bytes);

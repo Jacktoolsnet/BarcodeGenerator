@@ -1,5 +1,6 @@
 package net.jacktools.barcode.barcodegenerator.web.routes;
 
+import com.google.zxing.EncodeHintType;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import javafx.scene.paint.Color;
@@ -21,7 +22,9 @@ public class UpceHandler implements HttpHandler {
         try {
             AppServer.LOG(httpExchange.getRequestURI().toString());
             Map<String, String> queryParameter = null != httpExchange.getRequestURI().getQuery() ? AppServer.queryToMap(httpExchange.getRequestURI().getQuery()) : new HashMap<>();
-            byte[] bytes = Barcode.createByteArray(null != queryParameter.get("value") ? URLDecoder.decode(queryParameter.get("value")) : Settings.BARCODE_VALUE, SupportedBarcodeFormat.UPC_E, null != queryParameter.get("width") ? Integer.valueOf(queryParameter.get("width")) : Settings.BARCODE_DEFAULT_WIDTH, null != queryParameter.get("height") ? Integer.valueOf(queryParameter.get("height")) : Settings.BARCODE_DEFAULT_HEIGHT, null != queryParameter.get("backgroundcolor") ? Color.valueOf(queryParameter.get("backgroundcolor")) : Settings.BARCODE_BACKGROUND_COLOR, null != queryParameter.get("color") ? Color.valueOf(queryParameter.get("color")) : Settings.BARCODE_COLOR);
+            Map<EncodeHintType, Object> hints = new HashMap<>();
+            hints.put(EncodeHintType.MARGIN, null != queryParameter.get("margin") ? Integer.valueOf(queryParameter.get("margin")) : Settings.QRCODE_DEFAULT_MARGIN);
+            byte[] bytes = Barcode.createByteArray(null != queryParameter.get("value") ? URLDecoder.decode(queryParameter.get("value")) : Settings.BARCODE_VALUE, SupportedBarcodeFormat.UPC_E, null != queryParameter.get("width") ? Integer.valueOf(queryParameter.get("width")) : Settings.BARCODE_DEFAULT_WIDTH, null != queryParameter.get("height") ? Integer.valueOf(queryParameter.get("height")) : Settings.BARCODE_DEFAULT_HEIGHT, null != queryParameter.get("backgroundcolor") ? Color.valueOf(queryParameter.get("backgroundcolor")) : Settings.BARCODE_BACKGROUND_COLOR, null != queryParameter.get("color") ? Color.valueOf(queryParameter.get("color")) : Settings.BARCODE_COLOR, hints);
             httpExchange.sendResponseHeaders(200, bytes.length);
             OutputStream outputStream = httpExchange.getResponseBody();
             outputStream.write(bytes);

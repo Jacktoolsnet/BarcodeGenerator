@@ -1,5 +1,6 @@
 package net.jacktools.barcode.barcodegenerator.web.routes.epc;
 
+import com.google.zxing.EncodeHintType;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import javafx.scene.paint.Color;
@@ -32,6 +33,7 @@ public class EpcCodeHandler implements HttpHandler {
             EpcCode.REFERENCE = null != queryParameter.get("reference") && !queryParameter.get("reference").isBlank() ? queryParameter.get("reference") : Settings.REFERENCE;
             EpcCode.PURPOSE_OF_USE = null != queryParameter.get("purpose_of_use") && !queryParameter.get("purpose_of_use").isBlank() ? queryParameter.get("purpose_of_use") : Settings.PURPOSE_OF_USE;
             EpcCode.NOTICE = null != queryParameter.get("notice") && !queryParameter.get("notice").isBlank() ? queryParameter.get("notice") : Settings.NOTICE;
+            EpcCode.HINTS.put(EncodeHintType.MARGIN, null != queryParameter.get("margin") ? Integer.valueOf(queryParameter.get("margin")) : Settings.QRCODE_DEFAULT_MARGIN);
             byte[] bytes = Barcode.createByteArray(null != queryParameter.get("value") ? URLDecoder.decode(queryParameter.get("value")) : EpcCode.getValue(), SupportedBarcodeFormat.QR_CODE, null != queryParameter.get("width") ? Integer.valueOf(queryParameter.get("width")) : Settings.QRCODE_DEFAULT_WIDTH, null != queryParameter.get("height") ? Integer.valueOf(queryParameter.get("height")) : Settings.QRCODE_DEFAULT_HEIGHT, null != queryParameter.get("backgroundcolor") ? Color.valueOf(queryParameter.get("backgroundcolor")) : Settings.BARCODE_BACKGROUND_COLOR, null != queryParameter.get("color") ? Color.valueOf(queryParameter.get("color")) : Settings.BARCODE_COLOR, EpcCode.HINTS);
             httpExchange.sendResponseHeaders(200, bytes.length);
             OutputStream outputStream = httpExchange.getResponseBody();
