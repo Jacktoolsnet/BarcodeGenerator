@@ -609,7 +609,46 @@ public class MainViewController {
 
     @FXML
     void buttonHelp_onAction(ActionEvent event) {
-
+        String helpPageUrl = "";
+        switch (this.tabPaneMain.getSelectionModel().getSelectedIndex()) {
+            case 0 -> {
+                switch (Settings.BARCODE_TYPE) {
+                    case AZTEC -> helpPageUrl = "https://de.wikipedia.org/wiki/Aztec-Code";
+                    case CODE_39 -> helpPageUrl = "https://de.wikipedia.org/wiki/Code_39";
+                    case CODE_93 -> helpPageUrl = "https://de.wikipedia.org/wiki/Strichcode";
+                    case CODE_128 -> helpPageUrl = "https://de.wikipedia.org/wiki/Code128";
+                    case CODABAR -> helpPageUrl = "https://de.wikipedia.org/wiki/Codabar";
+                    case DATA_MATRIX -> helpPageUrl = "https://de.wikipedia.org/wiki/DataMatrix-Code";
+                    case EAN_8 -> helpPageUrl = "https://de.wikipedia.org/wiki/European_Article_Number";
+                    case EAN_13 -> helpPageUrl = "https://de.wikipedia.org/wiki/European_Article_Number";
+                    case ITF -> helpPageUrl = "https://de.wikipedia.org/wiki/Strichcode";
+                    case PDF_417 -> helpPageUrl = "https://de.wikipedia.org/wiki/PDF417";
+                    case QR_CODE -> helpPageUrl = "https://de.wikipedia.org/wiki/QR-Code";
+                    case UPC_A -> helpPageUrl = "https://de.wikipedia.org/wiki/Universal_Product_Code";
+                    case UPC_E -> helpPageUrl = "https://de.wikipedia.org/wiki/Universal_Product_Code";
+                    case EPC -> helpPageUrl = "https://de.wikipedia.org/wiki/EPC-QR-Code";
+                    case WIFI -> helpPageUrl = "https://de.wikipedia.org/wiki/Strichcode";
+                    default -> helpPageUrl = "https://de.wikipedia.org/wiki/Strichcode";
+                }
+            }
+            case 1 -> {
+                if (this.titledPaneTransfer.isExpanded()) {
+                    helpPageUrl = "https://de.wikipedia.org/wiki/EPC-QR-Code";
+                } else if (this.titledPaneWifi.isExpanded()) {
+                    helpPageUrl = "https://de.wikipedia.org/wiki/Strichcode";
+                } else {
+                    helpPageUrl = "https://de.wikipedia.org/wiki/QR-Code";
+                }
+            }
+            default -> helpPageUrl = "https://de.wikipedia.org/wiki/QR-Code";
+        }
+        if (!helpPageUrl.isBlank()) {
+            try {
+                Desktop.getDesktop().browse(new URI(helpPageUrl));
+            } catch (IOException | URISyntaxException e) {
+                AppLog.log(Level.SEVERE, e.getLocalizedMessage());
+            }
+        }
     }
 
     @FXML
