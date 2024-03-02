@@ -690,8 +690,13 @@ public class MainViewController {
     @FXML
     void hyperlinkPreview_onAction(ActionEvent event) {
         try {
-            Desktop.getDesktop().browse(new URI(this.hyperlinkPreview.getText()));
-        } catch (IOException | URISyntaxException e) {
+            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                Desktop.getDesktop().browse(new URI(this.hyperlinkPreview.getText()));
+            } else{
+                Runtime runtime = Runtime.getRuntime();
+                runtime.exec(new String[]{"xdg-open", this.hyperlinkPreview.getText()});
+            }
+        } catch (Exception e) {
             AppLog.log(Level.SEVERE, e.getLocalizedMessage());
         }
     }
