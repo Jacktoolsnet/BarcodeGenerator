@@ -9,6 +9,7 @@ import javafx.stage.Window;
 
 import java.text.MessageFormat;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class Assets {
@@ -18,7 +19,7 @@ public class Assets {
 
     static {
         RESOURCEBUNDLE = ResourceBundle.getBundle("i18n", Locale.getDefault());
-        APPLICATION_ICON = new Image(Assets.class.getResourceAsStream("/img/logo.jpg"));
+        APPLICATION_ICON = new Image(Objects.requireNonNull(Assets.class.getResourceAsStream("/img/logo.jpg")));
     }
 
     public static String getString(String key) {

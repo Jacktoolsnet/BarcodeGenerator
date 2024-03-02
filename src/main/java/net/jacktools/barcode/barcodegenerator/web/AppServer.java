@@ -100,7 +100,8 @@ public class AppServer {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(logTime.format(cal.getTime()))
                 .append(" || ")
-                .append(message + "\n");
+                .append(message)
+                .append("\n");
         LOG_PROPERTY.set(null != LOG_PROPERTY.get() ? stringBuilder + LOG_PROPERTY.get() : stringBuilder.toString());
     }
 }

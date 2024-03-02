@@ -203,7 +203,7 @@ public class MainViewController {
             alert.getButtonTypes().clear();
             alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
             Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.NO) {
+            if (result.isPresent() && result.get() == ButtonType.NO) {
                 e.consume();
             } else {
                 // Save settings.
@@ -609,7 +609,7 @@ public class MainViewController {
 
     @FXML
     void buttonHelp_onAction(ActionEvent event) {
-        String helpPageUrl = "";
+        String helpPageUrl;
         switch (this.tabPaneMain.getSelectionModel().getSelectedIndex()) {
             case 0 -> {
                 switch (Settings.BARCODE_TYPE) {
