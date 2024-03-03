@@ -5,14 +5,19 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.converter.CurrencyStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import net.jacktools.barcode.barcodegenerator.epc.EpcCode;
@@ -79,13 +84,7 @@ public class MainViewController {
         return c;
     };
     @FXML
-    private Accordion accordionQrCodes;
-    @FXML
-    private Button buttonCloseApplication;
-    @FXML
     private Button buttonCopy;
-    @FXML
-    private Button buttonInfo;
     @FXML
     private Button buttonSave;
     @FXML
@@ -644,7 +643,12 @@ public class MainViewController {
         }
         if (!helpPageUrl.isBlank()) {
             try {
-                Desktop.getDesktop().browse(new URI(helpPageUrl));
+                if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                    Desktop.getDesktop().browse(new URI(helpPageUrl));
+                } else {
+                    Runtime runtime = Runtime.getRuntime();
+                    runtime.exec(new String[]{"xdg-open", helpPageUrl});
+                }
             } catch (IOException | URISyntaxException e) {
                 AppLog.log(Level.SEVERE, e.getLocalizedMessage());
             }
@@ -653,7 +657,18 @@ public class MainViewController {
 
     @FXML
     void buttonInfo_onAction(ActionEvent event) {
-
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("infoView.fxml"));
+            Parent root1 = (Parent) fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.DECORATED);
+            stage.setTitle("ABC");
+            stage.setScene(new Scene(root1));
+            stage.show();
+        } catch (IOException e) {
+            AppLog.log(Level.SEVERE, e.getLocalizedMessage());
+        }
     }
 
     @FXML
@@ -692,7 +707,7 @@ public class MainViewController {
         try {
             if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
                 Desktop.getDesktop().browse(new URI(this.hyperlinkPreview.getText()));
-            } else{
+            } else {
                 Runtime runtime = Runtime.getRuntime();
                 runtime.exec(new String[]{"xdg-open", this.hyperlinkPreview.getText()});
             }
