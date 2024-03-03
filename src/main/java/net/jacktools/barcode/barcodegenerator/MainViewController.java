@@ -137,7 +137,7 @@ public class MainViewController {
     @FXML
     private TitledPane titledPaneTransfer;
     @FXML
-    private Spinner<Double> spinnerPaymentAmount;
+    private Spinner<Number> spinnerPaymentAmount;
     @FXML
     private TextField textFieldBic;
     @FXML
@@ -430,7 +430,7 @@ public class MainViewController {
         }));
         //  Spinner
         this.spinnerPaymentAmount.setEditable(true);
-        SpinnerValueFactory spinnerPaymentAmountFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(EpcCode.MIN_PAYMENT_AMOUNT, EpcCode.MAX_PAYMENT_AMOUNT, null != Settings.PAYMENT_AMOUNT ? Settings.PAYMENT_AMOUNT : 0.00, 1.00);
+        SpinnerValueFactory spinnerPaymentAmountFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(Double.parseDouble(EpcCode.MIN_PAYMENT_AMOUNT.toString()), Double.parseDouble(EpcCode.MAX_PAYMENT_AMOUNT.toString()), null != Settings.PAYMENT_AMOUNT ? Double.parseDouble(Settings.PAYMENT_AMOUNT.toString()) : 0.00, 1.00);
         spinnerPaymentAmountFactory.setConverter(new CurrencyStringConverter());
         this.spinnerPaymentAmount.setValueFactory(spinnerPaymentAmountFactory);
         this.spinnerPaymentAmount.getEditor().setTextFormatter(new TextFormatter<>(new CurrencyStringConverter(), Settings.PAYMENT_AMOUNT, currencyFilter));

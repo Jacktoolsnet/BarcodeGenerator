@@ -44,7 +44,7 @@ public class Settings {
     public static String PAYEE;
     public static String IBAN;
     public static SupportedCurrency CURRENCY;
-    public static Double PAYMENT_AMOUNT;
+    public static Number PAYMENT_AMOUNT;
     public static String PURPOSE;
     public static String REFERENCE;
     public static String PURPOSE_OF_USE;
@@ -122,7 +122,7 @@ public class Settings {
         PAYEE = !"null".equals(properties.getProperty("epc.payee")) ? properties.getProperty("epc.payee") : "";
         IBAN = !"null".equals(properties.getProperty("epc.iban")) ? properties.getProperty("epc.iban") : "";
         CURRENCY = !"null".equals(properties.getProperty("epc.currency")) ? SupportedCurrency.valueOf(properties.getProperty("epc.currency")) : SupportedCurrency.EUR;
-        PAYMENT_AMOUNT = !"null".equals(properties.getProperty("epc.paymentamount")) ? Double.valueOf(properties.getProperty("epc.paymentamount")) : 0.00;
+        PAYMENT_AMOUNT = !"null".equals(properties.getProperty("epc.paymentamount")) ? Double.parseDouble(properties.getProperty("epc.paymentamount")) : 0.00;
         PURPOSE = !"null".equals(properties.getProperty("epc.purpose")) ? properties.getProperty("epc.purpose") : "";
         REFERENCE = !"null".equals(properties.getProperty("epc.reference")) ? properties.getProperty("epc.reference") : "";
         PURPOSE_OF_USE = !"null".equals(properties.getProperty("epc.purposeofuse")) ? properties.getProperty("epc.purposeofuse") : "";
