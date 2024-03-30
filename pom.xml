@@ -63,13 +63,13 @@
                         <mainJar>target/BarcodeGenerator-1.0.0.jar</mainJar>
                         <destination>target/dist</destination>
                         <name>BarcodeGenerator</name>
-                        <appversion>1.0.0</appversion>
+                        <appVersion>1.0.0</appVersion>
                         <copyright>JackTools.Net</copyright>
                         <description>Ein Barcodegenerator mit integriertem Server.</description>
                         <vendor>JackToolsNet</vendor>
-                        <installdir>vendor/name</installdir>
-                        <winmenu>true</winmenu>
-                        <winmenugroup>vendor/name</winmenugroup>
+                        <installDir>vendor/name</installDir>
+                        <winMenu>true</winMenu>
+                        <winMenuGroup>vendor/name</winMenuGroup>
                     </configuration>
                 </plugin>
                 <plugin>
