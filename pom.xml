@@ -6,7 +6,7 @@
 
     <groupId>net.jacktools.barcode</groupId>
     <artifactId>BarcodeGenerator</artifactId>
-    <version>1.0.ß</version>
+    <version>1.0.0</version>
     <name>BarcodeGenerator</name>
 
     <properties>
@@ -41,26 +41,62 @@
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
             <version>3.5.3</version>
-            <scope>import</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>javase</artifactId>
             <version>3.5.3</version>
-            <scope>import</scope>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.panteleyev</groupId>
+                    <artifactId>jpackage-maven-plugin</artifactId>
+                    <version>1.6.3</version>
+                    <configuration>
+                        <input>target</input>
+                        <mainJar>target/BarcodeGenerator-1.0.0.jar</mainJar>
+                        <destination>target/dist</destination>
+                        <name>BarcodeGenerator</name>
+                        <appversion>1.0.0</appversion>
+                        <copyright>JackTools.Net</copyright>
+                        <description>Ein Barcodegenerator mit integriertem Server.</description>
+                        <vendor>JackToolsNet</vendor>
+                        <installdir>vendor/name</installdir>
+                        <winmenu>true</winmenu>
+                        <winmenugroup>vendor/name</winmenugroup>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.10.1</version>
+                    <configuration>
+                        <source>21</source>
+                        <target>21</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.1</version>
-                <configuration>
-                    <source>19</source>
-                    <target>19</target>
-                </configuration>
+                <groupId>org.panteleyev</groupId>
+                <artifactId>jpackage-maven-plugin</artifactId>
+                <version>1.6.3</version>
+                <executions>
+                    <execution>
+                        <id>jpackage-installer</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jpackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.openjfx</groupId>
