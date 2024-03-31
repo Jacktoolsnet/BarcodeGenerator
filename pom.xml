@@ -17,12 +17,37 @@
     <dependencies>
         <dependency>
             <groupId>org.openjfx</groupId>
+            <artifactId>javafx-base</artifactId>
+            <version>21.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>21.0.2</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
+            <version>21.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>21.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>21.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-swing</artifactId>
+            <version>21.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
             <version>21.0.2</version>
         </dependency>
         <dependency>
@@ -41,13 +66,11 @@
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
             <version>3.5.3</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>javase</artifactId>
             <version>3.5.3</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 
@@ -59,17 +82,22 @@
                     <artifactId>jpackage-maven-plugin</artifactId>
                     <version>1.6.3</version>
                     <configuration>
-                        <input>target</input>
-                        <mainJar>target/BarcodeGenerator-1.0.0.jar</mainJar>
-                        <destination>target/dist</destination>
+                        <runtimeImage>${java.home}</runtimeImage>
+                        <input>${project.basedir}/out/artifacts/BarcodeGenerator</input>
+                        <mainJar>BarcodeGenerator.jar</mainJar>
+                        <mainClass>net.jacktools.barcode.barcodegenerator.Main</mainClass>
+                        <destination>${project.basedir}/out/dist</destination>
+                        <type>MSI</type>
                         <name>BarcodeGenerator</name>
+                        <icon>${project.basedir}/src/main/resources/img/app.ico</icon>
                         <appVersion>1.0.0</appVersion>
                         <copyright>JackTools.Net</copyright>
-                        <description>Ein Barcodegenerator mit integriertem Server.</description>
+                        <description>Ein Barcodegenerator mit integriertem Weberver.</description>
                         <vendor>JackToolsNet</vendor>
-                        <installDir>vendor/name</installDir>
+                        <installDir>JackToolsNet/BarcodeGenerator</installDir>
                         <winMenu>true</winMenu>
-                        <winMenuGroup>vendor/name</winMenuGroup>
+                        <winMenuGroup>JackToolsNet/BarcodeGenerator</winMenuGroup>
+                        <winShortcut>true</winShortcut>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -79,6 +107,14 @@
                     <configuration>
                         <source>21</source>
                         <target>21</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>javafx-maven-plugin</artifactId>
+                    <version>0.0.8</version>
+                    <configuration>
+                        <mainClass>net.jacktools.barcode.barcodegenerator.Main</mainClass>
                     </configuration>
                 </plugin>
             </plugins>
@@ -95,28 +131,6 @@
                         <goals>
                             <goal>jpackage</goal>
                         </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>0.0.8</version>
-                <executions>
-                    <execution>
-                        <!-- Default configuration for running with: mvn clean javafx:run -->
-                        <id>default-cli</id>
-                        <configuration>
-                            <mainClass>
-                                net.jacktools.barcode.barcodegenerator/net.jacktools.barcode.barcodegenerator.Application
-                            </mainClass>
-                            <launcher>app</launcher>
-                            <jlinkZipName>app</jlinkZipName>
-                            <jlinkImageName>app</jlinkImageName>
-                            <noManPages>true</noManPages>
-                            <stripDebug>true</stripDebug>
-                            <noHeaderFiles>true</noHeaderFiles>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
