@@ -39,3 +39,5 @@ build/
 
 ### JackTools ###
 /Documentation/
+/out/dist/BarcodeGenerator-1.0.0.msi
+/out/artifacts/BarcodeGenerator/BarcodeGenerator.jar
